@@ -1,0 +1,361 @@
+---
+title: "bargraphs for odds"
+author: "Nathalie Huerta"
+date: "7/20/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(ggplot2)
+#odds  ratio for male:female for suspension for final dataset 
+mfsus <-  3.49
+#odds ratio for male:female for dropout for final dataset 
+mfdo <- 1.40
+#odds ratio for m:f for expulsion for final dataset
+mfexp <- 4.52
+
+#creates a dataframe for the OR 
+df <- data.frame(Odds_Ratios =c(mfsus, mfexp,mfdo),Disciplinary_Action = c("Suspension", "Expulsion", "Drop Out"))
+
+#creates a bar graph for OR for the final data set
+finalmf2 <- ggplot(data = df) + geom_col(mapping = aes(x= Disciplinary_Action, y = Odds_Ratios), fill = "darkorange3") + labs(title="Odds Ratios for Males vs Females 2013 - 2017", x = "Disciplinary Actions", y =  "Odds Ratio")+theme(axis.text=element_text(size=15),axis.title=element_text(size=15),title=element_text(size=15))+ geom_text(aes(x = Disciplinary_Action, y=Odds_Ratios, label=Odds_Ratios,hjust="middle", vjust = "bottom",size =12), position = position_dodge(width=.8)) + theme(plot.title = element_text(hjust = 0.5)) 
+finalmf2
+
+#this code overrides the x and y axis labels 
+#labs(title = "MAIN TITLE", x = "X-AXIS TITLE", y = "Y-AXIS TITLE")
+```
+
+```{r}
+#odds ratio for male : female for suspension, dropout, and expulsion only dataset
+
+#odds ratio for dropout 
+malfemldo <- 1.42
+
+#odds ratio for suspension
+malfemlsus <- 3.68
+
+#odds ratio for expulsion 
+malexp <- 3.88
+
+#creates a dataframe for suspension on gender 
+df2 <- data.frame(Odds_Ratios =c(malfemlsus, malfemldo, malexp),Disciplinary_Action = c("Suspension","Dropout","Expulsion"))
+onlymf <- ggplot(data = df2) + geom_col(mapping = aes(x= Disciplinary_Action, y = Odds_Ratios), fill = "darkorange3") + labs(title="Odds Ratios for Males vs Females 2011 - 2017", y = "Odds Ratio", x = "Disciplinary Action")+theme(axis.text=element_text(size=13),axis.title=element_text(size=13),title=element_text(size=15)) + geom_text(aes(x = Disciplinary_Action, y=Odds_Ratios, label=Odds_Ratios,hjust="middle", vjust = "bottom", size= 12), position = position_dodge(width=.8)) + theme(plot.title = element_text(hjust = 0.5)) 
+onlymf
+
+```
+
+
+```{r}
+#OR for ethnicities for dropout final data for final dataset for dropout
+
+#asian : Black 
+ab <- .07
+#asian : hispanic 
+ah <- .16
+#asian : white
+aw <- 0.36
+#---------------------------
+
+#black : asian 
+ba <- 14.11
+#black : hispanic
+bh <- 2.21
+#black : white
+bw <- 5.11
+
+#--------------------------
+
+#hispanic : asian
+#ha <- 5.98
+ha <- 6.40
+#hispanic : black
+#hb <- 0.54
+hb <- 0.45
+#hispanic : white 
+#hw <- 2.24
+hw <- 2.32
+
+#-------------------------
+
+#white : asian
+#wa <- 2.68
+wa <- 2.76
+#white : black
+#wb <- 0.24
+wb <- 0.20
+#white : hispanic
+wh <- 0.43
+
+#-------------------------
+
+#creating dataframe 
+df3 <- data.frame(Odds_Ratios =c(ab, ah, aw, ba, bh, bw, ha, hb, hw, wa, wb,wh),Ethnicities = c("A:B","A:H", "A:W", "B:A", "B:H", "B:W", "H:A", "H:B", "H:W", "W:A", "W:B", "W:H"))
+
+ethor2 <- ggplot(data = df3) + geom_col(mapping = aes(x= Ethnicities, y = Odds_Ratios), fill = "goldenrod") + labs(title="OR for Race/Ethnicity for Dropout 2013 - 2017",x= "Race/Ethnicity", y = "Odds Ratio",x="Race/Ethnicity")+theme(axis.text=element_text(size=13),axis.title=element_text(size=13),title=element_text(size=15)) + geom_text(aes(x = Ethnicities, y=Odds_Ratios, label=Odds_Ratios,hjust="middle", vjust = "bottom",size=10), position = position_dodge(width=.8)) + theme(plot.title = element_text(hjust = 0.5)) 
+ethor2
+
+```
+
+```{r}
+#OR FOR ETHNICITIES FOR SUSPENSION FOR FINAL DATASET 
+
+#asian : Black 
+#susfab <-0.23
+fab <-0.04
+#asian : hispanic 
+#susfah <- 0.14
+fah <- 0.14
+#asian : white
+#susfaw <-.25
+faw <- 0.26
+#---------------------------
+
+#black : asian 
+fba <-25.47
+#susfba<-4.32
+#black : hispanic
+fbh <- 3.65
+#susfbh <- .60
+#black : white
+fbw <- 6.63
+#susfbw<-1.10
+
+#--------------------------
+
+#hispanic : asian
+#susfha <- 7.25
+fha <- 6.97
+#hispanic : black
+fhb <- 0.27
+#hispanic : white 
+fhw <- 1.81
+
+#-------------------------
+
+#white : asian
+fwa <- 3.84
+#white : black
+fwb <- 0.15
+#white : hispanic
+fwh <- 0.55
+
+#-------------------------
+
+#creating dataframe 
+df6 <- data.frame(Odds_Ratios =c(fab, fah, faw, fba,fbh, fbw, fha, fhb, fhw, fwa, fwb,fwh),Ethnicities = c("A:B","A:H", "A:W", "B:A", "B:H", "B:W", "H:A", "H:B", "H:W", "W:A", "W:B", "W:H"))
+
+ethor6 <- ggplot(data = df6) + geom_col(mapping = aes(x= Ethnicities, y = Odds_Ratios), fill = "goldenrod") + labs(title="OR for Race/Ethnicity for Suspension 2013 - 2017", y = "Odds Ratio",x="Race/Ethnicity")+theme(axis.text=element_text(size=13),axis.title=element_text(size=13),title=element_text(size=15)) + geom_text(aes(x = Ethnicities, y=Odds_Ratios, label=Odds_Ratios,hjust="middle", vjust = "bottom", size = 12), position = position_dodge(width=.8)) + theme(plot.title = element_text(hjust = 0.5)) 
+ethor6
+
+```
+
+```{r}
+#OR FOR ETHNICITIES FOR EXPULSION FOR FINAL DATASET 
+
+#asian : Black 
+
+EXPab <-0.07
+#asian : hispanic 
+#susfah <- 0.14
+EXPah <- 0.18
+#asian : white
+#susfaw <-.25
+EXPaw <- 0.24
+#---------------------------
+
+#black : asian 
+EXPba <-14.41
+#susfba<-4.32
+#black : hispanic
+EXPbh <- 2.65
+#susfbh <- .60
+#black : white
+EXPbw <- 3.50
+#susfbw<-1.10
+
+#--------------------------
+
+#hispanic : asian
+#susfha <- 7.25
+EXPha <- 5.44
+#hispanic : black
+EXPhb <- 0.38
+#hispanic : white 
+EXPhw <- 1.32
+
+#-------------------------
+
+#white : asian
+EXPwa <- 4.11
+#white : black
+EXPwb <- 0.29
+#white : hispanic
+EXPwh <- 0.76
+
+#-------------------------
+
+#creating dataframe 
+df13 <- data.frame(Odds_Ratios =c(EXPab, EXPah, EXPaw, EXPba,EXPbh, EXPbw, EXPha, EXPhb, EXPhw, EXPwa, EXPwb,EXPwh),Ethnicities = c("A:B","A:H", "A:W", "B:A", "B:H", "B:W", "H:A", "H:B", "H:W", "W:A", "W:B", "W:H"))
+
+ethor13 <- ggplot(data = df13) + geom_col(mapping = aes(x= Ethnicities, y = Odds_Ratios), fill = "goldenrod") + labs(title="OR for Race/Ethnicity for Expulsion 2013 -2017", y = "Odds Ratio",x="Race/Ethnicity")+theme(axis.text=element_text(size=13),axis.title=element_text(size=13),title=element_text(size=15)) + geom_text(aes(x = Ethnicities, y=Odds_Ratios, label=Odds_Ratios,hjust="middle", vjust = "bottom", size = 12), position = position_dodge(width=.7)) + theme(plot.title = element_text(hjust = 0.5)) 
+ethor13
+```
+
+
+
+
+```{r}
+#OR FOR ONLY dropout
+
+#asian : black 
+doab <- 0.17
+#asian : hispanic 
+doah <- 0.28
+#asian : white
+doaw <- 1.28
+
+#--------------------
+
+#black : asian 
+doba <- 6.06
+#black : hispanic 
+dobh <- 1.72
+#black : white
+dobw <- 7.76
+
+#-------------------
+
+#hispanic : asian
+doha <- 3.53
+#hispanic : black 
+dohb <- 0.58
+#hispanic : white 
+dohw <- 4.52
+
+#-------------------
+
+#white : asian 
+dowa <- 0.78
+#white : black
+dowb <- 0.13
+dowh <-0.22
+
+#creates bar graphs for only suspension 
+#creating dataframe 
+df4 <- data.frame(Odds_Ratios =c(doab, doah, doaw, doba, dobh, dobw, doha, dohb, dohw, dowa, dowb,dowh),Ethnicities = c("A:B","A:H", "A:W", "B:A", "B:H", "B:W", "H:A", "H:B", "H:W", "W:A", "W:B", "W:H"))
+
+ethor34 <- ggplot(data = df4) + geom_col(mapping = aes(x= Ethnicities, y = Odds_Ratios), fill = "goldenrod") + labs(title="OR for Race/Ethnicity for Dropout 2011 - 2017", y = "Odds Ratio", x= " Race/Ethnicity")+theme(axis.text=element_text(size=13),axis.title=element_text(size=13),title=element_text(size=15)) + geom_text(aes(x = Ethnicities, y=Odds_Ratios, label=Odds_Ratios,hjust="middle", vjust = "bottom", size = 12), position = position_dodge(width=.5)) + theme(plot.title = element_text(hjust = 0.5)) 
+ethor34
+
+```
+
+```{r}
+#OR FOR ONLY SUSPENSION
+
+#asian : black 
+#susab <- 0.07
+susab <- 0.04
+#asian : hispanic 
+susah <- 0.19
+#asian : white 
+susaw <- 0.26
+
+
+#--------------------------
+
+#black : asian 
+susba <- 25.15
+#black : hispanic 
+susbh <- 4.77
+#black : white
+susbw <- 6.55
+
+#--------------------------
+
+#hispanic : asian 
+susha <- 5.27
+#hispanic : black
+sushb <- 0.21
+#hispanic : white
+sushw <- 1.37
+
+#--------------------------
+
+#white : asian 
+suswa <- 3.84
+#white : black 
+suswb <- 0.15
+#white: hispanic 
+suswh <-0.73
+
+
+#-------------------------
+
+#creates bar graph for only suspension data 
+#creates dataframe for suspension data only 
+
+df51 <- data.frame(Odds_Ratios =c(susab, susah, susaw, susba, susbh, susbw, susha, sushb, sushw, suswa, suswb,suswh),Ethnicities = c("A:B","A:H", "A:W", "B:A", "B:H", "B:W", "H:A", "H:B", "H:W", "W:A", "W:B", "W:H"))
+
+ethor41 <- ggplot(data = df51) + geom_col(mapping = aes(x= Ethnicities, y = Odds_Ratios), fill = "goldenrod") + labs(title="OR for Race/Ethnicity for Suspension 2011 - 2017", y= "Odds Ratio", x="Race/Ethnicity")+theme(axis.text=element_text(size=13),axis.title=element_text(size=13),title=element_text(size=15)) + geom_text(aes(x = Ethnicities, y=Odds_Ratios, label=Odds_Ratios,hjust="middle", vjust = "bottom", size = 12), position = position_dodge(width=.5)) + theme(plot.title = element_text(hjust = 0.5)) 
+ethor41
+```
+
+```{r}
+#OR FOR ETHNICITIES FOR EXPULSION FOR FINAL DATASET 
+
+#asian : Black 
+
+EXPab1 <-0.12
+#asian : hispanic 
+#susfah <- 0.14
+EXPah1 <- 0.24
+#asian : white
+#susfaw <-.25
+EXPaw1 <- 0.35
+#---------------------------
+
+#black : asian 
+EXPba1 <-8.37
+#susfba<-4.32
+#black : hispanic
+EXPbh1 <- 2.04
+#susfbh <- .60
+#black : white
+EXPbw1 <- 2.92
+#susfbw<-1.10
+
+#--------------------------
+
+#hispanic : asian
+#susfha <- 7.25
+EXPha1 <- 4.10
+#hispanic : black
+EXPhb1 <- 0.49
+#hispanic : white 
+EXPhw1<- 1.43
+
+#-------------------------
+
+#white : asian
+EXPwa1 <- 2.86
+#white : black
+EXPwb1 <- 0.34
+#white : hispanic
+EXPwh1 <- 0.70
+
+#-------------------------
+
+#creating dataframe 
+df134 <- data.frame(Odds_Ratios =c(EXPab1, EXPah1, EXPaw1, EXPba1,EXPbh1, EXPbw1, EXPha1, EXPhb1, EXPhw1, EXPwa1, EXPwb,EXPwh),Ethnicities = c("A:B","A:H", "A:W", "B:A", "B:H", "B:W", "H:A", "H:B", "H:W", "W:A", "W:B", "W:H"))
+
+ethor134 <- ggplot(data = df134) + geom_col(mapping = aes(x= Ethnicities, y = Odds_Ratios), fill = "goldenrod") + labs(title="OR for Race/Ethnicity for Expulsion 2011 - 2017", y = "Odds Ratio", x="Race/Ethnicity")+theme(axis.text=element_text(size=13),axis.title=element_text(size=13),title=element_text(size=15)) + geom_text(aes(x = Ethnicities, y=Odds_Ratios, label=Odds_Ratios,hjust="middle", vjust = "bottom", size = 12), position = position_dodge(width=.5)) + theme(plot.title = element_text(hjust = 0.5)) 
+ethor134
+```
+```
+
+
+
+
+

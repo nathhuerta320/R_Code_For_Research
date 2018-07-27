@@ -1,0 +1,201 @@
+---
+title: "trying remergeexpulsiondata"
+author: "Nathalie Huerta"
+date: "7/18/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library("dplyr")
+comboexpulsion <- read.csv(file = "Combined_Expulsions.csv", header = T)
+
+```
+
+```{r}
+#extracts only the information for males and all schools 
+countforgm <- filter(comboexpulsion,comboexpulsion$reportingcategory == "GM", comboexpulsion$aggregatelevel == "D1")
+countforgm
+
+#this command calls for all rows and columns 1,4,12
+gm <- countforgm[,c(1,4,12)]
+gm
+
+gf <- countforfem[,c(1,4,12)]
+gf
+
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+dfmales <- data.frame(countGM[,"districtcode"],gm)
+
+dffemales <- data.frame(countGF[, "districtcode"], gf)
+
+#clean data for males 
+dfnm <- dfmales[,c(3,2,4)]
+colnames(dfnm)<- c("districtcode","Year", "Expulsions_Males")
+
+#clean data for females
+dffem <- dffemales[,c(3,2,4)]
+colnames(dffem)<- c("districtcode","Year", "Expulsions_Females")
+
+
+#merges data for gender 
+newmf <- merge(dfnm, dffem, by = c("districtcode", "Year"))
+newmf$dist_year <- paste(newmf$districtcode, newmf$Year, sep="_")
+newmf <- newmf[,-c(1,2)]
+newmf<- newmf[,c(3,2,1)]
+```
+
+```{r}
+#merging for ethnicity 
+
+countRF <- filter(newcombine, newcombine$reportingcategory == "RF" , newcombine$aggregatelevel == "D1") 
+countRA <- filter(newcombine, newcombine$reportingcategory == "RA" , newcombine$aggregatelevel == "D1") 
+countRH <- filter(newcombine, newcombine$reportingcategory == "RH" , newcombine$aggregatelevel == "D1") 
+countRP <- filter(newcombine, newcombine$reportingcategory == "RP" , newcombine$aggregatelevel == "D1") 
+countRB <- filter(newcombine, newcombine$reportingcategory == "RB" , newcombine$aggregatelevel == "D1") 
+countRI <- filter(newcombine, newcombine$reportingcategory == "RI" , newcombine$aggregatelevel == "D1") 
+countRW <- filter(newcombine, newcombine$reportingcategory == "RW" , newcombine$aggregatelevel == "D1") 
+countRT <- filter(newcombine, newcombine$reportingcategory == "RT" , newcombine$aggregatelevel == "D1") 
+countRD <- filter(newcombine, newcombine$reportingcategory == "RD" , newcombine$aggregatelevel == "D1") 
+
+rfcol <- countRF[,c(1,4,12)] #used
+
+racol <- countRA[,c(1,4,12)] #used
+
+rhcol <- countRH[,c(1,4,12)] #used
+
+rpcol <- countRP[,c(1,4,12)] #used
+
+rbcol <- countRB[,c(1,4,12)] #used
+
+ricol <- countRI[,c(1,4,12)] #used
+
+rwcol <- countRW[,c(1,4,12)] #used
+
+rdcol <- countRD[,c(1,4,12)] #used 
+
+rtcol <- countRT[,c(1,4,12)] #used 
+
+#creates a dataframe with only countynames for only ethnicities and total expulsions 
+rfdf <- data.frame(countRF[, "districtcode"], rfcol)
+
+radf <- data.frame(countRA[, "districtcode"], racol)
+
+rhdf <- data.frame(countRH[, "districtcode"], rhcol)
+
+ridf <- data.frame(countRI[, "districtcode"], ricol)
+
+rpdf <- data.frame(countRP[, "districtcode"], rpcol)
+
+rwdf <- data.frame(countRW[, "districtcode"], rwcol)
+
+rbdf <- data.frame(countRB[, "districtcode"], rbcol)
+
+rtdf <- data.frame(countRT[, "districtcode"], rtcol)
+
+rddf <- data.frame(countRD[, "districtcode"], rdcol)
+
+# asian
+dfeth1 <- radf[,c(3,2,4)]
+colnames(dfeth1 )<- c("districtcode", "Year", "Expulsion_Asian")
+
+# black
+dfeth2 <- rbdf[,c(3,2,4)]
+colnames(dfeth2)<- c("districtcode", "Year", "Expulsions_Black")
+
+#hispanic 
+dfeth3 <- rhdf[,c(3,2,4)]
+colnames(dfeth3 )<- c("districtcode", "Year", "Expulsions_Hispanic")
+
+# white
+dfeth4 <- rwdf[,c(3,2,4)]
+colnames(dfeth4) <- c("districtcode", "Year", "Expulsions_White")
+
+# other
+dfnewo <- rfdf[,c(3,2,4)]
+colnames(dfnewo)<- c("districtcode", "Year", "Expulsions_Other")
+
+#other 2
+dfnewo2 <- ridf[,c(3,2,4)]
+colnames(dfnewo2)<- c("districtcode", "Year", "Expulsions_Other")
+
+#other 3
+dfnewo3 <- rpdf[,c(3,2,4)]
+colnames(dfnewo3)<- c("districtcode", "Year", "Expulsions_Other")
+
+#other 4
+dfnewo4 <- rddf[,c(3,2,4)]
+colnames(dfnewo4)<- c("districtcode", "Year", "Expulsions_Other")
+
+#other 5
+dfnewo5 <- rtdf[,c(3,2,4)]
+colnames(dfnewo5)<- c("districtcode", "Year", "Expulsions_Other")
+
+#-----------------------------------------------------------------
+
+#ADDING COLUMNS TOGETHER 
+
+dfother1 <- merge(dfnewo, dfnewo2, by = c("districtcode", "Year"), all=T)
+
+dfother1$Expulsions_Other.x <- as.numeric(as.character(dfother1$Expulsions_Other.x))
+dfother1$Expulsions_Other.y <- as.numeric(as.character(dfother1$Expulsions_Other.y))
+dfother1$Expulsions_Other.x[is.na(dfother1$Expulsions_Other.x)] <- 0
+dfother1$Expulsions_Other.y[is.na(dfother1$Expulsions_Other.y)] <- 0
+
+#sum of 2 cols
+dfother11 <- dfother1$Expulsions_Other.x + dfother1$Expulsions_Other.y
+#adds new columns with will add cols 
+dfother1$dfother11 <- dfother1$Expulsions_Other.x + dfother1$Expulsions_Other.y
+#deltes cols 
+dfother1 <- dfother1[,-c(3,4)]
+
+#----------------------------------------------------------------
+
+dfother2 <- merge(dfother1,dfnewo3, by = c("districtcode", "Year"), all=T)
+
+dfother2$Expulsions_Other <- as.numeric(as.character(dfother2$Expulsions_Other))
+dfother2$Expulsions_Other[is.na(dfother2$Expulsions_Other)] <- 0
+dfother22 <- dfother2$dfother11 + dfother2$Expulsions_Other
+dfother2$dfother22 <- dfother2$dfother11 + dfother2$Expulsions_Other
+dfother2 <- dfother2[,-c(3,4)]
+
+#----------------------------------------------------------------
+
+dfother3 <- merge(dfother2, dfnewo4,by = c("districtcode", "Year"))
+
+dfother3$Expulsions_Other <- as.numeric(as.character(dfother3$Expulsions_Other))
+dfother3$Expulsions_Other[is.na(dfother3$Expulsions_Other)] <- 0
+dfother33 <- dfother3$dfother22 + dfother3$Expulsions_Other
+dfother3$dfother33 <- dfother3$dfother22 + dfother3$Expulsions_Other
+dfother3 <- dfother3[,-c(3,4)]
+
+#----------------------------------------------------------------
+
+dfotherfinal <- merge(dfother3, dfnewo5,by = c("districtcode", "Year"))
+
+dfotherfinal$Expulsions_Other <- as.numeric(as.character(dfotherfinal$Expulsions_Other))
+dfotherfinal$Expulsions_Other[is.na(dfotherfinal$Expulsions_Other)] <- 0
+Expulsions_Other <- dfotherfinal$dfother33 + dfotherfinal$Expulsions_Other
+dfotherfinal$Expulsions_Other <- dfotherfinal$dfother33 + dfotherfinal$Expulsions_Other
+dfotherfinal <- dfotherfinal[,-c(4)]
+
+#----------------------------------------------------------------
+
+ethnicity1 <- merge(dfeth1, dfeth2, by = c("districtcode", "Year"))
+ethnicity2 <- merge(ethnicity1, dfeth3, by = c("districtcode", "Year"))
+ethnicity3 <- merge(ethnicity2, dfeth4, by=c("districtcode", "Year"))
+combinedEthnFrame <- merge(ethnicity3, dfotherfinal, by =c("districtcode", "Year"))
+combinedEthnFrame$dist_year <- paste(combinedEthnFrame$districtcode, combinedEthnFrame$Year, sep="_")
+combinedEthnFrame <- combinedEthnFrame[,-c(1,2)]
+combinedEthnFrame <- combinedEthnFrame[,c(6,1,2,3,4,5)]
+combinedEthnFrame <- rename(combinedEthnFrame, c( "dfother33"="Expulsion_Other"))
+
+Megaexpulsion <- merge( newmf, combinedEthnFrame , c("dist_year"))
+
+```
+
+
+
+
+

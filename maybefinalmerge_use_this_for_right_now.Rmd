@@ -1,0 +1,118 @@
+---
+title: "attempt4expulsion"
+author: "Nathalie Huerta"
+date: "7/19/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library("dplyr")
+ExpulsionData <- read.csv(file = "Combined_Expulsions.csv", header = T)
+```
+
+```{r}
+#get only the information for 
+expomale <- filter(ExpulsionData, ExpulsionData$reportingcategory == "GM",ExpulsionData$aggregatelevel == "D1")
+#sum(as.numeric(expomale$totalexpulsions))= 371239
+
+expofemale <- filter(ExpulsionData, ExpulsionData$reportingcategory == "GF",  ExpulsionData$aggregatelevel == "D1")
+#sum(as.numeric(expofemale$totalexpulsions))= 205566
+
+expomal <- expomale[,c(1,4,12)]
+expofemal <- expofemale[,c(1,4,12)]
+
+mergeexpulsion <- merge(expomal, expofemal, by = c("academicyear", "districtcode"))
+names(mergeexpulsion) <- c("Year", "districtcode", "Expulsion_Males","Expulsion_Females")
+
+mergeexpulsion$dist_year <- paste(mergeexpulsion$districtcode, mergeexpulsion$Year, sep="_")
+mergeexpulsion <- mergeexpulsion[,-c(1,2)]
+mergeexpulsion <- mergeexpulsion[,c(3,2,1)]
+
+```
+
+```{r}
+expora <- filter(ExpulsionData, ExpulsionData$reportingcategory == "RA"& ExpulsionData$aggregatelevel == "D1")
+exporb <- filter(ExpulsionData, ExpulsionData$reportingcategory == "RB"& ExpulsionData$aggregatelevel == "D1")
+exporh <- filter(ExpulsionData, ExpulsionData$reportingcategory == "RH"& ExpulsionData$aggregatelevel == "D1")
+exporw <- filter(ExpulsionData, ExpulsionData$reportingcategory == "RW"& ExpulsionData$aggregatelevel == "D1")
+expori <- filter(ExpulsionData, ExpulsionData$reportingcategory == "RI"& ExpulsionData$aggregatelevel == "D1")
+exporp <- filter(ExpulsionData, ExpulsionData$reportingcategory == "RP"& ExpulsionData$aggregatelevel == "D1")
+expord <- filter(ExpulsionData, ExpulsionData$reportingcategory == "RD"& ExpulsionData$aggregatelevel == "D1")
+export <- filter(ExpulsionData, ExpulsionData$reportingcategory == "RT"& ExpulsionData$aggregatelevel == "D1")
+exporf <- filter(ExpulsionData, ExpulsionData$reportingcategory == "RF"& ExpulsionData$aggregatelevel == "D1")
+
+expora <- expora[,c(1,4,12)]
+colnames(expora) <- c("Year","districtcode", "Expulsion_Asian" )
+
+exporb <- exporb[,c(1,4,12)]
+colnames(exporb) <- c("Year","districtcode", "Expulsion_Black" )
+
+exporh <- exporh[,c(1,4,12)]
+colnames(exporh) <- c("Year","districtcode", "Expulsion_Hispanic" )
+
+exporw <- exporw[,c(1,4,12)]
+colnames(exporw) <- c("Year","districtcode", "Expulsion_White" )
+
+expori <- expori[,c(1,4,12)]
+colnames(expori) <- c("Year","districtcode", "Expulsion_Other1" )
+
+exporp <- exporp[,c(1,4,12)]
+colnames(exporp) <- c("Year","districtcode", "Expulsion_Other2" )
+
+expord <- expord[,c(1,4,12)]
+colnames(expord) <- c("Year","districtcode", "Expulsion_Other3" )
+
+export <- export[,c(1,4,12)]
+colnames(export) <- c("Year","districtcode", "Expulsion_Other4" )
+
+exporf <- exporf[,c(1,4,12)]
+colnames(exporf) <- c("Year","districtcode", "Expulsion_Other5" )
+
+ethnicity1 <- merge(expori, exporp, by = c("Year", "districtcode"))
+ethnicity2 <- merge(ethnicity1, expord, by = c("Year", "districtcode"))
+ethnicity3 <- merge(ethnicity2, export, by = c("Year", "districtcode"))
+ethnicity4 <- merge(ethnicity3, exporf, by = c("Year", "districtcode"))
+
+ethnicity4$Expulsion_Other1 <- as.numeric(as.character(ethnicity4$Expulsion_Other1))
+ethnicity4$Expulsion_Other1[is.na(ethnicity4$Expulsion_Other1)] <- 0
+
+ethnicity4$Expulsion_Other2 <- as.numeric(as.character(ethnicity4$Expulsion_Other2))
+ethnicity4$Expulsion_Other2[is.na(ethnicity4$Expulsion_Other2)] <- 0
+
+ethnicity4$Expulsion_Other3 <- as.numeric(as.character(ethnicity4$Expulsion_Other3))
+ethnicity4$Expulsion_Other3[is.na(ethnicity4$Expulsion_Other3)] <- 0
+
+ethnicity4$Expulsion_Other4 <- as.numeric(as.character(ethnicity4$Expulsion_Other4))
+ethnicity4$Expulsion_Other4[is.na(ethnicity4$Expulsion_Other4)] <- 0
+
+ethnicity4$Expulsion_Other5 <- as.numeric(as.character(ethnicity4$Expulsion_Other5))
+ethnicity4$Expulsion_Other5[is.na(ethnicity4$Expulsion_Other5)] <- 0
+
+ethnicity4$ColSum <- ethnicity4$Expulsion_Other1 + ethnicity4$Expulsion_Other2 + ethnicity4$Expulsion_Other3 + ethnicity4$Expulsion_Other4 + ethnicity4$Expulsion_Other5
+
+ethnicity4 <- ethnicity4[,c(1,2,8)]
+colnames(ethnicity4) <- c("Year","districtcode", "Expulsion_Other" )
+#thnicity4$dist_year <- paste(ethnicity4$districtcode, ethnicity4$Year, sep="_")
+#ethnicity4 <- ethnicity4[,c(-1,-2)]
+#ethnicity4 <- ethnicity4[,c(2,1)]
+
+ethn1 <- merge(ethnicity4, expora, by = c("Year", "districtcode") )
+ethn2 <- merge(ethn1, exporb, by = c("Year", "districtcode"))
+ethn3 <- merge(ethn2, exporw, by = c("Year", "districtcode"))
+ethn4 <- merge(ethn3, exporh, by = c("Year", "districtcode"))
+ethn4$dist_year <- paste(ethn4$districtcode, ethn4$Year, sep="_")
+ethn4 <- ethn4[,c(-1,-2)]
+ethn4 <- ethn4[,c(6,1,2,3,4,5)]
+
+
+mergegeneth <- merge(mergeexpulsion, ethn4, by = c("dist_year"))
+
+write.csv(mergegeneth, file = "/Users/nathaliehuerta/Documents/dataed/Rforresearch/ExpulsionGenEth2.csv")
+
+```
+
+
+
+

@@ -1,0 +1,306 @@
+---
+title: "data2newed"
+author: "Nathalie Huerta"
+date: "7/11/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(dplyr)
+expulsion2011 <- read.csv(file = "expulsion2011-12.csv", header = T) #imports the data 
+#this is the data for 2012-2013
+expulsion2012 <- read.csv(file= "expulsion2012-13.csv", header = T) #imports the data 
+#this is the data for 2013-14
+expulsion2013 <- read.csv(file= "expulsion2013-14.csv", header = T) #imports the data 
+#this is the data for 2014-2015
+expulsion2014 <- read.csv(file= "expulsion2014-15.csv", header = T) #imports the data 
+#this is the data for 2016-2017
+expulsion2015 <- read.csv(file= "expulsion2015-16.csv", header = T)
+expulsion2016 <- read.csv(file= "expulsion2016-17.csv", header = T) #imports the data 
+```
+
+```{r}
+#this combines all 6 datasets 
+thiscoball <- rbind(expulsion2011,expulsion2012,expulsion2013,expulsion2014,expulsion2015,expulsion2016)
+
+#newcombo <- thiscoball[-c(1:13),]
+
+# expulsions for males
+countGM <- filter(thiscoball, thiscoball$reportingcategory == "GM", thiscoball$aggregatelevel == "D1")
+
+# expulsions for females
+countGF <- filter(thiscoball, thiscoball$reportingcategory == "GF", thiscoball$aggregatelevel == "D1")
+
+#this command calls for all rows and columns 1,4,12
+GM2 <- countGM[,c(1,4,12)]
+GM2
+
+GF2 <- countGF[,c(1,4,12)]
+GF2
+
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+dataframemales <- data.frame(countGM[,"districtcode"],GM2)
+
+dataframefemales <- data.frame(countGF[, "districtcode"], GF2)
+
+
+#making new df
+#clean data for males 
+dfnewmales <- dataframemales[,c(3,2,4)]
+colnames(dfnewmales)<- c("districtcode","Year", "totalexpulsions")
+dfnewmales$Gender <- "Males"
+
+#clean data for females
+dfnewfemales <- dataframefemales[,c(3,2,4)]
+colnames(dfnewfemales)<- c("districtcode","Year", "totalexpulsions")
+dfnewfemales$Gender <- "Females"
+
+library(dplyr)
+library(dplyr)
+
+#renames the columns got the code from Cookbook for R
+renamedata <- rename(dfnewmales, c( "totalexpulsions"="Expulsions_Males"))
+
+renamdrop <- renamedata[,c(-4)] 
+
+renamedata2 <- rename(dfnewfemales, c("totalexpulsions"="Expulsions_Females"))
+
+renamdrop2 <- renamedata2[,c(-4)]
+
+ 
+#this merges the all the females and males by district code
+#I still have to merge 2 columns together 
+alldatmalfem <- merge(renamdrop, renamdrop2)
+
+#this command let's me merge 2 columns so it becomes 1 new column 
+#droprows$Year <- paste(droprows$Year,droprows$districtcode.x)
+#droprows
+
+
+```
+
+```{r}
+#merging for ethnicity 
+#let's begin and see where I get stuck lol
+
+countRFtot2 <- filter(newcombine, newcombine$reportingcategory == "RF" , newcombine$aggregatelevel == "D1") 
+countRAtot2 <- filter(newcombine, newcombine$reportingcategory == "RA" , newcombine$aggregatelevel == "D1") 
+countRHtot2 <- filter(newcombine, newcombine$reportingcategory == "RH" , newcombine$aggregatelevel == "D1") 
+countRPtot2 <- filter(newcombine, newcombine$reportingcategory == "RP" , newcombine$aggregatelevel == "D1") 
+countRBtot2 <- filter(newcombine, newcombine$reportingcategory == "RB" , newcombine$aggregatelevel == "D1") 
+countRItot2 <- filter(newcombine, newcombine$reportingcategory == "RI" , newcombine$aggregatelevel == "D1") 
+countRWtot2 <- filter(newcombine, newcombine$reportingcategory == "RW" , newcombine$aggregatelevel == "D1") 
+countRTtot2 <- filter(newcombine, newcombine$reportingcategory == "RT" , newcombine$aggregatelevel == "D1") 
+countRDtot2 <- filter(newcombine, newcombine$reportingcategory == "RD" , newcombine$aggregatelevel == "D1") 
+
+srf <- countRFtot2[,c(1,4,12)]
+
+sra <- countRAtot2[,c(1,4,12)]
+
+srh <- countRHtot2[,c(1,4,12)]
+
+srp <- countRPtot2[,c(1,4,12)]
+
+srb <- countRBtot2[,c(1,4,12)]
+
+sri <- countRItot2[,c(1,4,12)]
+
+srw <- countRWtot2[,c(1,4,12)]
+
+srd <- countRDtot2[,c(1,4,12)]
+
+srt <- countRTtot2[,c(1,4,12)]
+
+#creates a dataframe with only countynames for only ethnicities and total expulsions 
+rf <- data.frame(countRFtot2[, "districtcode"], srf)
+
+ra <- data.frame(countRAtot2[, "districtcode"], sra)
+
+rh <- data.frame(countRHtot2[, "districtcode"], srh)
+
+ri <- data.frame(countRItot2[, "districtcode"], sri)
+
+rp <- data.frame(countRPtot2[, "districtcode"], srp)
+
+rw <- data.frame(countRWtot2[, "districtcode"], srw)
+
+rb <- data.frame(countRBtot2[, "districtcode"], srb)
+
+rt <- data.frame(countRTtot2[, "districtcode"], srt)
+
+rd <- data.frame(countRDtot2[, "districtcode"], srd)
+
+# asian
+dfnew2 <- ra[,c(3,2,4)]
+colnames(dfnew2)<- c("districtcode", "Year", "totalexpulsions")
+dfnew2$Ethnicity <- "Asian"
+renamasian <- rename(dfnew2, c( "totalexpulsions"="Expulsion_Asian"))
+droprenamasian <- renamasian[,c(-4)]
+
+# black
+dfnew6 <- rb[,c(3,2,4)]
+colnames(dfnew6)<- c("districtcode", "Year", "totalexpulsions")
+dfnew6$Ethnicity <- "Black"
+renamblack <- rename(dfnew6, c( "totalexpulsions"="Expulsion_Black"))
+droprenamblack <- renamblack[,c(-4)]
+
+# hispanic
+dfnew4 <- rh[,c(3,2,4)]
+colnames(dfnew4)<- c("districtcode", "Year", "totalexpulsions")
+dfnew4$Ethnicity <- "Hispanic or Latino"
+renamchic <- rename(dfnew4, c( "totalexpulsions"="Expulsion_Hispanic"))
+drophis <- renamchic[,c(-4)]
+
+# white
+dfnew8 <- rw[,c(3,2,4)]
+colnames(dfnew8) <- c("districtcode", "Year", "totalexpulsions")
+dfnew8$Ethnicity <- "White"
+renamwhite <- rename(dfnew8, c( "totalexpulsions"="Expulsion_White"))
+dropwhite <- renamwhite[,c(-4)]
+
+# other
+dfnew3 <- rf[,c(3,2,4)]
+colnames(dfnew3)<- c("districtcode", "Year", "totalexpulsions")
+dfnew3$Ethnicity <- "Other"
+renamother <- rename(dfnew3, c( "totalexpulsions"="Expulsion_Other1"))
+dropother <- renamother[,c(-4)]
+
+# other
+dfnew5 <- ri[,c(3,2,4)]
+colnames(dfnew5) <- c("districtcode", "Year", "totalexpulsions")
+dfnew5$Ethnicity <- "Other"
+renamother2 <- rename(dfnew5, c( "totalexpulsions"="Expulsion_Other2"))
+dropother2 <- renamother2[,c(-4)]
+
+# other
+dfnew7 <- rp[,c(3,2,4)]
+colnames(dfnew7) <- c("districtcode", "Year", "totalexpulsions")
+dfnew7$Ethnicity <- "Other"
+renamother3 <- rename(dfnew7, c( "totalexpulsions"="Expulsion_Other3"))
+dropother3 <- renamother3[,c(-4)]
+
+# other
+dfnew9 <- rt[,c(3,2,4)]
+colnames(dfnew9) <- c("districtcode", "Year", "totalexpulsions")
+dfnew9$Ethnicity <- "Other"
+renamother4 <- rename(dfnew9, c( "totalexpulsions"="Expulsion_Other4"))
+dropother4 <- renamother4[,c(-4)]
+
+dfnew0 <- rd[,c(3,2,4)]
+colnames(dfnew0) <- c("districtcode", "Year", "totalexpulsions")
+dfnew0$Ethnicity <- "Other"
+renamother5 <- rename(dfnew0, c( "totalexpulsions"="Expulsion_Other5"))
+dropother5 <- renamother5[,c(-4)]
+
+allother <- merge(dropother, dropother2, by = c("districtcode", "Year"))
+
+#turns the * in the rows into NA entry
+allother$Expulsion_Other1 <- as.numeric(as.character(allother$Expulsion_Other1))
+allother$Expulsion_Other2 <- as.numeric(as.character(allother$Expulsion_Other2))
+#turns NA entries into 0's
+allother$Expulsion_Other1[is.na(allother$Expulsion_Other1)] <- 0
+allother$Expulsion_Other2[is.na(allother$Expulsion_Other2)] <- 0
+
+sumdata <- allother$Expulsion_Other1 + allother$Expulsion_Other2
+
+#adds new column
+allother$sumdata <- allother$Expulsion_Other1 + allother$Expulsion_Other2
+#drops unneeded columns 
+finalethother <- allother[,c(-3,-4)]
+
+#-----------------------------------------------------------------------------------------
+allother2 <- merge(finalethother, dropother4, by = c("districtcode", "Year"))
+
+#turns the * in the rows into NA entry
+allother2$Expulsion_Other4 <- as.numeric(as.character(allother2$Expulsion_Other4))
+#turns NA entries into 0's
+allother2$Expulsion_Other4[is.na(allother2$Expulsion_Other4)]<- 0
+
+sumdata2 <- allother2$sumdata + allother2$Expulsion_Other4
+
+#adds new column
+allother2$sumdata2 <- allother2$sumdata + allother2$Expulsion_Other4
+#drops unneeded columns 
+finalethother2 <- allother2[,c(-3,-4)]
+#-----------------------------------------------------------------------------------------
+allother3 <- merge(finalethother2, dropother5, by = c("districtcode", "Year"))
+
+#turns the * in the rows into NA entry
+allother3$Expulsion_Other5 <- as.numeric(as.character(allother3$Expulsion_Other5))
+#turns NA entries into 0's
+allother3$Expulsion_Other5[is.na(allother3$Expulsion_Other5)] <- 0
+
+sumdata3 <- allother3$sumdata2 + allother3$Expulsion_Other5
+
+#adds new column
+allother3$sumdata3 <- allother3$sumdata2 + allother3$Expulsion_Other5
+#drops unneeded columns 
+finalethother3 <- allother3[,c(-3,-4)]
+
+#----------------------------------------------------------------------------------------
+allother4 <- merge(finalethother3 , dropother3, by = c("districtcode", "Year"))
+
+#turns the * in the rows into NA entry
+allother4$Expulsion_Other3 <- as.numeric(as.character(allother4$Expulsion_Other3))
+#turns NA entries into 0's
+allother4$Expulsion_Other3[is.na(allother4$Expulsion_Other3)] <- 0
+
+sumdata4 <- allother4$sumdata3 + allother4$Expulsion_Other3
+
+#Expulsion_Other <- allother4$sumdata3 + allother4$Expulsion_Other3
+#allother$Expulsion_Other <- allother4$sumdata3 + allother4$Expulsion_Other3
+#adds new column
+
+allother4$sumdata4 <- allother4$sumdata3 + allother4$Expulsion_Other3
+#drops unneeded columns 
+finalethother4 <- allother4[,c(-3,-4)]
+
+#-----------------------------------------------------------------------------------------
+
+blackasian <- merge(droprenamasian, droprenamblack, by = c("districtcode", "Year"), all=T)
+blackwhite <- merge(blackasian,dropwhite, by = c("districtcode", "Year"), all=T)
+baw <- merge(blackwhite, drophis, by = c("districtcode", "Year"), all=TRUE)
+sum(as.numeric(drophis$Expulsion_Hispanic), na.rm = T)
+
+
+
+171557
+
+finalalleth <- merge(finalethother4, baw, by = c("districtcode", "Year"), all=T)
+
+#turns the * in the rows into NA entry
+finalalleth$Expulsion_Hispanic <- as.numeric(finalalleth$Expulsion_Hispanic)
+#turns NA entries into 0's
+finalalleth$Expulsion_Hispanic[is.na(finalalleth$Expulsion_Hispanic)] <- 0
+
+sum(as.numeric(finalalleth$Expulsion_Hispanic), na.rm = T)
+
+#renames the columns got the code from Cookbook for R
+renameth <- rename(finalalleth, c("sumdata4"="Expulsion_Other"))
+sum(as.numeric(renameth$Expulsion_Hispanic))
+
+#merges all ethnicities and genders together 
+finalethgender <- merge(renameth,alldatmalfem, by = c("districtcode", "Year") )
+
+#reorders columns so all data is the same and can combine all together 
+finalethgender <- finalethgender[,c(1,2,4,5,6,7,8,9,3)]
+sum(as.numeric(finalethgender$Expulsion_Hispanic))
+
+#merges two columns together and appends at the end 
+finalethgender$dist_year <- paste(finalethgender$districtcode, finalethgender$Year, sep="_")
+sum(as.numeric(finalethgender$Expulsion_Hispanic))
+
+#drops col 1-2 & reorder so the combined col is the 1st column 
+fethgen <- finalethgender[,c(-1,-2)]
+fethgen2 <- fethgen[,c(8,1,2,3,4,5,6,7)]
+sum(as.numeric(fethgen2$Expulsion_Hispanic))
+sum(as.numeric(fethgen2$Expulsion_Asian))
+
+#command for a .csv to be saved on computer
+
+write.csv(fethgen2, file = "/Users/nathaliehuerta/Documents/dataed/Rforresearch/ExpulsionGenEth.csv")
+#-----------------------------------------------------------------------------------------
+```
+

@@ -1,0 +1,1220 @@
+---
+title: "Dateducation"
+author: "Nathalie Huerta"
+date: "7/3/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+library(dplyr)
+#2011-2012 data 
+explusion <- read.csv(file = "expulsion2011-12.csv", header = T) #imports the data 
+#explusion 
+
+
+length(unique(explusion$reportingcategory))#Finding how many unique elements are in the column reporting category 
+
+dname <- length(unique(explusion$districtname)) #Finding how many unique elements are in the column district name 
+dname
+
+dcode <- length(unique(explusion$districtcode))#Finding how many unique elements are in the column district code 
+dcode
+
+ccode <- length(unique(explusion$countycode)) #Finding how many unique elements are in the column county code 
+ccode
+
+length(unique(explusion$schoolname))
+
+scode <- length(unique(explusion$schoolcode)) #Finding how many unique elements are in the column school scholol 
+scode
+
+sum(as.numeric(explusion$cumulativeenrollment))
+sum(as.numeric(explusion$totalexpulsions))
+sum(as.numeric(explusion$unduplicatedcountofstudentsexpel))
+sum(as.numeric(explusion$v14))
+sum(as.numeric(explusion$expulsionratetotal))
+o<-sum(as.numeric(explusion$expulsioncountviolentincidentinj))
+sum(as.numeric(explusion$expulsioncountviolentincidentnoi))
+a <- sum(as.numeric(explusion$expulsioncountweaponspossession))
+b <- sum(as.numeric(explusion$expulsioncountillicitdrugrelated))
+b
+sum(as.numeric(explusion$expulsioncountofstudentsexpelled))
+sum(as.numeric(explusion$expulsioncountotherreasons))
+
+library(ggplot2)
+theme_set(theme_classic())
+
+
+
+```
+
+
+```{r}
+#this is the data for 2012-2013
+
+explusion12 <- read.csv(file= "expulsion2012-13.csv", header = T) #imports the data 
+#explusion12 
+
+length(unique(explusion12$reportingcategory))#Finding how many unique elements are in the column reporting category 
+
+length(unique(explusion12$districtname)) #Finding how many unique elements are in the column district name 
+
+
+length(unique(explusion12$districtcode))#Finding how many unique elements are in the column district code 
+
+length(unique(explusion12$countyname))
+
+length(unique(explusion12$countycode)) #Finding how many unique elements are in the column county code 
+length(unique(explusion12$schoolname))
+
+length(unique(explusion12$schoolcode)) #Finding how many unique elements are in the column school scholol 
+
+
+sum(as.numeric(explusion12$cumulativeenrollment))
+sum(as.numeric(explusion12$totalexpulsions))
+sum(as.numeric(explusion12$unduplicatedcountofstudentsexpel))
+sum(as.numeric(explusion12$v14))
+sum(as.numeric(explusion12$expulsionratetotal))
+x<-sum(as.numeric(explusion12$expulsioncountviolentincidentinj))
+sum(as.numeric(explusion12$expulsioncountviolentincidentnoi))
+y <- sum(as.numeric(explusion12$expulsioncountweaponspossession))
+y
+z <- sum(as.numeric(explusion12$expulsioncountillicitdrugrelated))
+z
+sum(as.numeric(explusion12$expulsioncountofstudentsexpelled))
+sum(as.numeric(explusion12$expulsioncountotherreasons))
+```
+
+
+```{r}
+#this is the data for 2013-14
+explusion13 <- read.csv(file= "expulsion2013-14.csv", header = T) #imports the data 
+#explusion13 
+
+length(unique(explusion13$reportingcategory))#Finding how many unique elements are in the column reporting category 
+
+length(unique(explusion13$districtname)) #Finding how many unique elements are in the column district name 
+
+
+length(unique(explusion13$districtcode))#Finding how many unique elements are in the column district code 
+
+length(unique(explusion13$countyname))
+
+length(unique(explusion13$countycode)) #Finding how many unique elements are in the column county code 
+length(unique(explusion13$schoolname))
+
+length(unique(explusion13$schoolcode)) #Finding how many unique elements are in the column school scholol 
+
+
+sum(as.numeric(explusion13$cumulativeenrollment))
+sum(as.numeric(explusion13$totalexpulsions))
+sum(as.numeric(explusion13$unduplicatedcountofstudentsexpel))
+sum(as.numeric(explusion13$v14))
+sum(as.numeric(explusion13$expulsionratetotal))
+n<-sum(as.numeric(explusion13$expulsioncountviolentincidentinj))
+sum(as.numeric(explusion13$expulsioncountviolentincidentnoi))
+
+c <- sum(as.numeric(explusion13$expulsioncountweaponspossession))
+c
+d <- sum(as.numeric(explusion13$expulsioncountillicitdrugrelated))
+d
+sum(as.numeric(explusion13$expulsioncountofstudentsexpelled))
+sum(as.numeric(explusion13$expulsioncountotherreasons))
+
+```
+
+```{r}
+#this is the data for 2014-2015
+explusion14 <- read.csv(file= "expulsion2014-15.csv", header = T) #imports the data 
+#explusion14 
+
+length(unique(explusion14$reportingcategory))#Finding how many unique elements are in the column reporting category 
+
+length(unique(explusion14$districtname)) #Finding how many unique elements are in the column district name 
+
+
+length(unique(explusion14$districtcode))#Finding how many unique elements are in the column district code 
+length(unique(explusion14$districtname))
+
+length(unique(explusion14$countyname))
+
+length(unique(explusion14$countycode)) #Finding how many unique elements are in the column county code 
+
+length(unique(explusion14$schoolcode)) #Finding how many unique elements are in the column school scholol 
+
+length(unique(explusion14$schoolname))
+
+
+sum(as.numeric(explusion14$cumulativeenrollment))
+sum(as.numeric(explusion14$totalexpulsions))
+sum(as.numeric(explusion14$unduplicatedcountofstudentsexpel))
+sum(as.numeric(explusion14$v14))
+sum(as.numeric(explusion14$expulsionratetotal))
+m<-sum(as.numeric(explusion14$expulsioncountviolentincidentinj))
+sum(as.numeric(explusion14$expulsioncountviolentincidentnoi))
+e <- sum(as.numeric(explusion14$expulsioncountweaponspossession))
+e
+f <- sum(as.numeric(explusion14$expulsioncountillicitdrugrelated))
+f
+sum(as.numeric(explusion14$expulsioncountofstudentsexpelled))
+sum(as.numeric(explusion14$expulsioncountotherreasons))
+
+```
+
+```{r}
+#this the data for 2015-2016
+explusion15 <- read.csv(file= "expulsion2015-16.csv", header = T) #imports the data 
+#explusion15 
+
+length(unique(explusion15$reportingcategory))#Finding how many unique elements are in the column reporting category 
+
+length(unique(explusion15$districtname)) #Finding how many unique elements are in the column district name 
+
+
+length(unique(explusion15$districtcode))#Finding how many unique elements are in the column district code 
+
+length(unique(explusion15$countyname))
+length(unique(explusion15$schoolname))
+
+length(unique(explusion15$countycode)) #Finding how many unique elements are in the column county code 
+
+
+length(unique(explusion15$schoolcode)) #Finding how many unique elements are in the column school scholol 
+
+
+sum(as.numeric(explusion15$cumulativeenrollment))
+sum(as.numeric(explusion15$totalexpulsions))
+sum(as.numeric(explusion15$unduplicatedcountofstudentsexpel))
+sum(as.numeric(explusion15$v14))
+sum(as.numeric(explusion15$expulsionratetotal))
+l<-sum(as.numeric(explusion15$expulsioncountviolentincidentinj))
+sum(as.numeric(explusion15$expulsioncountviolentincidentnoi))
+g <- sum(as.numeric(explusion15$expulsioncountweaponspossession))
+h <- sum(as.numeric(explusion15$expulsioncountillicitdrugrelated))
+sum(as.numeric(explusion15$expulsioncountofstudentsexpelled))
+sum(as.numeric(explusion15$expulsioncountotherreasons))
+
+```
+
+```{r}
+#this is the data for 2016-2017
+explusion16 <- read.csv(file= "expulsion2016-17.csv", header = T) #imports the data 
+#explusion16 
+
+length(unique(explusion16$reportingcategory))#Finding how many unique elements are in the column reporting category 
+
+length(unique(explusion16$districtname)) #Finding how many unique elements are in the column district name 
+
+
+length(unique(explusion16$districtcode))#Finding how many unique elements are in the column district code 
+
+
+length(unique(explusion16$countycode)) #Finding how many unique elements are in the column county code 
+length(unique(explusion16$countyname))
+
+
+length(unique(explusion16$schoolcode)) #Finding how many unique elements are in the column school scholol 
+
+
+sum(as.numeric(explusion16$cumulativeenrollment))
+sum(as.numeric(explusion16$totalexpulsions))
+sum(as.numeric(explusion16$unduplicatedcountofstudentsexpel))
+sum(as.numeric(explusion16$v14))
+sum(as.numeric(explusion16$expulsionratetotal))
+k<-sum(as.numeric(explusion16$expulsioncountviolentincidentinj))
+sum(as.numeric(explusion16$expulsioncountviolentincidentnoi))
+i <- sum(as.numeric(explusion16$expulsioncountweaponspossession))
+j <- sum(as.numeric(explusion16$expulsioncountillicitdrugrelated))
+sum(as.numeric(explusion16$expulsioncountofstudentsexpelled))
+sum(as.numeric(explusion16$expulsioncountotherreasons))
+
+```
+
+```{r}
+library(ggplot2)
+exdat <- data.frame(x = c(11,12,13,14,15,16), y = c(b,z,d,f,h,j ))
+exdat
+
+plot(exdat)
+drug <- ggplot(data = exdat, aes(x, y)) + geom_line() + labs(x = "Academic Year", y = "Expulsion Drug Related")
+drug
+
+exdat2 <- data.frame( x =  c(11,12,13,14,15,16), y = c(a,y,c,e,g,i))
+exdat2
+
+
+weapon <- ggplot(data = exdat2, aes(x,y)) + geom_line() + labs(x= "Academic Year", y= "Expulsion Weapon Related")
+weapon 
+
+exdat3 <- data.frame(x = c(11,12,13,14,15,16), y = c(o,x,n,m,l,k )) 
+exdat3
+
+vincident <- ggplot(data = exdat3, aes(x,y)) + geom_line()
+vincident
+
+```
+
+```{r}
+#this is the data for 2011
+#tells us the location and extracts for males 
+
+
+
+
+GMlocation <- which(explusion[,10] == "GM")
+GMlocation
+length(GMlocation)
+
+gmrowcol <- explusion[GMlocation,]
+gmrowcol
+
+#tells us the location and extracts for males 
+GFlocation <- which(explusion[,10] == "GF")
+GFlocation 
+length(GFlocation)
+
+gfrowcol <- explusion[GFlocation,]
+gfrowcol
+
+#tells us the location and extracts for African Americans 
+RBlocation <- which(explusion[,10] == "RB")
+RBlocation 
+length(GFlocation)
+
+rbrowcol <- explusion[RBlocation,]
+rbrowcol
+
+#tells us the location and extracts for American Indian or Alaska Native 
+RIlocation <- which(explusion[,10] == "RI")
+RIlocation 
+
+#how many for the whole data set are American Indian or Alaska Native
+length(RIlocation)
+
+rirowcol <- explusion[RIlocation,]
+rirowcol
+
+#tells us the location and extracts for Asian 
+RAlocation <- which(explusion[,10] == "RA")
+#RAlocation
+#how many for the whole data set are Asian 
+length(RAlocation)
+
+rarowcol <- explusion[RAlocation,]
+#rarowcol
+
+
+#tells us the location and extracts for Flipnino  
+RFlocation <- which(explusion[,10] == "RF")
+#RFlocation
+
+#how many for the whole data set are Flipino 
+length(RFlocation)
+
+rfrowcol <- explusion[RFlocation,]
+#rarowcol
+
+
+#tells us the location and extracts for Hispanic or Latino  
+RHlocation <- which(explusion[,10] == "RH")
+#RHlocation
+
+#how many for the whole data set are Flipino 
+length(RHlocation)
+
+rhrowcol <- explusion[RHlocation,]
+#rhrowcol
+
+#tells us the location and extracts for Pacific Islanders  
+RPlocation <- which(explusion[,10] == "RP")
+#RPlocation
+
+#how many for the whole data set are Pacific Islanders 
+length(RPlocation)
+
+rprowcol <- explusion[RPlocation,]
+#rhrowcol
+
+#tells us the location and extracts for white
+RWlocation <- which(explusion[,10] == "RW")
+#RHlocation
+
+#how many for the whole data set are White 
+length(RWlocation)
+
+rwrowcol <- explusion[RWlocation,]
+#rhrowcol
+
+
+
+
+count_TAtotal <- filter(explusion, explusion$reportingcategory == "TA")
+count_TAtotal
+
+count_GMtotal <- filter(explusion, explusion$reportingcategory == "GM")
+
+count_GFtotal <- filter(explusion, explusion$reportingcategory == "GF")
+
+library(ggplot2)
+theme_set(theme_classic())
+
+#how to extract rows to get rows 2 through 59 and creates new data with only these rows
+stepTA <- count_TAtotal[c(2:59),c(10,11,12)]
+stepTA
+
+stepGM <- count_GMtotal[c(2:59),c(10,11,12)]
+stepGM
+
+stepGF <- count_GFtotal[c(2:59), c(10,11,12)]
+
+#we now need to figure out how to make a 59 by 2 new dataset that only contains the countycode and the total number of expulsions 
+
+
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+datframegm <- data.frame(count_GMtotal[c(2:59), "countyname"], stepGM)
+datframegm
+
+dataframegf <- data.frame(count_GFtotal[c(2:59), "countyname"], stepGF)
+dataframegf
+
+dataframeta <- data.frame(count_TAtotal[c(2:59), "countyname"], stepTA)
+dataframeta
+
+#clean data for males 
+dfnew <- datframegm[,c(1,4)]
+colnames(dfnew)<- c("county", "Total")
+dfnew$gender <- "Males"
+
+#clean data for females
+dfnew2 <- dataframegf[,c(1,4)]
+colnames(dfnew2)<- c("county", "Total")
+dfnew2$gender <- "Females"
+
+#binds the dataframes together 
+combined <- rbind(dfnew, dfnew2)
+
+
+
+
+
+
+```
+
+```{r}
+#extracting for year 2012-2013
+#tells us the location and extracts for males 
+GMlocation12 <- which(explusion12[,10] == "GM")
+#GMlocation12
+length(GMlocation12)
+
+gmrowcol12 <- explusion[GMlocation12,]
+#gmrowcol12
+
+#tells us the location and extracts for males 
+GFlocation12 <- which(explusion12[,10] == "GF")
+#GFlocation12 
+length(GFlocation12)
+
+gfrowcol12 <- explusion[GFlocation12,]
+#gfrowcol12
+
+#tells us the location and extracts for African Americans 
+RBlocation12 <- which(explusion12[,10] == "RB")
+#RBlocation12 
+length(GFlocation12)
+
+rbrowcol12 <- explusion[RBlocation12,]
+#rbrowcol12
+
+#tells us the location and extracts for American Indian or Alaska Native 
+RIlocation12 <- which(explusion12[,10] == "RI")
+RIlocation12
+
+#how many for the whole data set are American Indian or Alaska Native
+length(RIlocation12)
+
+rirowcol12 <- explusion12[RIlocation12,]
+rirowcol12
+
+#tells us the location and extracts for Asian 
+RAlocation12 <- which(explusion12[,10] == "RA")
+#RAlocation
+#how many for the whole data set are Asian 
+length(RAlocation12)
+
+rarowcol12 <- explusion12[RAlocation12,]
+#rarowcol
+
+
+#tells us the location and extracts for Flipnino  
+RFlocation12 <- which(explusion12[,10] == "RF")
+#RFlocation
+
+#how many for the whole data set are Flipino 
+length(RFlocation12)
+
+rfrowcol12 <- explusion12[RFlocation12,]
+
+#tells us the location and extracts for Hispanic or Latino  
+RHlocation12 <- which(explusion12[,10] == "RH")
+#RHlocation
+
+#how many for the whole data set are Flipino 
+length(RHlocation12)
+
+rhrowcol12 <- explusion12[RHlocation,]
+#rhrowcol
+
+#tells us the location and extracts for Pacific Islanders  
+RPlocation12 <- which(explusion12[,10] == "RP")
+#RPlocation
+
+#how many for the whole data set are Pacific Islanders 
+length(RPlocation12)
+
+rprowcol12 <- explusion12[RPlocation12,]
+#rhrowcol
+
+#tells us the location and extracts for white
+RWlocation12 <- which(explusion12[,10] == "RW")
+#RHlocation
+
+#how many for the whole data set are White 
+length(RWlocation12)
+
+rwrowcol12 <- explusion12[RWlocation12,]
+#rhrowcol
+
+
+count_total12 <- filter(explusion12, explusion12$reportingcategory == "TA")
+count_total12
+
+#rarowcol
+```
+
+
+
+```{r}
+#tells us the location and extracts for males 
+GMlocation13 <- which(explusion13[,10] == "GM")
+GMlocation13
+length(GMlocation13)
+
+gmrowcol13 <- explusion13[GMlocation13,]
+gmrowcol13
+
+#tells us the location and extracts for males 
+GFlocation13 <- which(explusion13[,10] == "GF")
+GFlocation13 
+length(GFlocation13)
+
+gfrowcol13 <- explusion13[GFlocation13,]
+gfrowcol13
+
+#tells us the location and extracts for African Americans 
+RBlocation13 <- which(explusion13[,10] == "RB")
+RBlocation13 
+length(GFlocation13)
+
+rbrowcol13 <- explusion13[RBlocation13,]
+rbrowcol13
+
+#tells us the location and extracts for American Indian or Alaska Native 
+RIlocation13 <- which(explusion13[,10] == "RI")
+RIlocation13
+
+#how many for the whole data set are American Indian or Alaska Native
+length(RIlocation13)
+
+rirowcol13 <- explusion13[RIlocation13,]
+rirowcol13
+
+#tells us the location and extracts for Asian 
+RAlocation13 <- which(explusion13[,10] == "RA")
+#RAlocation
+#how many for the whole data set are Asian 
+length(RAlocation13)
+
+rarowcol13 <- explusion13[RAlocation13,]
+#rarowcol
+
+
+#tells us the location and extracts for Flipnino  
+RFlocation13 <- which(explusion13[,10] == "RF")
+#RFlocation
+
+#how many for the whole data set are Flipino 
+length(RFlocation13)
+
+rfrowcol13 <- explusion13[RFlocation13,]
+#rarowcol
+
+#tells us the location and extracts for Hispanic or Latino  
+RHlocation13 <- which(explusion13[,10] == "RH")
+#RHlocation
+
+#how many for the whole data set are Flipino 
+length(RHlocation13)
+
+rhrowcol13 <- explusion13[RHlocation13,]
+#rhrowcol
+
+#tells us the location and extracts for Pacific Islanders  
+RPlocation13 <- which(explusion13[,10] == "RP")
+#RPlocation
+
+#how many for the whole data set are Pacific Islanders 
+length(RPlocation13)
+
+rprowcol13 <- explusion13[RPlocation13,]
+#rhrowcol
+
+#tells us the location and extracts for white
+RWlocation13 <- which(explusion13[,10] == "RW")
+#RHlocation
+
+#how many for the whole data set are White 
+length(RWlocation13)
+
+rwrowcol13 <- explusion13[RWlocation13,]
+#rhrowcol
+
+
+count_total13 <- filter(explusion13, explusion13$reportingcategory == "TA")
+count_total13
+
+```
+
+```{r}
+#extraction for the years 2014-2015 
+#tells us the location and extracts for males 
+GMlocation14 <- which(explusion14[,10] == "GM")
+GMlocation14
+length(GMlocation14)
+
+gmrowcol14 <- explusion14[GMlocation14,]
+gmrowcol14
+
+#tells us the location and extracts for males 
+GFlocation14 <- which(explusion14[,10] == "GF")
+GFlocation14 
+length(GFlocation14)
+
+gfrowcol14 <- explusion14[GFlocation14,]
+gfrowcol14
+
+#tells us the location and extracts for African Americans 
+RBlocation14 <- which(explusion14[,10] == "RB")
+RBlocation14 
+length(GFlocation14)
+
+rbrowcol14 <- explusion14[RBlocation14,]
+rbrowcol14
+
+#tells us the location and extracts for American Indian or Alaska Native 
+RIlocation14 <- which(explusion14[,10] == "RI")
+RIlocation14
+
+#how many for the whole data set are American Indian or Alaska Native
+length(RIlocation14)
+
+rirowcol14 <- explusion14[RIlocation14,]
+rirowcol14
+
+#tells us the location and extracts for Asian 
+RAlocation14 <- which(explusion14[,10] == "RA")
+#RAlocation
+#how many for the whole data set are Asian 
+length(RAlocation14)
+
+rarowcol14 <- explusion14[RAlocation14,]
+#rarowcol
+
+
+#tells us the location and extracts for Flipnino  
+RFlocation14 <- which(explusion14[,10] == "RF")
+#RFlocation
+
+#how many for the whole data set are Flipino 
+length(RFlocation14)
+
+rfrowcol14 <- explusion14[RFlocation14,]
+#rarowcol
+
+
+#tells us the location and extracts for Flipnino  
+RFlocation14 <- which(explusion14[,10] == "RF")
+#RFlocation
+
+#how many for the whole data set are Flipino 
+length(RFlocation14)
+
+rfrowcol14 <- explusion[RFlocation14,]
+#rarowcol
+
+
+#tells us the location and extracts for Hispanic or Latino  
+RHlocation14 <- which(explusion14[,10] == "RH")
+#RHlocation
+
+#how many for the whole data set are Flipino 
+length(RHlocation14)
+
+rhrowcol14 <- explusion14[RHlocation14,]
+#rhrowcol
+
+#tells us the location and extracts for Pacific Islanders  
+RPlocation14 <- which(explusion14[,10] == "RP")
+#RPlocation
+
+#how many for the whole data set are Pacific Islanders 
+length(RPlocation14)
+
+rprowcol14 <- explusion14[RPlocation,]
+#rhrowcol
+
+#tells us the location and extracts for white
+RWlocation14 <- which(explusion14[,10] == "RW")
+#RHlocation
+
+#how many for the whole data set are White 
+length(RWlocation14)
+
+rwrowcol14 <- explusion14[RWlocation,]
+#rhrowcol
+
+
+count_total14 <- filter(explusion14, explusion14$reportingcategory == "TA")
+count_total14
+
+```
+
+```{r}
+#extraction for the years 2015-2016 
+#tells us the location and extracts for males 
+GMlocation15 <- which(explusion15[,10] == "GM")
+GMlocation15
+length(GMlocation15)
+
+gmrowcol15 <- explusion15[GMlocation15,]
+gmrowcol15
+
+#tells us the location and extracts for males 
+GFlocation15 <- which(explusion15[,10] == "GF")
+GFlocation15 
+length(GFlocation15)
+
+gfrowcol15 <- explusion15[GFlocation15,]
+gfrowcol15
+
+#tells us the location and extracts for African Americans 
+RBlocation15 <- which(explusion15[,10] == "RB")
+RBlocation15 
+length(GFlocation15)
+
+rbrowcol15 <- explusion15[RBlocation15,]
+rbrowcol15
+
+#tells us the location and extracts for American Indian or Alaska Native 
+RIlocation15 <- which(explusion15[,10] == "RI")
+RIlocation15
+
+#how many for the whole data set are American Indian or Alaska Native
+length(RIlocation15)
+
+rirowcol15 <- explusion15[RIlocation15,]
+rirowcol15
+
+#tells us the location and extracts for Asian 
+RAlocation15 <- which(explusion15[,10] == "RA")
+#RAlocation
+#how many for the whole data set are Asian 
+length(RAlocation15)
+
+rarowcol15 <- explusion15[RAlocation15,]
+#rarowcol
+
+
+#tells us the location and extracts for Flipnino  
+RFlocation15 <- which(explusion15[,10] == "RF")
+#RFlocation
+
+#how many for the whole data set are Flipino 
+length(RFlocation15)
+
+rfrowcol15 <- explusion15[RFlocation15,]
+#rarowcol
+
+
+
+#tells us the location and extracts for Hispanic or Latino  
+RHlocation15 <- which(explusion15[,10] == "RH")
+#RHlocation
+
+#how many for the whole data set are Flipino 
+length(RHlocation15)
+
+rhrowcol15 <- explusion15[RHlocation,]
+#rhrowcol
+
+#tells us the location and extracts for Pacific Islanders  
+RPlocation15 <- which(explusion15[,10] == "RP")
+#RPlocation
+
+#how many for the whole data set are Pacific Islanders 
+length(RPlocation15)
+
+rprowcol15 <- explusion15[RPlocation15,]
+#rhrowcol
+
+#tells us the location and extracts for white
+RWlocation15 <- which(explusion15[,10] == "RW")
+#RHlocation
+
+#how many for the whole data set are White 
+length(RWlocation15)
+
+rwrowcol15 <- explusion15[RWlocation,]
+#rhrowcol
+
+
+count_total15 <- filter(explusion15, explusion15$reportingcategory == "TA")
+count_total15
+
+
+```
+
+```{r}
+#extraction for the years 2016-2017 
+#tells us the location and extracts for males 
+GMlocation17 <- which(explusion17[,10] == "GM")
+GMlocation17
+length(GMlocation17)
+
+gmrowcol17 <- explusion17[GMlocation15,]
+gmrowcol17
+
+#tells us the location and extracts for males 
+GFlocation17 <- which(explusion17[,10] == "GF")
+GFlocation17 
+length(GFlocation17)
+
+gfrowcol17 <- explusion17[GFlocation17,]
+gfrowcol17
+
+#tells us the location and extracts for African Americans 
+RBlocation17 <- which(explusion17[,10] == "RB")
+RBlocation17 
+length(GFlocation17)
+
+rbrowcol17 <- explusion17[RBlocation17,]
+rbrowcol17
+
+#tells us the location and extracts for American Indian or Alaska Native 
+RIlocation17 <- which(explusion17[,10] == "RI")
+RIlocation17
+
+#how many for the whole data set are American Indian or Alaska Native
+length(RIlocation17)
+
+rirowcol17 <- explusion17[RIlocation17,]
+rirowcol17
+
+#tells us the location and extracts for Asian 
+RAlocation17 <- which(explusion17[,10] == "RA")
+#RAlocation
+#how many for the whole data set are Asian 
+length(RAlocation17)
+
+rarowcol17 <- explusion17[RAlocation17,]
+#rarowcol
+
+
+#tells us the location and extracts for Flipnino  
+RFlocation17 <- which(explusion17[,10] == "RF")
+#RFlocation
+
+#how many for the whole data set are Flipino 
+length(RFlocation17)
+
+rfrowcol17 <- explusion17[RFlocation17,]
+#rarowcol
+
+
+#tells us the location and extracts for Hispanic or Latino  
+RHlocation17 <- which(explusion17[,10] == "RH")
+#RHlocation
+
+#how many for the whole data set are hispanic
+length(RHlocation17)
+
+rhrowcol17 <- explusion17[RHlocation17,]
+#rhrowcol
+
+#tells us the location and extracts for Pacific Islanders  
+RPlocation17 <- which(explusion17[,10] == "RP")
+#RPlocation
+
+#how many for the whole data set are Pacific Islanders 
+length(RPlocation17)
+
+rprowcol17 <- explusion[RPlocation17,]
+#rhrowcol
+
+#tells us the location and extracts for white
+RWlocation17 <- which(explusion17[,10] == "RW")
+#RHlocation
+
+#how many for the whole data set are White 
+length(RWlocation17)
+
+rwrowcol17 <- explusion17[RWlocation17,]
+#rhrowcol
+
+
+count_total17 <- filter(explusion17, explusion17$reportingcategory == "TA")
+count_total17
+```
+
+```{r}
+#started redoing what i had done previously right here 
+
+#combines all 6 datasets together to make one big data set by using rbind but to use all column names must be the same 
+combineall <- rbind(explusion,explusion12,explusion13,explusion14,explusion15,explusion16)
+#combineall
+
+#takes out the first 13 rows of the dataset 
+newcombine <- combineall[-c(1:13),]
+#newcombine
+
+#write.csv(newcombine,file = "/Users/nathaliehuerta/Desktop/Combined_Expulsions.csv")
+
+
+
+count_GMtotal2 <- filter(newcombine, newcombine$reportingcategory == "GM" , newcombine$aggregatelevel == "C") 
+
+count_GFtotal2 <- filter(newcombine, newcombine$reportingcategory == "GF" , newcombine$aggregatelevel == "C")
+
+#library(ggplot2)
+#theme_set(theme_classic())
+
+
+stepGM2 <- count_GMtotal2[,c(1,6,10,11,12)]
+stepGM2
+
+
+stepGF2 <- count_GFtotal2[,c(1,6,10,11,12)]
+stepGF2
+
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+datframegm2 <- data.frame(count_GMtotal2[, "countyname"], stepGM2)
+datframegm2
+
+dataframegf2 <- data.frame(count_GFtotal2[, "countyname"], stepGF2)
+dataframegf2
+
+#clean data for males 
+dfnew2 <- datframegm2[,c(1,2,6)]
+colnames(dfnew2)<- c("county", "Year", "Total")
+dfnew2$Gender <- "Males"
+
+#clean data for females
+dfnew3 <- dataframegf2[,c(1,2,6)]
+colnames(dfnew3)<- c("county", "Year", "Total")
+dfnew3$Gender <- "Females"
+
+#binds the dataframes together 
+combined2 <- rbind(dfnew2, dfnew3)
+combined2
+sum(as.numeric(combined2$Total))
+
+
+
+#plot bar graphs 
+library(ggplot2)
+geninfo <- aggregate(.~Year+Gender, data=combined2, sum)
+
+GenPlot <- ggplot(geninfo, aes(x = Year, y = Total)) + labs(title = "Yearly Expulsions By Gender") +  geom_bar(aes(fill=Gender), stat="identity") + 
+  theme(plot.title = element_text(hjust = 0.5))
+GenPlot
+
+# Histogram on a Categorical variable
+# Stacked Bar Plot with Colors and Legend
+ 
+```
+
+
+
+```{r}
+
+
+#start here tomorrow 07/09/18
+count_RFtot <- filter(newcombine, newcombine$reportingcategory == "RF" , newcombine$aggregatelevel == "C") 
+count_RAtot <- filter(newcombine, newcombine$reportingcategory == "RA" , newcombine$aggregatelevel == "C") 
+count_RHtot <- filter(newcombine, newcombine$reportingcategory == "RH" , newcombine$aggregatelevel == "C") 
+count_RPtot <- filter(newcombine, newcombine$reportingcategory == "RP" , newcombine$aggregatelevel == "C") 
+count_RBtot <- filter(newcombine, newcombine$reportingcategory == "RB" , newcombine$aggregatelevel == "C") 
+count_RItot <- filter(newcombine, newcombine$reportingcategory == "RI" , newcombine$aggregatelevel == "C") 
+count_RWtot <- filter(newcombine, newcombine$reportingcategory == "RW" , newcombine$aggregatelevel == "C") 
+
+count_RTtot <- filter(newcombine, newcombine$reportingcategory == "RT" , newcombine$aggregatelevel == "C") 
+
+count_RDtot <- filter(newcombine, newcombine$reportingcategory == "RD" , newcombine$aggregatelevel == "C") 
+#how to extract rows to get rows 2 through 59 and creates new data with only these rows
+
+steprf <- count_RFtot[,c(1,6,10,11,12)]
+steprf
+
+stepra <- count_RAtot[,c(1,6,10,11,12)]
+stepra
+
+steprh <- count_RHtot[,c(1,6,10,11,12)]
+steprh
+
+steprp <- count_RPtot[,c(1,6,10,11,12)]
+steprp
+
+steprb <- count_RBtot[,c(1,6,10,11,12)]
+steprb
+
+stepri <- count_RItot[,c(1,6,10,11,12)]
+stepri
+
+steprw <- count_RWtot[,c(1,6,10,11,12)]
+steprw
+
+steprd <- count_RDtot[,c(1,6,10,11,12)]
+steprd
+
+steprt <- count_RTtot[,c(1,6,10,11,12)]
+steprt
+
+#we now need to figure out how to make a 59 by 2 new dataset that only contains the countycode and the total number of expulsions 
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+rf <- data.frame(count_RFtot[, "countyname"], steprf)
+rf
+
+ra <- data.frame(count_RAtot[, "countyname"], stepra)
+ra
+
+rh <- data.frame(count_RHtot[, "countyname"], steprh)
+rh
+
+ri <- data.frame(count_RItot[, "countyname"], stepri)
+ri
+
+rp <- data.frame(count_RPtot[, "countyname"], steprp)
+rp
+
+rw <- data.frame(count_RWtot[, "countyname"], steprw)
+rw
+
+rb <- data.frame(count_RBtot[, "countyname"], steprb)
+rb
+
+rt <- data.frame(count_RTtot[, "countyname"], steprt)
+rt
+
+rd <- data.frame(count_RDtot[, "countyname"], steprd)
+rd
+ 
+dfnew2 <- ra[,c(1,2,6)]
+colnames(dfnew2)<- c("county", "Year", "Total")
+dfnew2$Ethnicity <- "Asian"
+
+dfnew6 <- rb[,c(1,2,6)]
+colnames(dfnew6)<- c("county", "Year", "Total")
+dfnew6$Ethnicity <- "African American"
+
+dfnew3 <- rf[,c(1,2,6)]
+colnames(dfnew3)<- c("county", "Year", "Total")
+dfnew3$Ethnicity <- "Other"
+
+dfnew4 <- rh[,c(1,2,6)]
+colnames(dfnew4)<- c("county", "Year", "Total")
+dfnew4$Ethnicity <- "Hispanic or Latino"
+
+dfnew5 <- ri[,c(1,2,6)]
+colnames(dfnew5) <- c("county", "Year", "Total")
+dfnew5$Ethnicity <- "Other"
+
+dfnew7 <- rp[,c(1,2,6)]
+colnames(dfnew7) <- c("county", "Year", "Total")
+dfnew7$Ethnicity <- "Other"
+
+dfnew8 <- rw[,c(1,2,6)]
+colnames(dfnew8) <- c("county", "Year", "Total")
+dfnew8$Ethnicity <- "White"
+
+dfnew9 <- rt[,c(1,2,6)]
+colnames(dfnew9) <- c("county", "Year", "Total")
+dfnew9$Ethnicity <- "Other"
+
+dfnew0 <- rd[,c(1,2,6)]
+colnames(dfnew0) <- c("county", "Year", "Total")
+dfnew0$Ethnicity <- "Other"
+
+#binds the dataframes together 
+
+
+
+ethall <- rbind(dfnew2,dfnew6,dfnew3,dfnew4,dfnew5,dfnew7,dfnew8,dfnew9,dfnew0)
+ethall
+
+sum(as.numeric(ethall$Total))
+
+#plot bar graphs 
+library(ggplot2)
+
+#combining several elments 
+ethinfo <- aggregate(.~Year+Ethnicity, data=ethall, sum)
+
+ethPlot <- ggplot(ethinfo, aes(Year,Total)) +labs(title="Yearly Expulsion Rates By Ethnicity") + geom_bar(aes(fill=Ethnicity), stat="identity")  +
+  theme(plot.title = element_text(hjust = 0.5))
+ethPlot
+```
+
+
+Cumulative Enrollment
+```{r}
+
+TAcount <- (filter(newcombine, newcombine$reportingcategory =="TA", newcombine$aggregatelevel =="C"))
+
+#subset with certin columns  of the TA and Cs
+onlyTAcount <- TAcount[,]
+onlyTAcount
+
+#dataframe of all TA and counties
+onlyTAcountdf <- data.frame(onlyTAcount[, "countyname"], onlyTAcount)
+onlyTAcountdf
+
+CE11 <- sum(as.numeric(as.character(onlyTAcount[1:58,11])))
+CE12 <- sum(as.numeric(as.character(onlyTAcount[59:116,11])))
+CE12
+CE13 <- sum(as.numeric(as.character(onlyTAcount[117:174,11])))
+CE13
+CE14 <- sum(as.numeric(as.character(onlyTAcount[175:232,11])))
+CE14
+CE15 <- sum(as.numeric(as.character(onlyTAcount[233:290,11])))
+CE15
+CE16 <- sum(as.numeric(as.character(onlyTAcount[291:348,11])))
+CE16
+
+
+```
+Total Explusion
+```{r}
+
+TA11 <- sum(as.numeric(as.character(onlyTAcount[1:58,12])))
+TA11
+TA12 <- sum(as.numeric(as.character(onlyTAcount[59:116,12])))
+TA12
+TA13 <- sum(as.numeric(as.character(onlyTAcount[117:174,12])))
+TA13
+TA14 <- sum(as.numeric(as.character(onlyTAcount[175:232,12])))
+TA14
+TA15 <- sum(as.numeric(as.character(onlyTAcount[233:290,12])))
+TA15
+TA16 <- sum(as.numeric(as.character(onlyTAcount[291:348,12])))
+TA16
+
+```
+Expulsion Rate
+```{r}
+
+SR11 <- sum(as.numeric(as.character(onlyTAcount[1:58,16])))
+SR11
+SR12 <- sum(as.numeric(as.character(onlyTAcount[59:116,16])))
+SR12
+SR13 <- sum(as.numeric(as.character(onlyTAcount[117:174,16])))
+SR13
+SR14 <- sum(as.numeric(as.character(onlyTAcount[175:232,16])))
+SR14
+SR15 <- sum(as.numeric(as.character(onlyTAcount[233:290,16])))
+SR15
+SR16 <- sum(as.numeric(as.character(onlyTAcount[291:348,16])))
+SR16
+
+```
+Violent Injury
+```{r}
+VI11 <- sum(as.numeric(as.character(onlyTAcount[1:58,17])))
+VI11
+VI12 <- sum(as.numeric(as.character(onlyTAcount[59:116,17])))
+VI12
+VI13 <- sum(as.numeric(as.character(onlyTAcount[117:174,17])))
+VI13
+VI14 <- sum(as.numeric(as.character(onlyTAcount[175:232,17])))
+VI14
+VI15 <- sum(as.numeric(as.character(onlyTAcount[233:290,17])))
+VI15
+VI16 <- sum(as.numeric(as.character(onlyTAcount[291:348,17])))
+VI16
+
+```
+
+Violent Non-Injury
+```{r}
+VN11 <- sum(as.numeric(as.character(onlyTAcount[1:58,18])))
+VN11
+VN12 <- sum(as.numeric(as.character(onlyTAcount[59:116,18])))
+VN12
+VN13 <- sum(as.numeric(as.character(onlyTAcount[117:174,18])))
+VN13
+VN14 <- sum(as.numeric(as.character(onlyTAcount[175:232,18])))
+VN14
+VN15 <- sum(as.numeric(as.character(onlyTAcount[233:290,18])))
+VN15
+VN16 <- sum(as.numeric(as.character(onlyTAcount[291:348,18])))
+VN16
+```
+Weapon Possession
+```{r}
+WP11 <- sum(as.numeric(as.character(onlyTAcount[1:58,19])))
+WP11
+WP12 <- sum(as.numeric(as.character(onlyTAcount[59:116,19])))
+WP12
+WP13 <- sum(as.numeric(as.character(onlyTAcount[117:174,19])))
+WP13
+WP14 <- sum(as.numeric(as.character(onlyTAcount[175:232,19])))
+WP14
+WP15 <- sum(as.numeric(as.character(onlyTAcount[233:290,19])))
+WP15
+WP16 <- sum(as.numeric(as.character(onlyTAcount[291:348,19])))
+WP16
+```
+
+Drug Related
+```{r}
+DR11 <- sum(as.numeric(as.character(onlyTAcount[1:58,20])))
+DR12 <- sum(as.numeric(as.character(onlyTAcount[59:116,20])))
+DR13 <- sum(as.numeric(as.character(onlyTAcount[117:174,20])))
+DR14 <- sum(as.numeric(as.character(onlyTAcount[175:232,20])))
+DR15 <- sum(as.numeric(as.character(onlyTAcount[233:290,20])))
+DR16 <- sum(as.numeric(as.character(onlyTAcount[291:348,20])))
+```
+
+Defiance Only
+```{r}
+DO11 <- sum(as.numeric(as.character(onlyTAcount[1:58,21])))
+DO11
+DO12 <- sum(as.numeric(as.character(onlyTAcount[59:116,21])))
+DO12
+DO13 <- sum(as.numeric(as.character(onlyTAcount[117:174,21])))
+DO13
+DO14 <- sum(as.numeric(as.character(onlyTAcount[175:232,21])))
+DO14
+DO15 <- sum(as.numeric(as.character(onlyTAcount[233:290,21])))
+DO15
+DO16 <- sum(as.numeric(as.character(onlyTAcount[291:348,21])))
+DO16
+```
+
+```{r}
+#new plots 
+```
+
+

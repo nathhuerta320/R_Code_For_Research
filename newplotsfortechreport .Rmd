@@ -1,0 +1,240 @@
+---
+title: "Newgrpahs"
+author: "Nathalie Huerta"
+date: "7/15/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(dplyr)
+exp2011 <- read.csv(file = "expulsion2011-12.csv", header = T) #imports the data 
+#this is the data for 2012-2013
+exp2012 <- read.csv(file= "expulsion2012-13.csv", header = T) #imports the data 
+#this is the data for 2013-14
+exp2013 <- read.csv(file= "expulsion2013-14.csv", header = T) #imports the data 
+#this is the data for 2014-2015
+exp2014 <- read.csv(file= "expulsion2014-15.csv", header = T) #imports the data 
+#this is the data for 2016-2017
+exp2015 <- read.csv(file= "expulsion2015-16.csv", header = T)
+exp2016 <- read.csv(file= "expulsion2016-17.csv", header = T) #imports the data 
+```
+
+```{r}
+#this combines all 6 datasets 
+thiscoball2 <- rbind(exp2011,exp2012,exp2013,exp2014,exp2015,exp2016)
+
+TAcount <- (filter(thiscoball2, thiscoball2$reportingcategory =="TA", thiscoball2$aggregatelevel =="C"))
+
+#subset with certin columns  of the TA and Cs
+onlyTAcount <- TAcount[,]
+onlyTAcount
+
+#dataframe of all TA and counties
+onlyTAcountdf <- data.frame(onlyTAcount[, "countyname"], onlyTAcount)
+onlyTAcountdf
+
+CE11 <- sum(as.numeric(as.character(onlyTAcount[1:58,11])))
+CE12 <- sum(as.numeric(as.character(onlyTAcount[59:116,11])))
+CE13 <- sum(as.numeric(as.character(onlyTAcount[117:174,11])))
+CE14 <- sum(as.numeric(as.character(onlyTAcount[175:232,11])))
+CE15 <- sum(as.numeric(as.character(onlyTAcount[233:290,11])))
+CE16 <- sum(as.numeric(as.character(onlyTAcount[291:348,11])))
+```
+Total Suspension
+```{r}
+
+TA11 <- sum(as.numeric(as.character(onlyTAcount[1:58,12])))
+TA12 <- sum(as.numeric(as.character(onlyTAcount[59:116,12])))
+TA13 <- sum(as.numeric(as.character(onlyTAcount[117:174,12])))
+TA14 <- sum(as.numeric(as.character(onlyTAcount[175:232,12])))
+TA15 <- sum(as.numeric(as.character(onlyTAcount[233:290,12])))
+TA16 <- sum(as.numeric(as.character(onlyTAcount[291:348,12])))
+
+```
+Suspension Rate
+```{r}
+
+SR11 <- sum(as.numeric(as.character(onlyTAcount[1:58,16])))
+SR12 <- sum(as.numeric(as.character(onlyTAcount[59:116,16])))
+SR13 <- sum(as.numeric(as.character(onlyTAcount[117:174,16])))
+SR14 <- sum(as.numeric(as.character(onlyTAcount[175:232,16])))
+SR15 <- sum(as.numeric(as.character(onlyTAcount[233:290,16])))
+SR16 <- sum(as.numeric(as.character(onlyTAcount[291:348,16])))
+
+```
+Violent Injury
+```{r}
+VI11 <- sum(as.numeric(as.character(onlyTAcount[1:58,17])))
+VI12 <- sum(as.numeric(as.character(onlyTAcount[59:116,17])))
+VI13 <- sum(as.numeric(as.character(onlyTAcount[117:174,17])))
+VI14 <- sum(as.numeric(as.character(onlyTAcount[175:232,17])))
+VI15 <- sum(as.numeric(as.character(onlyTAcount[233:290,17])))
+VI16 <- sum(as.numeric(as.character(onlyTAcount[291:348,17])))
+
+```
+
+Violent Non-Injury
+```{r}
+VN11 <- sum(as.numeric(as.character(onlyTAcount[1:58,18])))
+VN12 <- sum(as.numeric(as.character(onlyTAcount[59:116,18])))
+VN13 <- sum(as.numeric(as.character(onlyTAcount[117:174,18])))
+VN14 <- sum(as.numeric(as.character(onlyTAcount[175:232,18])))
+VN15 <- sum(as.numeric(as.character(onlyTAcount[233:290,18])))
+VN16 <- sum(as.numeric(as.character(onlyTAcount[291:348,18])))
+```
+Weapon Possession
+```{r}
+WP11 <- sum(as.numeric(as.character(onlyTAcount[1:58,19])))
+WP12 <- sum(as.numeric(as.character(onlyTAcount[59:116,19])))
+WP13 <- sum(as.numeric(as.character(onlyTAcount[117:174,19])))
+WP14 <- sum(as.numeric(as.character(onlyTAcount[175:232,19])))
+WP15 <- sum(as.numeric(as.character(onlyTAcount[233:290,19])))
+WP16 <- sum(as.numeric(as.character(onlyTAcount[291:348,19])))
+```
+
+Drug Related
+```{r}
+DR11 <- sum(as.numeric(as.character(onlyTAcount[1:58,20])))
+DR12 <- sum(as.numeric(as.character(onlyTAcount[59:116,20])))
+DR13 <- sum(as.numeric(as.character(onlyTAcount[117:174,20])))
+DR14 <- sum(as.numeric(as.character(onlyTAcount[175:232,20])))
+DR15 <- sum(as.numeric(as.character(onlyTAcount[233:290,20])))
+DR16 <- sum(as.numeric(as.character(onlyTAcount[291:348,20])))
+```
+
+Defiance Only
+```{r}
+DO11 <- sum(as.numeric(as.character(onlyTAcount[1:58,21])))
+DO12 <- sum(as.numeric(as.character(onlyTAcount[59:116,21])))
+DO13 <- sum(as.numeric(as.character(onlyTAcount[117:174,21])))
+DO14 <- sum(as.numeric(as.character(onlyTAcount[175:232,21])))
+DO15 <- sum(as.numeric(as.character(onlyTAcount[233:290,21])))
+DO16 <- sum(as.numeric(as.character(onlyTAcount[291:348,21])))
+```
+
+```{r}
+library(ggplot2)
+# df <- data.frame(x = c(2011:2016), y = c(DR11, DR12, DR13, DR14, DR15, DR16), z = c(WP11, WP12, WP13, WP14, WP15, WP16))
+# df
+# #plots the number of drug suspensions 2011-2017; suspension for drugs increased? why? easy access? change in laws?
+# 
+# ggplot(data=df, aes(x,y)) + geom_line(aes(x,y),color = "red") + labs(title = "Rate of Drug Related Expulsion") + labs(x = "Year", y= "Expulsion for Drug Use") 
+# 
+# ggplot(data=df, aes(x,y)) + geom_line(aes(x,z),color = "blue") + labs(title = "Rate of Weapon Related Expulsion") + labs(x = "Year", y= "Expulsion for Weapons") 
+```
+
+```{r}
+library(dplyr)
+library(gridExtra)
+library(scales)
+library(ggplot2)
+Years = c(2011:2016)
+x <- c(DR11, DR12, DR13, DR14, DR15, DR16)
+y <- c(WP11, WP12, WP13, WP14, WP15, WP16)
+dfd <-data.frame(Years,x )
+
+names(dfd) <- c("Years", "Total")
+dfd$offense <-c("Drugs")
+
+dfw <- data.frame(Years,y)
+names(dfw) <- c("Years", "Total")
+dfw$offense <-c("Weapons")
+
+dfdw <- rbind(dfd, dfw)
+                  
+dfdw$Years[dfdw$Years == 2011] <- "2011-12"
+dfdw$Years[dfdw$Years == 2012] <- "2012-13"
+dfdw$Years[dfdw$Years == 2013] <- "2013-14"
+dfdw$Years[dfdw$Years == 2014] <- "2014-15"
+dfdw$Years[dfdw$Years == 2015] <- "2015-16"
+dfdw$Years[dfdw$Years == 2016] <- "2016-17"
+
+
+options(scipen=999)
+Graph <- dfdw %>% group_by(offense, Years) %>% summarise(length=Total)
+
+Years <- Graph$Years
+Total <- Graph$length
+
+OffenseGraph <- ggplot(Graph, aes(Years, Total, group = offense)) + geom_line(aes(color=offense), size =2)  + labs(title = "Rate of Suspensions", subtitle= "By Offense") + theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) + scale_y_continuous(limits=c(0,35000), breaks = seq(0,35000,5000), labels = comma)
+OffenseGraph
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#bargraphs
+count_GMtotal2 <- filter(thiscoball2, thiscoball2$reportingcategory == "GM" ,thiscoball2$aggregatelevel == "C") 
+
+count_GFtotal2 <- filter(thiscoball2, thiscoball2$reportingcategory == "GF" , thiscoball2$aggregatelevel == "C")
+
+#library(ggplot2)
+#theme_set(theme_classic())
+
+
+stepGM2 <- count_GMtotal2[,c(1,6,10,11,12)]
+stepGM2
+
+stepGF2 <- count_GFtotal2[,c(1,6,10,11,12)]
+stepGF2
+
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+datframegm2 <- data.frame(count_GMtotal2[, "countyname"], stepGM2)
+datframegm2
+
+dataframegf2 <- data.frame(count_GFtotal2[, "countyname"], stepGF2)
+dataframegf2
+
+#clean data for males 
+dfnew2 <- datframegm2[,c(1,2,6)]
+colnames(dfnew2)<- c("county", "Year", "Total")
+dfnew2$Gender <- "Males"
+
+#clean data for females
+dfnew3 <- dataframegf2[,c(1,2,6)]
+colnames(dfnew3)<- c("county", "Year", "Total")
+dfnew3$Gender <- "Females"
+
+#binds the dataframes together 
+combined2 <- rbind(dfnew2, dfnew3)
+combined2
+
+
+
+#plot bar graphs 
+library(ggplot2)
+geninfo <- aggregate(.~Year+Gender, data=combined2, sum)
+
+GenPlot <- ggplot(geninfo, aes(Year,Total)) + labs(title = "Yearly Expulsions By Gender") + geom_bar(aes(fill=Gender), stat="identity") + 
+  theme(plot.title = element_text(hjust = 0.5))
+GenPlot
+```
+

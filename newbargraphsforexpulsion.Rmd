@@ -1,0 +1,970 @@
+---
+title: "bargraphsfordataed"
+author: "Nathalie Huerta"
+date: "7/17/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#Sky helped me to run code 
+library(dplyr)
+Expulsion11 <- read.csv(file = "expulsion2011-12.csv", header = T) #imports the data 
+#this is the data for 2012-2013
+Expulsion12 <- read.csv(file= "expulsion2012-13.csv", header = T) #imports the data 
+#this is the data for 2013-14
+Expulsion13 <- read.csv(file= "expulsion2013-14.csv", header = T) #imports the data 
+#this is the data for 2014-2015
+Expulsion14 <- read.csv(file= "expulsion2014-15.csv", header = T) #imports the data 
+#this is the data for 2016-2017
+Expulsion15 <- read.csv(file= "expulsion2015-16.csv", header = T)
+Expulsion16 <- read.csv(file= "expulsion2016-17.csv", header = T) #imports the data 
+```
+
+#Steps to Build the bar graph for Gender 
+```{r}
+county_GMcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="GM")
+
+county_GFcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="GF")
+
+GMcounty11 <- county_GMcount11[c(2:59), c(1,6,10,12)]
+GMcounty11
+
+ExpulsionMales11 <- sum(as.numeric(as.character(GMcounty11$totalexpulsions)))
+ExpulsionMales11
+
+GFcounty11 <- county_GFcount11[c(2:59), c(1,6,10,12)]
+GFcounty11
+
+ExpulsionFemales11 <- sum(as.numeric(as.character(GFcounty11$totalexpulsions)))
+ExpulsionFemales11
+
+#---------------------------------------------------------------------------------------------------
+
+county_GMcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="GM")
+
+county_GFcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="GF")
+
+GMcounty12 <- county_GMcount12[c(2:59), c(1,6,10,12)]
+GMcounty12
+
+ExpulsionMales12 <- sum(as.numeric(as.character(GMcounty12$totalexpulsions)))
+ExpulsionMales12
+
+GFcounty12 <- county_GFcount12[c(2:59), c(1,6,10,12)]
+GFcounty12
+
+ExpulsionFemales12 <- sum(as.numeric(as.character(GFcounty12$totalexpulsions)))
+ExpulsionFemales12
+
+#---------------------------------------------------------------------------------------------------
+
+county_GMcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="GM")
+
+county_GFcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="GF")
+
+GMcounty13 <- county_GMcount13[c(2:59), c(1,6,10,12)]
+GMcounty13
+
+ExpulsionMales13 <- sum(as.numeric(as.character(GMcounty13$totalexpulsions)))
+ExpulsionMales13
+
+GFcounty13 <- county_GFcount13[c(2:59), c(1,6,10,12)]
+GFcounty13
+
+ExpulsionFemales13 <- sum(as.numeric(as.character(GFcounty13$totalexpulsions)))
+ExpulsionFemales13
+
+#---------------------------------------------------------------------------------------------------
+
+county_GMcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="GM")
+
+county_GFcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="GF")
+
+GMcounty14 <- county_GMcount14[c(2:59), c(1,6,10,12)]
+GMcounty14
+
+ExpulsionMales14 <- sum(as.numeric(as.character(GMcounty14$totalexpulsions)))
+ExpulsionMales14
+
+GFcounty14 <- county_GFcount14[c(2:59), c(1,6,10,12)]
+GFcounty14
+
+ExpulsionFemales14 <- sum(as.numeric(as.character(GFcounty14$totalexpulsions)))
+ExpulsionFemales14
+
+#-------------------------------------------------------------------------------------------------
+
+county_GMcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="GM")
+
+county_GFcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="GF")
+
+GMcounty15 <- county_GMcount15[c(2:59), c(1,6,10,12)]
+GMcounty15
+
+ExpulsionMales15 <- sum(as.numeric(as.character(GMcounty15$totalexpulsions)))
+ExpulsionMales15
+
+GFcounty15 <- county_GFcount15[c(2:59), c(1,6,10,12)]
+GFcounty15
+
+ExpulsionFemales15 <- sum(as.numeric(as.character(GFcounty15$totalexpulsions)))
+ExpulsionFemales15
+
+#--------------------------------------------------------------------------------------------
+
+county_GMcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="GM")
+
+county_GFcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="GF")
+
+GMcounty16 <- county_GMcount16[c(2:59), c(1,6,10,12)]
+GMcounty16
+
+ExpulsionMales16 <- sum(as.numeric(as.character(GMcounty16$totalexpulsions)))
+ExpulsionMales16
+
+GFcounty16 <- county_GFcount16[c(2:59), c(1,6,10,12)]
+GFcounty16
+
+ExpulsionFemales16 <- sum(as.numeric(as.character(GFcounty16$totalexpulsions)))
+ExpulsionFemales16
+```
+
+```{r}
+#install.packages("ggthemes")
+#install.packages("scales")
+library(scales)
+library(ggplot2)
+library(ggthemes)
+Female <-c(ExpulsionFemales11, ExpulsionFemales12, ExpulsionFemales13, ExpulsionFemales14, ExpulsionFemales15, ExpulsionFemales16)
+
+Male <- c(ExpulsionMales11, ExpulsionMales12, ExpulsionMales13, ExpulsionMales14, ExpulsionMales15, ExpulsionMales16)
+
+Years <- c(2011:2016)
+
+FemTot <- data.frame(Years, Female)
+names(FemTot) <- c("Years","Total")
+FemTot$Gender <- "Female"
+
+MaleTot <- data.frame(Years, Male)
+names(MaleTot) <- c("Years", "Total")
+MaleTot$Gender <- "Male"
+
+GenTot <- rbind(FemTot, MaleTot)
+
+GenTot$Years[GenTot$Years == 2011] <- "2011-12"
+GenTot$Years[GenTot$Years == 2012] <- "2012-13"
+GenTot$Years[GenTot$Years == 2013] <- "2013-14"
+GenTot$Years[GenTot$Years == 2014] <- "2014-15"
+GenTot$Years[GenTot$Years == 2015] <- "2015-16"
+GenTot$Years[GenTot$Years == 2016] <- "2016-17"
+
+GenTot <- GenTot[c(3,1,2)]
+
+Genderinfo <- aggregate(.~Years+Gender, data=GenTot, sum)
+options(scipen = 999)
+
+#GenderPlot <- ddply(Genderinfo, .(Years), transform, pos = cumsum(Total) - (0.5 * Total)
+
+GendPlot <- ggplot(Genderinfo, aes(Years,Total)) + labs(title= "Yearly Expulsion Counts in California K-12 School", subtitle = "By Gender", fill = "Gender") + geom_bar(aes(fill = Gender),stat = "identity") + theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) + scale_y_continuous(limits=c(0,10000), breaks = seq(0,10000,1000), labels = comma)
+GendPlot
+
+
+
+
+
+
+
+
+
+```
+
+#Steps to build bar graph for ethnicity
+```{r}
+#BLACK
+county_RBcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="RB")
+
+RBcounty11 <- county_RBcount11[c(2:59), c(1,6,10,12)]
+RBcounty11
+
+RBcounty11$totalexpulsions <- as.numeric(as.character(RBcounty11$totalexpulsions))
+RBcounty11$totalexpulsions[is.na(RBcounty11$totalexpulsions)] <- 0
+
+ExpulsionRB11 <- sum(as.numeric(as.character(RBcounty11$totalexpulsions)))
+ExpulsionRB11
+
+#---------------------------------------------------------------------------------------------------
+
+#American Indian
+county_RIcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="RI")
+RIcounty11 <- county_RIcount11[c(2:59), c(1,6,10,12)]
+RIcounty11
+
+RIcounty11$totalexpulsions <- as.numeric(as.character(RIcounty11$totalexpulsions))
+RIcounty11$totalexpulsions[is.na(RIcounty11$totalexpulsions)] <- 0
+
+ExpulsionRI11 <- sum(as.numeric(as.character(RIcounty11$totalexpulsions)))
+ExpulsionRI11
+
+#---------------------------------------------------------------------------------------------------
+
+#Asian 
+county_RAcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="RA")
+RAcounty11 <- county_RAcount11[c(2:59), c(1,6,10,12)]
+RAcounty11
+
+RAcounty11$totalexpulsions <- as.numeric(as.character(RAcounty11$totalexpulsions))
+RAcounty11$totalexpulsions[is.na(RAcounty11$totalexpulsions)] <- 0
+
+ExpulsionRA11 <- sum(as.numeric(as.character(RAcounty11$totalexpulsions)))
+ExpulsionRA11
+
+#---------------------------------------------------------------------------------------------------
+
+#Flipino
+county_RFcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="RF")
+RFcounty11 <- county_RFcount11[c(2:59), c(1,6,10,12)]
+RFcounty11
+
+RFcounty11$totalexpulsions <- as.numeric(as.character(RFcounty11$totalexpulsions))
+RFcounty11$totalexpulsions[is.na(RFcounty11$totalexpulsions)] <- 0
+
+ExpulsionRF11 <- sum(as.numeric(as.character(RFcounty11$totalexpulsions)))
+ExpulsionRF11
+
+#---------------------------------------------------------------------------------------------------
+
+#Hispanic 
+county_RHcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="RH")
+RHcounty11 <- county_RHcount11[c(2:59), c(1,6,10,12)]
+RHcounty11
+
+RHcounty11$totalexpulsions <- as.numeric(as.character(RHcounty11$totalexpulsions))
+RHcounty11$totalexpulsions[is.na(RHcounty11$totalexpulsions)] <- 0
+
+ExpulsionRH11 <- sum(as.numeric(as.character(RHcounty11$totalexpulsions)))
+ExpulsionRH11
+
+#--------------------------------------------------------------------------------------------------
+
+#Pacific Islander
+county_RPcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="RP")
+RPcounty11 <- county_RPcount11[c(2:59), c(1,6,10,12)]
+RPcounty11
+
+RPcounty11$totalexpulsions <- as.numeric(as.character(RPcounty11$totalexpulsions))
+RPcounty11$totalexpulsions[is.na(RPcounty11$totalexpulsions)] <- 0
+
+ExpulsionRP11 <- sum(as.numeric(as.character(RPcounty11$totalexpulsions)))
+ExpulsionRP11
+
+#------------------------------------------------------------------------------------------------
+
+#Two or More Races 
+county_RTcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="RT")
+RTcounty11 <- county_RTcount11[c(2:59), c(1,6,10,12)]
+RTcounty11
+
+RTcounty11$totalexpulsions <- as.numeric(as.character(RTcounty11$totalexpulsions))
+RTcounty11$totalexpulsions[is.na(RTcounty11$totalexpulsions)] <- 0
+
+ExpulsionRT11 <- sum(as.numeric(as.character(RTcounty11$totalexpulsions)))
+ExpulsionRT11
+
+#-------------------------------------------------------------------------------------------------
+
+#White 
+county_RWcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="RW")
+RWcounty11 <- county_RWcount11[c(2:59), c(1,6,10,12)]
+RWcounty11
+
+ExpulsionRW11 <- sum(as.numeric(as.character(RWcounty11$totalexpulsions)))
+ExpulsionRW11
+
+#-------------------------------------------------------------------------------------------------
+#NOT REPORTED 
+county_RDcount11 <- filter(Expulsion11, Expulsion11$reportingcategory =="RD")
+RDcounty11 <- county_RDcount11[c(2:59), c(1,6,10,12)]
+RDcounty11
+
+RDcounty11$totalexpulsions <- as.numeric(as.character(RDcounty11$totalexpulsions))
+RDcounty11$totalexpulsions[is.na(RDcounty11$totalexpulsions)] <- 0
+
+
+ExpulsionRD11 <- sum(as.numeric(as.character(RDcounty11$totalexpulsions)))
+ExpulsionRD11
+
+
+#-----------------------------------------------------------------------------------------------
+
+#BLACK
+county_RBcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="RB")
+
+RBcounty12 <- county_RBcount12[c(2:59), c(1,6,10,12)]
+RBcounty12
+
+RBcounty12$totalexpulsions <- as.numeric(as.character(RBcounty12$totalexpulsions))
+RBcounty12$totalexpulsions[is.na(RBcounty12$totalexpulsions)] <- 0
+
+ExpulsionRB12 <- sum(as.numeric(as.character(RBcounty12$totalexpulsions)))
+ExpulsionRB12
+
+#---------------------------------------------------------------------------------------------------
+
+#American Indian
+county_RIcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="RI")
+RIcounty12 <- county_RIcount12[c(2:59), c(1,6,10,12)]
+RIcounty12
+
+RIcounty12$totalexpulsions <- as.numeric(as.character(RIcounty12$totalexpulsions))
+RIcounty12$totalexpulsions[is.na(RIcounty12$totalexpulsions)] <- 0
+
+ExpulsionRI12 <- sum(as.numeric(as.character(RIcounty12$totalexpulsions)))
+ExpulsionRI12
+
+#---------------------------------------------------------------------------------------------------
+
+#Asian 
+county_RAcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="RA")
+RAcounty12 <- county_RAcount12[c(2:59), c(1,6,10,12)]
+RAcounty12
+
+RAcounty12$totalexpulsions <- as.numeric(as.character(RAcounty12$totalexpulsions))
+RAcounty12$totalexpulsions[is.na(RAcounty12$totalexpulsions)] <- 0
+
+ExpulsionRA12 <- sum(as.numeric(as.character(RAcounty12$totalexpulsions)))
+ExpulsionRA12
+
+#---------------------------------------------------------------------------------------------------
+
+#Flipino
+county_RFcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="RF")
+RFcounty12 <- county_RFcount12[c(2:59), c(1,6,10,12)]
+RFcounty12
+
+RFcounty12$totalexpulsions <- as.numeric(as.character(RFcounty12$totalexpulsions))
+RFcounty12$totalexpulsions[is.na(RFcounty12$totalexpulsions)] <- 0
+
+ExpulsionRF12 <- sum(as.numeric(as.character(RFcounty12$totalexpulsions)))
+ExpulsionRF12
+
+#---------------------------------------------------------------------------------------------------
+
+#Hispanic 
+county_RHcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="RH")
+RHcounty12 <- county_RHcount12[c(2:59), c(1,6,10,12)]
+RHcounty12
+
+ExpulsionRH12 <- sum(as.numeric(as.character(RHcounty12$totalexpulsions)))
+ExpulsionRH12
+
+#--------------------------------------------------------------------------------------------------
+
+#Pacific Islander
+county_RPcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="RP")
+RPcounty12 <- county_RPcount12[c(2:59), c(1,6,10,12)]
+RPcounty12
+
+RPcounty12$totalexpulsions <- as.numeric(as.character(RPcounty12$totalexpulsions))
+RPcounty12$totalexpulsions[is.na(RPcounty12$totalexpulsions)] <- 0
+
+ExpulsionRP12 <- sum(as.numeric(as.character(RPcounty12$totalexpulsions)))
+ExpulsionRP12
+
+#------------------------------------------------------------------------------------------------
+
+#Two or More Races 
+county_RTcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="RT")
+RTcounty12 <- county_RTcount12[c(2:59), c(1,6,10,12)]
+RTcounty12
+
+RTcounty12$totalexpulsions <- as.numeric(as.character(RTcounty12$totalexpulsions))
+RTcounty12$totalexpulsions[is.na(RTcounty12$totalexpulsions)] <- 0
+
+ExpulsionRT12 <- sum(as.numeric(as.character(RTcounty12$totalexpulsions)))
+ExpulsionRT12
+
+#-------------------------------------------------------------------------------------------------
+
+#White 
+county_RWcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="RW")
+RWcounty12 <- county_RWcount12[c(2:59), c(1,6,10,12)]
+RWcounty12
+
+ExpulsionRW12 <- sum(as.numeric(as.character(RWcounty12$totalexpulsions)))
+ExpulsionRW12
+
+#-------------------------------------------------------------------------------------------------
+
+#NOT REPORTED 
+county_RDcount12 <- filter(Expulsion12, Expulsion12$reportingcategory =="RD")
+RDcounty12 <- county_RDcount12[c(2:59), c(1,6,10,12)]
+RDcounty12
+
+RDcounty12$totalexpulsions <- as.numeric(as.character(RDcounty12$totalexpulsions))
+RDcounty12$totalexpulsions[is.na(RDcounty12$totalexpulsions)] <- 0
+
+
+ExpulsionRD12 <- sum(as.numeric(as.character(RDcounty12$totalexpulsions)))
+ExpulsionRD12
+
+#-------------------------------------------------------------------------------------------------
+#BLACK
+county_RBcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="RB")
+
+RBcounty13 <- county_RBcount13[c(2:59), c(1,6,10,12)]
+RBcounty13
+
+RBcounty13$totalexpulsions <- as.numeric(as.character(RBcounty13$totalexpulsions))
+RBcounty13$totalexpulsions[is.na(RBcounty13$totalexpulsions)] <- 0
+
+ExpulsionRB13 <- sum(as.numeric(as.character(RBcounty13$totalexpulsions)))
+ExpulsionRB13
+
+#---------------------------------------------------------------------------------------------------
+
+#American Indian
+county_RIcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="RI")
+RIcounty13 <- county_RIcount13[c(2:59), c(1,6,10,12)]
+RIcounty13
+
+RIcounty13$totalexpulsions <- as.numeric(as.character(RIcounty13$totalexpulsions))
+RIcounty13$totalexpulsions[is.na(RIcounty13$totalexpulsions)] <- 0
+
+ExpulsionRI13 <- sum(as.numeric(as.character(RIcounty13$totalexpulsions)))
+ExpulsionRI13
+
+#---------------------------------------------------------------------------------------------------
+
+#Asian 
+county_RAcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="RA")
+RAcounty13 <- county_RAcount13[c(2:59), c(1,6,10,12)]
+RAcounty13
+
+RAcounty13$totalexpulsions <- as.numeric(as.character(RAcounty13$totalexpulsions))
+RAcounty13$totalexpulsions[is.na(RAcounty13$totalexpulsions)] <- 0
+
+ExpulsionRA13 <- sum(as.numeric(as.character(RAcounty13$totalexpulsions)))
+ExpulsionRA13
+
+#---------------------------------------------------------------------------------------------------
+
+#Flipino
+county_RFcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="RF")
+RFcounty13 <- county_RFcount13[c(2:59), c(1,6,10,12)]
+RFcounty13
+
+RFcounty13$totalexpulsions <- as.numeric(as.character(RFcounty13$totalexpulsions))
+RFcounty13$totalexpulsions[is.na(RFcounty13$totalexpulsions)] <- 0
+
+ExpulsionRF13 <- sum(as.numeric(as.character(RFcounty13$totalexpulsions)))
+ExpulsionRF13
+
+#---------------------------------------------------------------------------------------------------
+
+#Hispanic 
+county_RHcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="RH")
+RHcounty13 <- county_RHcount13[c(2:59), c(1,6,10,12)]
+RHcounty13
+
+RHcounty13$totalexpulsions <- as.numeric(as.character(RHcounty13$totalexpulsions))
+RHcounty13$totalexpulsions[is.na(RHcounty13$totalexpulsions)] <- 0
+
+ExpulsionRH13 <- sum(as.numeric(as.character(RHcounty13$totalexpulsions)))
+ExpulsionRH13
+
+#--------------------------------------------------------------------------------------------------
+
+#Pacific Islander
+county_RPcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="RP")
+RPcounty13 <- county_RPcount13[c(2:59), c(1,6,10,12)]
+RPcounty13
+
+RPcounty13$totalexpulsions <- as.numeric(as.character(RPcounty13$totalexpulsions))
+RPcounty13$totalexpulsions[is.na(RPcounty13$totalexpulsions)] <- 0
+
+ExpulsionRP13 <- sum(as.numeric(as.character(RPcounty13$totalexpulsions)))
+ExpulsionRP13
+
+#------------------------------------------------------------------------------------------------
+
+#Two or More Races 
+county_RTcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="RT")
+RTcounty13 <- county_RTcount13[c(2:59), c(1,6,10,12)]
+RTcounty13
+
+RTcounty13$totalexpulsions <- as.numeric(as.character(RTcounty13$totalexpulsions))
+RTcounty13$totalexpulsions[is.na(RTcounty13$totalexpulsions)] <- 0
+
+ExpulsionRT13 <- sum(as.numeric(as.character(RTcounty13$totalexpulsions)))
+ExpulsionRT13
+
+#-------------------------------------------------------------------------------------------------
+
+#White 
+county_RWcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="RW")
+RWcounty13 <- county_RWcount13[c(2:59), c(1,6,10,12)]
+RWcounty13
+
+ExpulsionRW13 <- sum(as.numeric(as.character(RWcounty13$totalexpulsions)))
+ExpulsionRW13
+
+#----------------------------------------------------------------------------------------------
+#NOT REPORTED 
+county_RDcount13 <- filter(Expulsion13, Expulsion13$reportingcategory =="RD")
+RDcounty13 <- county_RDcount13[c(2:59), c(1,6,10,12)]
+RDcounty13
+
+RDcounty13$totalexpulsions <- as.numeric(as.character(RDcounty13$totalexpulsions))
+RDcounty13$totalexpulsions[is.na(RDcounty13$totalexpulsions)] <- 0
+
+
+ExpulsionRD13 <- sum(as.numeric(as.character(RDcounty13$totalexpulsions)))
+ExpulsionRD13
+
+#----------------------------------------------------------------------------------------------
+#BLACK
+county_RBcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="RB")
+
+RBcounty14<- county_RBcount14[c(2:59), c(1,6,10,12)]
+RBcounty14
+
+RBcounty14$totalexpulsions <- as.numeric(as.character(RBcounty14$totalexpulsions))
+RBcounty14$totalexpulsions[is.na(RBcounty14$totalexpulsions)] <- 0
+
+ExpulsionRB14 <- sum(as.numeric(as.character(RBcounty14$totalexpulsions)))
+ExpulsionRB14
+
+#---------------------------------------------------------------------------------------------------
+
+#American Indian
+county_RIcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="RI")
+RIcounty14 <- county_RIcount14[c(2:59), c(1,6,10,12)]
+RIcounty14
+
+RIcounty14$totalexpulsions <- as.numeric(as.character(RIcounty14$totalexpulsions))
+RIcounty14$totalexpulsions[is.na(RIcounty14$totalexpulsions)] <- 0
+
+ExpulsionRI14 <- sum(as.numeric(as.character(RIcounty14$totalexpulsions)))
+ExpulsionRI14
+
+#---------------------------------------------------------------------------------------------------
+
+#Asian 
+county_RAcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="RA")
+RAcounty14 <- county_RAcount14[c(2:59), c(1,6,10,12)]
+RAcounty14
+
+RAcounty14$totalexpulsions <- as.numeric(as.character(RAcounty14$totalexpulsions))
+RAcounty14$totalexpulsions[is.na(RAcounty14$totalexpulsions)] <- 0
+
+ExpulsionRA14 <- sum(as.numeric(as.character(RAcounty14$totalexpulsions)))
+ExpulsionRA14
+
+#---------------------------------------------------------------------------------------------------
+
+#Flipino
+county_RFcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="RF")
+RFcounty14 <- county_RFcount14[c(2:59), c(1,6,10,12)]
+RFcounty14
+
+RFcounty14$totalexpulsions <- as.numeric(as.character(RFcounty14$totalexpulsions))
+RFcounty14$totalexpulsions[is.na(RFcounty14$totalexpulsions)] <- 0
+
+ExpulsionRF14 <- sum(as.numeric(as.character(RFcounty14$totalexpulsions)))
+ExpulsionRF14
+
+#---------------------------------------------------------------------------------------------------
+
+#Hispanic 
+county_RHcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="RH")
+RHcounty14 <- county_RHcount14[c(2:59), c(1,6,10,12)]
+RHcounty14
+
+RHcounty14$totalexpulsions <- as.numeric(as.character(RHcounty14$totalexpulsions))
+RHcounty14$totalexpulsions[is.na(RHcounty14$totalexpulsions)] <- 0
+
+ExpulsionRH14 <- sum(as.numeric(as.character(RHcounty14$totalexpulsions)))
+ExpulsionRH14
+
+#--------------------------------------------------------------------------------------------------
+
+#Pacific Islander
+county_RPcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="RP")
+RPcounty14 <- county_RPcount14[c(2:59), c(1,6,10,12)]
+RPcounty14
+
+RPcounty14$totalexpulsions <- as.numeric(as.character(RPcounty14$totalexpulsions))
+RPcounty14$totalexpulsions[is.na(RPcounty14$totalexpulsions)] <- 0
+
+ExpulsionRP14 <- sum(as.numeric(as.character(RPcounty14$totalexpulsions)))
+ExpulsionRP14
+
+#------------------------------------------------------------------------------------------------
+
+#Two or More Races 
+county_RTcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="RT")
+RTcounty14 <- county_RTcount14[c(2:59), c(1,6,10,12)]
+RTcounty14
+
+RTcounty14$totalexpulsions <- as.numeric(as.character(RTcounty14$totalexpulsions))
+RTcounty14$totalexpulsions[is.na(RTcounty14$totalexpulsions)] <- 0
+
+ExpulsionRT14 <- sum(as.numeric(as.character(RTcounty14$totalexpulsions)))
+ExpulsionRT14
+
+#-------------------------------------------------------------------------------------------------
+
+#White 
+county_RWcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="RW")
+RWcounty14 <- county_RWcount14[c(2:59), c(1,6,10,12)]
+RWcounty14
+
+ExpulsionRW14 <- sum(as.numeric(as.character(RWcounty14$totalexpulsions)))
+ExpulsionRW14
+
+#------------------------------------------------------------------------------------------------
+
+#NOT REPORTED
+county_RDcount14 <- filter(Expulsion14, Expulsion14$reportingcategory =="RD")
+RDcounty14 <- county_RDcount14[c(2:59), c(1,6,10,12)]
+RDcounty14
+
+RDcounty14$totalexpulsions <- as.numeric(as.character(RDcounty14$totalexpulsions))
+RDcounty14$totalexpulsions[is.na(RDcounty14$totalexpulsions)] <- 0
+
+
+ExpulsionRD14 <- sum(as.numeric(as.character(RDcounty14$totalexpulsions)))
+ExpulsionRD14
+
+#--------------------------------------------------------------------------------------------------
+
+#BLACK
+county_RBcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="RB")
+
+RBcounty15<- county_RBcount15[c(2:59), c(1,6,10,12)]
+RBcounty15
+
+RBcounty15$totalexpulsions <- as.numeric(as.character(RBcounty15$totalexpulsions))
+RBcounty15$totalexpulsions[is.na(RBcounty15$totalexpulsions)] <- 0
+
+ExpulsionRB15 <- sum(as.numeric(as.character(RBcounty15$totalexpulsions)))
+ExpulsionRB15
+
+#---------------------------------------------------------------------------------------------------
+
+#American Indian
+county_RIcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="RI")
+RIcounty15 <- county_RIcount15[c(2:59), c(1,6,10,12)]
+RIcounty15
+
+RIcounty15$totalexpulsions <- as.numeric(as.character(RIcounty15$totalexpulsions))
+RIcounty15$totalexpulsions[is.na(RIcounty15$totalexpulsions)] <- 0
+
+ExpulsionRI15 <- sum(as.numeric(as.character(RIcounty15$totalexpulsions)))
+ExpulsionRI15
+
+#---------------------------------------------------------------------------------------------------
+
+#Asian 
+county_RAcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="RA")
+RAcounty15 <- county_RAcount15[c(2:59), c(1,6,10,12)]
+RAcounty15
+
+RAcounty15$totalexpulsions <- as.numeric(as.character(RAcounty15$totalexpulsions))
+RAcounty15$totalexpulsions[is.na(RAcounty15$totalexpulsions)] <- 0
+
+ExpulsionRA15 <- sum(as.numeric(as.character(RAcounty15$totalexpulsions)))
+ExpulsionRA15
+
+#---------------------------------------------------------------------------------------------------
+
+#Flipino
+county_RFcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="RF")
+RFcounty15 <- county_RFcount15[c(2:59), c(1,6,10,12)]
+RFcounty15
+
+RFcounty15$totalexpulsions <- as.numeric(as.character(RFcounty15$totalexpulsions))
+RFcounty15$totalexpulsions[is.na(RFcounty15$totalexpulsions)] <- 0
+
+ExpulsionRF15 <- sum(as.numeric(as.character(RFcounty15$totalexpulsions)))
+ExpulsionRF15
+
+#---------------------------------------------------------------------------------------------------
+
+#Hispanic 
+county_RHcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="RH")
+RHcounty15 <- county_RHcount15[c(2:59), c(1,6,10,12)]
+RHcounty15
+
+RHcounty15$totalexpulsions <- as.numeric(as.character(RHcounty15$totalexpulsions))
+RHcounty15$totalexpulsions[is.na(RHcounty15$totalexpulsions)] <- 0
+
+
+ExpulsionRH15 <- sum(as.numeric(as.character(RHcounty15$totalexpulsions)))
+ExpulsionRH15
+
+#--------------------------------------------------------------------------------------------------
+
+#Pacific Islander
+county_RPcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="RP")
+RPcounty15 <- county_RPcount15[c(2:59), c(1,6,10,12)]
+RPcounty15
+
+RPcounty15$totalexpulsions <- as.numeric(as.character(RPcounty15$totalexpulsions))
+RPcounty15$totalexpulsions[is.na(RPcounty15$totalexpulsions)] <- 0
+
+ExpulsionRP15 <- sum(as.numeric(as.character(RPcounty15$totalexpulsions)))
+ExpulsionRP15
+
+#------------------------------------------------------------------------------------------------
+
+#Two or More Races 
+county_RTcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="RT")
+RTcounty15 <- county_RTcount15[c(2:59), c(1,6,10,12)]
+RTcounty15
+
+RTcounty15$totalexpulsions <- as.numeric(as.character(RTcounty15$totalexpulsions))
+RTcounty15$totalexpulsions[is.na(RTcounty15$totalexpulsions)] <- 0
+
+ExpulsionRT15 <- sum(as.numeric(as.character(RTcounty15$totalexpulsions)))
+ExpulsionRT15
+
+#-------------------------------------------------------------------------------------------------
+
+#White 
+county_RWcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="RW")
+RWcounty15 <- county_RWcount15[c(2:59), c(1,6,10,12)]
+RWcounty15
+
+ExpulsionRW15 <- sum(as.numeric(as.character(RWcounty15$totalexpulsions)))
+ExpulsionRW15
+
+
+#----------------------------------------------------------------------------------------------
+#NOT REPORTED
+
+county_RDcount15 <- filter(Expulsion15, Expulsion15$reportingcategory =="RD")
+RDcounty15 <- county_RDcount15[c(2:59), c(1,6,10,12)]
+RDcounty15
+
+RDcounty15$totalexpulsions <- as.numeric(as.character(RDcounty15$totalexpulsions))
+RDcounty15$totalexpulsions[is.na(RDcounty15$totalexpulsions)] <- 0
+
+
+ExpulsionRD15 <- sum(as.numeric(as.character(RDcounty15$totalexpulsions)))
+ExpulsionRD15
+
+#-----------------------------------------------------------------------------------------------
+
+#BLACK
+county_RBcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="RB")
+
+RBcounty16<- county_RBcount16[c(2:59), c(1,6,10,12)]
+RBcounty16
+
+RBcounty16$totalexpulsions <- as.numeric(as.character(RBcounty16$totalexpulsions))
+RBcounty16$totalexpulsions[is.na(RBcounty16$totalexpulsions)] <- 0
+
+ExpulsionRB16 <- sum(as.numeric(as.character(RBcounty16$totalexpulsions)))
+ExpulsionRB16
+
+#---------------------------------------------------------------------------------------------------
+
+#American Indian
+county_RIcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="RI")
+RIcounty16 <- county_RIcount16[c(2:59), c(1,6,10,12)]
+RIcounty16
+
+RIcounty16$totalexpulsions <- as.numeric(as.character(RIcounty16$totalexpulsions))
+RIcounty16$totalexpulsions[is.na(RIcounty16$totalexpulsions)] <- 0
+
+ExpulsionRI16 <- sum(as.numeric(as.character(RIcounty16$totalexpulsions)))
+ExpulsionRI16
+
+#---------------------------------------------------------------------------------------------------
+
+#Asian 
+county_RAcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="RA")
+RAcounty16 <- county_RAcount16[c(2:59), c(1,6,10,12)]
+RAcounty16
+
+RAcounty16$totalexpulsions <- as.numeric(as.character(RAcounty16$totalexpulsions))
+RAcounty16$totalexpulsions[is.na(RAcounty16$totalexpulsions)] <- 0
+
+ExpulsionRA16 <- sum(as.numeric(as.character(RAcounty16$totalexpulsions)))
+ExpulsionRA16
+
+#---------------------------------------------------------------------------------------------------
+
+#Flipino
+county_RFcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="RF")
+RFcounty16 <- county_RFcount16[c(2:59), c(1,6,10,12)]
+RFcounty16
+
+RFcounty16$totalexpulsions <- as.numeric(as.character(RFcounty16$totalexpulsions))
+RFcounty16$totalexpulsions[is.na(RFcounty16$totalexpulsions)] <- 0
+
+ExpulsionRF16 <- sum(as.numeric(as.character(RFcounty16$totalexpulsions)))
+ExpulsionRF16
+
+#---------------------------------------------------------------------------------------------------
+
+#Hispanic 
+county_RHcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="RH")
+RHcounty16 <- county_RHcount16[c(2:59), c(1,6,10,12)]
+RHcounty16
+
+RHcounty16$totalexpulsions <- as.numeric(as.character(RHcounty16$totalexpulsions))
+RHcounty16$totalexpulsions[is.na(RHcounty16$totalexpulsions)] <- 0
+
+
+ExpulsionRH16 <- sum(as.numeric(as.character(RHcounty16$totalexpulsions)))
+ExpulsionRH16
+
+#--------------------------------------------------------------------------------------------------
+
+#Pacific Islander
+county_RPcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="RP")
+RPcounty16 <- county_RPcount16[c(2:59), c(1,6,10,12)]
+RPcounty16
+
+RPcounty16$totalexpulsions <- as.numeric(as.character(RPcounty16$totalexpulsions))
+RPcounty16$totalexpulsions[is.na(RPcounty16$totalexpulsions)] <- 0
+
+ExpulsionRP16 <- sum(as.numeric(as.character(RPcounty16$totalexpulsions)))
+ExpulsionRP16
+
+#------------------------------------------------------------------------------------------------
+
+#Two or More Races 
+county_RTcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="RT")
+RTcounty16 <- county_RTcount16[c(2:59), c(1,6,10,12)]
+RTcounty16
+
+RTcounty16$totalexpulsions <- as.numeric(as.character(RTcounty16$totalexpulsions))
+RTcounty16$totalexpulsions[is.na(RTcounty16$totalexpulsions)] <- 0
+
+ExpulsionRT16 <- sum(as.numeric(as.character(RTcounty16$totalexpulsions)))
+ExpulsionRT16
+
+#-------------------------------------------------------------------------------------------------
+
+#White 
+county_RWcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="RW")
+
+RWcounty16 <- county_RWcount16[c(2:59), c(1,6,10,12)]
+
+RWcounty16
+
+ExpulsionRW16 <- sum(as.numeric(as.character(RWcounty16$totalexpulsions)))
+ExpulsionRW16
+
+#-------------------------------------------------------------------------------------------------
+
+#not rported 
+county_RDcount16 <- filter(Expulsion16, Expulsion16$reportingcategory =="RD")
+RDcounty16 <- county_RDcount16[c(2:59), c(1,6,10,12)]
+RDcounty16
+
+RDcounty16$totalexpulsions <- as.numeric(as.character(RDcounty16$totalexpulsions))
+RDcounty16$totalexpulsions[is.na(RDcounty16$totalexpulsions)] <- 0
+
+
+ExpulsionRD16 <- sum(as.numeric(as.character(RDcounty16$totalexpulsions)))
+ExpulsionRD16
+
+```
+
+#Plotting the bar graphs for Ethnicity 
+
+```{r}
+RAethnicity  <-c(ExpulsionRA11, ExpulsionRA12,ExpulsionRA13, ExpulsionRA14, ExpulsionRA15, ExpulsionRA16)
+
+RBethnicity2  <-c(ExpulsionRB11, ExpulsionRB12,ExpulsionRB13, ExpulsionRB14, ExpulsionRB15, ExpulsionRB16)
+
+RHethnicity5  <-c(ExpulsionRH11, ExpulsionRH12,ExpulsionRH13, ExpulsionRH14, ExpulsionRH15, ExpulsionRH16)
+
+RWethnicity8  <-c(ExpulsionRW11, ExpulsionRW12,ExpulsionRW13, ExpulsionRW14, ExpulsionRW15, ExpulsionRW16)
+
+ROsum11  <-sum(ExpulsionRF11, ExpulsionRP11,ExpulsionRT11,ExpulsionRI11, ExpulsionRD11)
+
+ROsum12  <-sum(ExpulsionRF12, ExpulsionRP12,ExpulsionRT12,ExpulsionRI12, ExpulsionRD12)
+
+ROsum13  <-sum(ExpulsionRF13, ExpulsionRP13,ExpulsionRT13,ExpulsionRI13, ExpulsionRD13)
+
+ROsum14 <- sum(ExpulsionRF14, ExpulsionRP14,ExpulsionRT14,ExpulsionRI14, ExpulsionRD14)
+
+ROsum15 <- sum(ExpulsionRF15, ExpulsionRP15,ExpulsionRT15,ExpulsionRI15, ExpulsionRD15)
+
+ROsum16 <- sum(ExpulsionRF16, ExpulsionRP16,ExpulsionRT16,ExpulsionRI16, ExpulsionRD16)
+
+ROethnicity <- c(ROsum11,ROsum12,ROsum13,ROsum14,ROsum15,ROsum16)
+
+Years <- c(2011:2016)
+
+RATot <- data.frame(Years, RAethnicity)
+names(RATot) <- c("Years","Total")
+RATot$ethnicity <- "Asian"
+
+RBTot <- data.frame(Years, RBethnicity2)
+names(RBTot) <- c("Years","Total")
+RBTot$ethnicity <- "Black"
+
+RHTot <- data.frame(Years, RHethnicity5)
+names(RHTot) <- c("Years","Total")
+RHTot$ethnicity <- "Hispanic/Latinx"
+
+RWTot <- data.frame(Years, RWethnicity8)
+names(RWTot) <- c("Years","Total")
+RWTot$ethnicity <- "White"
+
+ROTot <- data.frame(Years, ROethnicity)
+names(ROTot) <- c("Years","Total")
+ROTot$ethnicity <- "Other"
+
+EthTot <- rbind(RATot, RBTot, RHTot,RWTot,ROTot )
+
+EthTot$Years[EthTot$Years == 2011] <- "2011-12"
+EthTot$Years[EthTot$Years == 2012] <- "2012-13"
+EthTot$Years[EthTot$Years == 2013] <- "2013-14"
+EthTot$Years[EthTot$Years == 2014] <- "2014-15"
+EthTot$Years[EthTot$Years == 2015] <- "2015-16"
+EthTot$Years[EthTot$Years == 2016] <- "2016-17"
+
+EthTot <- EthTot[c(3,1,2)]
+
+
+Ethinfo <- aggregate(.~Years+ethnicity, data=EthTot, sum)
+options(scipen = 999)
+
+
+#install.packages("plyr")
+library(plyr)
+library(scales)
+#ethPlot <- ddply(ethPlot, .(Years),transform, pos = cumsum(Total) - (0.5 * Total))
+
+
+ethPlot <- ggplot(Ethinfo, aes(Years,Total)) + labs(title= "Yearly Expulsion Counts in California K-12 School", subtitle = "By Race/Ethnicity", fill = "Race/Ethnicity") + geom_bar(aes(fill = ethnicity),stat="identity") + theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) + scale_y_continuous(limits=c(0,10000), breaks = seq(0,10000,1000), labels = comma)
+ethPlot
+
+
+
+#ethPlot <- ethPlot + geom_text(data=ethPlot, aes(x = year, y = pos, label = paste0(percentage,"%")),
+                      # size=4)
+#ethPlot
+
+```
+
+
+
+
+
+
+
+
+
+
+
+

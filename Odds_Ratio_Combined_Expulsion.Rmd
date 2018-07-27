@@ -1,0 +1,21 @@
+---
+title: "Odds_Ratio_Combined_Expulsion"
+author: "Nathalie Huerta"
+date: "7/18/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#Odds Ratio for Gender
+
+```{r}
+#imports the data and merges calpads and csu/uc eligible 
+combinedexpulsion <- read.csv(file = "ExpulsionGenEth.csv", header = T) #imports the data 
+
+entot <- read.csv(file = "en_demo.csv", header = T)
+
+explusionenrolled <- merge(combinedexpulsion,entot, by = c("dist_year") )
+
+```
+

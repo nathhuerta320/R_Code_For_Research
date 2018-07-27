@@ -1,0 +1,132 @@
+---
+title: "Chi- Squared Testing"
+author: "Nathalie Huerta"
+date: "7/17/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#Chi- Squared Testing 
+
+##What is a Chi- Square test? 
+
+There are two types of chi- sqaure tests, using the chi- square statistic and distribution for different purposes: 
+
+1) Chi- square "Goodness of Fit" is used when the data is categorical and there is one independent variable. Hence, goodness of fit observes if the distribution of the data is simliar or different to that expected. 
+
+2) Chi- square test for inedependence is a comparison of 2 independent varibles from a categorical dataset. This comparison is done by using a contingency table. Hence, this test allows one to see if there is an association between the variables. When the result for the chi- sqaure test statistic is very small, there is a relaationship whereas when it results in a very large chi square test statistic, there is no relationship.
+
+The chi square stattistic, denoted as $\chi^2$, is used to examine whether distributions of categorical variables are different from one another (i.e. shows the relationship between two categorical variables). It is "a single number that tells you how much difference exists between [the] obeserved counts and the [counts] you would expect if there were no relationship at all in the population" (cite). Hence, the fomula for a chi- sqaure statistic used in the chi- square test is: 
+
+$$\chi_{c}^2 = \sum \frac{(O_i - E_i)^2}{E_i}$$
+where c are the degrees of freedom, O is the observed value, and E is the expected value. 
+
+#This is just me importing data, extracting rows, and transposing the data. 
+```{r}
+#loads data 
+chidata <- read.csv(file = "completeMerge copy.csv", header = T)
+#drops 1st column b/c we don't need it 
+newchi <- chidata[,-c(1)]
+
+#this code was from stackoverflow the title was "Need to convert columns to rows in R"
+#need to transform the data set so the columns become the rows 
+#i think this transposes the data. in my opnion it did transpose the dataset but then again i could be completly wrong, we'll seee. 
+
+#creates a data frame and transposes the old data. Old data = 125 obs & 44 var -> New data = 44 obs & 125 variables 
+dftransposechi <- data.frame(t(newchi))
+
+#this extracts the rows needed to build a new dataframe with only ethinicities 
+ethnicitychi <- dftransposechi[c("do_asian", "do_black", "do_hisp","do_white","do_other", "AsianSuspensions", "BlackSuspensions", "HispanicSuspensions", "WhiteSuspensoins", "OtherSuspensions","Expulsion_Asian",        "Expulsion_Black", "Expulsion_White","Expulsion_Hispanic","Expulsion_Other"),]
+
+#not sure why i'm doind this but im going to transpose this dataset again
+newethnicitytransposedf <- data.frame(t(ethnicitychi))
+```
+
+#This takes the sum of the colums so I can build my contingency table. A contingency table is a table of frequencies. I think there is an easier way to do this where I can I can transpose my data to get my contingency table. 
+```{r}
+#need to figure out how to append the other column because in the finalized dataset that column was not merged but was there when I merged my expulsion dataset????????
+
+#take the sum of each column to make a new dataframe. pretty sure there's a faster way of doing this  
+dropoutasian <- sum(as.numeric(newethnicitytransposedf$do_asian))
+dropoutblack <- sum(as.numeric(newethnicitytransposedf$do_black))
+dropouthisp <- sum(as.numeric(newethnicitytransposedf$do_hisp))
+dropoutwhite <- sum(as.numeric(newethnicitytransposedf$do_white))
+dropoutother <- sum(as.numeric(newethnicitytransposedf$do_other))
+#do the same for suspension
+susasian <- sum(as.numeric(newethnicitytransposedf$AsianSuspensions))
+susblack <- sum(as.numeric(newethnicitytransposedf$BlackSuspensions))
+sushisp <- sum(as.numeric(newethnicitytransposedf$HispanicSuspensions))
+suswhite <- sum(as.numeric(newethnicitytransposedf$WhiteSuspensoins))
+susother <- sum(as.numeric(newethnicitytransposedf$OtherSuspensions))
+#do the same for expulsion
+expulsionasian <- sum(as.numeric(newethnicitytransposedf$Expulsion_Asian))
+expulsionblack <- sum(as.numeric(newethnicitytransposedf$Expulsion_Black))
+expulsionhisp <- sum(as.numeric(newethnicitytransposedf$Expulsion_Hispanic))
+expulsionwhite <- sum(as.numeric(newethnicitytransposedf$Expulsion_White))
+expulsionother <- sum(as.numeric(newethnicitytransposedf$Expulsion_Other))
+```
+
+#This is me creating a new dataframe and me renaming the rows so my column names are the dropouts, expulsion, and suspension and my row names are the ethnicities. 
+```{r}
+#install.packages("data.table")
+#makes a vector with these numbers
+library("data.table")
+library("dplyr")
+#makes a list in order to create a dataframe
+dropout = c(399,788,3185,1607,659)
+suspension = c(2155,4356,6341,6035, 3392)
+expulsion = c(280, 518, 943,358,243)
+#creates a dataframe with the above 
+chimatrixfortable <- data.frame(dropout, suspension, expulsion)
+#renames rows 
+setattr(chimatrixfortable, "row.names", c("Asian", "Black", "Hispanic","White", "Other"))
+```
+
+#This is me making ballonplots. I'm really not sure what they're saying but I think it tells us where the most students are and there ethinicities as well as if they dropped out, got suspended, or expelled. I think it just serves as a summary of the data we have. 
+```{r}
+#this code was obtained from Statistical tools for high-throughput data analysis
+#install.packages("gplots")
+library(gplots)
+library(ggplot2)
+# convert the data as a table
+#this code creates a table in 
+dt <- as.table(as.matrix(chimatrixfortable))
+# Graphs the new table dt 
+balloonplot(t(dt), main ="Disciplinary Actions", xlab ="", ylab="",
+            label = FALSE, show.margins = FALSE)
+
+#need to look into how to interpret
+#way to visualize the contingency table
+library("graphics")
+mosaicplot(dt, shade = TRUE, las=2,
+           main = "Disciplinary Actions")
+```
+
+#This computes the chi sqaure test. 
+```{r}
+# computing the chi- square test 
+chisq <- chisq.test(chimatrixfortable)
+chisq
+#computed the observed counts 
+chisq$observed
+#computes the expected counts and rounds to 2 decimal points 
+round(chisq$expected,2)
+#prints out the residuals for the chi square
+round(chisq$residuals, 3)
+#visualization of the residuals 
+library(corrplot)
+corrplot(chisq$residuals, is.cor = FALSE)
+# Contibution in percentage (%)
+contrib <- 100*chisq$residuals^2/chisq$statistic
+round(contrib, 3)
+# Visualize the contribution
+corrplot(contrib, is.cor = FALSE)
+```
+
+
+
+
+
+
+

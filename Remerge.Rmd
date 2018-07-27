@@ -1,0 +1,243 @@
+---
+title: "Merge DistriDts"
+author: "Skylyn Irby"
+date: "7/19/2018"
+output: html_document
+---
+
+```{r}
+
+library(ggplot2)
+library(dplyr)
+Data<- read.csv("SuspensionCombined.csv", header = T)
+
+
+Data <- Data[-c(1:13),]
+
+#extract when aggregate level is c
+
+#Extracts the rows of GM for each county; 
+
+Dcounty_GMcount <- filter(Data, Data$reportingcategory =="GM" , Data$aggregatelevel == "D1" )
+Dcounty_GMcount
+
+Dcounty_GFcount <- filter(Data, Data$reportingcategory =="GF" , Data$aggregatelevel =="D1")
+Dcounty_GFcount
+#county_count <- filter(Suspension11, Suspension11$reportingcategory =="TA" && Suspension11$aggregatelevel == "D1" && Suspension11$totalsuspensions)
+
+#DonlyTAcounty <- Dcounty_TAcount[c(2:59),c(10,11,12)]
+#DonlyTAcounty
+
+Dcounty_GMcount <- Dcounty_GMcount[,c(1,2,5,11,13)]
+Dcounty_GMcount
+
+Dcounty_GFcount <- Dcounty_GFcount[,c(1,2,5,11,13)]
+Dcounty_GFcount
+
+
+#DdatframeTA <- data.frame(Dcounty_TAcount[c(2:59), "countyname"], DonlyTAcounty)
+#DdatframeTA
+
+# DdatframeGM <- data.frame(Dcounty_GMcount[ , "countyname"], DonlyGMcounty)
+# DdatframeGM
+# 
+# DdatframeGF <- data.frame(Dcounty_GFcount[, "countyname"], DonlyGFcounty)
+# DdatframeGF
+
+#clean data for males
+Dcounty_GMcount <- Dcounty_GMcount[,-c(1,4)]
+colnames(Dcounty_GMcount) <- c("Year","DistrictCode", "Total")
+Dcounty_GMcount$Gender <- "Males"
+
+
+#clean for females
+Dcounty_GFcount <- Dcounty_GFcount[,-c(1,4)]
+colnames(Dcounty_GFcount) <- c("Year", "DistrictCode","Total")
+Dcounty_GFcount$Gender <- "Females"
+```
+
+```{r}
+DcombinedGenderFrame <- merge(Dcounty_GMcount, Dcounty_GFcount, by = c("DistrictCode", "Year"))
+
+DcombinedGenderFrame$dist_year <- paste(DcombinedGenderFrame$DistrictCode, DcombinedGenderFrame$Year, sep="_")
+
+DcombinedGenderFrame <- DcombinedGenderFrame[,-c(1,2,4,6)]
+DcombinedGenderFrame <- DcombinedGenderFrame[c(3,1,2)]
+
+names(DcombinedGenderFrame) <- c("dist_year", "MaleSuspensions", "Female Suspensions")
+
+
+
+
+count_RFtot <- filter(Data, Data$reportingcategory == "RF" , Data$aggregatelevel == "D1") 
+count_RAtot <- filter(Data, Data$reportingcategory == "RA" , Data$aggregatelevel == "D1") 
+count_RHtot <- filter(Data, Data$reportingcategory == "RH" , Data$aggregatelevel == "D1") 
+count_RPtot <- filter(Data, Data$reportingcategory == "RP" , Data$aggregatelevel == "D1") 
+count_RBtot <- filter(Data, Data$reportingcategory == "RB" , Data$aggregatelevel == "D1") 
+count_RItot <- filter(Data, Data$reportingcategory == "RI" , Data$aggregatelevel == "D1") 
+count_RWtot <- filter(Data, Data$reportingcategory == "RW" , Data$aggregatelevel == "D1") 
+
+count_RTtot <- filter(Data, Data$reportingcategory == "RT" , Data$aggregatelevel == "D1") 
+
+count_RDtot <- filter(Data, Data$reportingcategory == "RD" , Data$aggregatelevel == "D1")
+#how to extract rows to get rows 2 through 59 and creates new data with only these rows
+
+#Shows all the number of suspensions for each race in school districts
+
+#Filipino
+steprf <- count_RFtot[,c(2,5,7,13)]
+steprf
+
+#Asian
+stepra <- count_RAtot[,c(2,5,7,13)]
+stepra
+
+#Hispanic
+steprh <- count_RHtot[,c(2,5,7,13)]
+steprh
+
+#Pacific Islander
+steprp <- count_RPtot[,c(2,5,7,13)]
+steprp
+
+#Black
+steprb <- count_RBtot[,c(2,5,7,13)]
+steprb
+
+#Indian
+stepri <- count_RItot[,c(2,5,7,13)]
+stepri
+
+#White
+steprw <- count_RWtot[,c(2,5,7,13)]
+steprw
+
+#not reported
+steprd <- count_RDtot[,c(2,5,7,13)]
+steprd
+
+#Mixed
+steprt <- count_RTtot[,c(2,5,7,13)]
+steprt
+
+#we now need to figure out how to make a 59 by 2 new dataset that only contains the countycode and the total number of expulsions 
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+# rf <- data.frame(count_RFtot[, "districtcode"], steprf)
+# rf
+# 
+# ra <- data.frame(count_RAtot[, "districtcode"], stepra)
+# ra
+# 
+# rh <- data.frame(count_RHtot[, "districtcode"], steprh)
+# rh
+# 
+# ri <- data.frame(count_RItot[, "districtcode"], stepri)
+# ri
+# 
+# rp <- data.frame(count_RPtot[, "districtcode"], steprp)
+# rp
+# 
+# rw <- data.frame(count_RWtot[, "districtcode"], steprw)
+# rw
+# 
+# rb <- data.frame(count_RBtot[, "districtcode"], steprb)
+# rb
+# 
+# rt <- data.frame(count_RTtot[, "districtcode"], steprt)
+# rt
+# 
+# rd <- data.frame(count_RDtot[, "districtcode"], steprd)
+# rd
+ 
+#steprb <- stepra[,c(2,1,3,4)]
+colnames(stepra)<- c("Year","DistrictCode","County", "Total")
+stepra$Ethnicity <- "Asian"
+
+#steprb <- steprb[,c(3,2,4,8)]
+colnames(steprb)<- c("Year","DistrictCode","County", "Total")
+steprb$Ethnicity <- "Black"
+
+#dfnew4 <- steprh[,c(3,2,4,8)]
+colnames(steprh)<- c("Year","DistrictCode","County", "Total")
+steprh$Ethnicity <- "Hispanic or Latino"
+
+#dfnew8 <- steprw[,c(3,2,4,8)]
+colnames(steprw) <- c("Year","DistrictCode","County", "Total")
+steprw$Ethnicity <- "White"
+
+#dfnew5 <- ri[,c(3,2,4,8)]
+colnames(stepri) <- c("Year","DistrictCode","County", "Total")
+stepri$Ethnicity <- "Other"
+
+#dfnew7 <- steprp[,c(3,2,4,8)]
+colnames(steprp) <- c("Year","DistrictCode","County", "Total")
+steprp$Ethnicity <- "Other"
+
+#dfnew3 <- steprf[,c(3,2,4,8)]
+colnames(steprp)<- c("Year","DistrictCode","County", "Total")
+steprp$Ethnicity <- "Other"
+
+#dfnew9 <- steprt[,c(3,2,4,8)]
+colnames(steprt) <- c("Year","DistrictCode","County", "Total")
+steprt$Ethnicity <- "Other"
+
+#dfnew0 <- steprd[,c(3,2,4,8)]
+colnames(steprd) <- c("Year","DistrictCode","County", "Total")
+steprd$Ethnicity <- "Other"
+
+#-----------
+#ADDING THE Other Columns together!!!
+#Start making changes here!
+dfother1 <- cbind(stepri, steprp, by = c("Year","DistrictCode","County", "Total"))
+
+dfother1$OtherSuspensions.x <- as.numeric(as.character(dfother1$OtherSuspensions.x))
+dfother1$OtherSuspensions.y <- as.numeric(as.character(dfother1$OtherSuspensions.y))
+dfother1$OtherSuspensions.x[is.na(dfother1$OtherSuspensions.x)] <- 0
+dfother1$OtherSuspensions.y[is.na(dfother1$OtherSuspensions.y)] <- 0
+
+#sums the 2 columns
+dfother11 <- dfother1$OtherSuspensions.x + dfother1$OtherSuspensions.y
+#adds new column with add columns
+dfother1$dfother11 <- dfother1$OtherSuspensions.x + dfother1$OtherSuspensions.y
+#subtracts old 2 columns, keeps the added one
+dfother1 <- dfother1[,-c(4,5)]
+
+#---------------
+
+dfother2 <- merge(dfother1, steprp,by = c("DistrictCode", "Year","County"))
+
+dfother2$OtherSuspensions <- as.numeric(as.character(dfother2$OtherSuspensions))
+dfother2$OtherSuspensions[is.na(dfother2$OtherSuspensions)] <- 0
+dfother22 <- dfother2$dfother11 + dfother2$OtherSuspensions
+dfother2$dfother22 <- dfother2$dfother11 + dfother2$OtherSuspensions
+dfother2 <- dfother2[,-c(4,5)]
+
+
+dfother3 <- merge(dfother2, steprf,by = c("DistrictCode", "Year","County"))
+
+dfother3$OtherSuspensions <- as.numeric(as.character(dfother3$OtherSuspensions))
+dfother3$OtherSuspensions[is.na(dfother3$OtherSuspensions)] <- 0
+dfother33 <- dfother3$dfother22 + dfother3$OtherSuspensions
+dfother3$dfother33 <- dfother3$dfother22 + dfother3$OtherSuspensions
+dfother3 <- dfother3[,-c(4,5)]
+
+
+dfotherfinal <- merge(dfother3, steprt,by = c("DistrictCode", "Year","County"))
+
+dfotherfinal$OtherSuspensions <- as.numeric(as.character(dfotherfinal$OtherSuspensions))
+dfotherfinal$OtherSuspensions[is.na(dfotherfinal$OtherSuspensions)] <- 0
+OtherSuspensions <- dfotherfinal$dfother33 + dfotherfinal$OtherSuspensions
+dfotherfinal$OtherSuspensions <- dfotherfinal$dfother33 + dfotherfinal$OtherSuspensions
+dfotherfinal <- dfotherfinal[,-c(4)]
+
+
+ethnicity1 <- merge(dfeth1, steprd, by = c("DistrictCode", "Year","County"))
+ethnicity2 <- merge(ethnicity1, dfeth3, by = c("DistrictCode", "Year","County"))
+ethnicity3 <- merge(ethnicity2, dfeth4, by=c("DistrictCode", "Year","County"))
+combinedEthnFrame <- merge(ethnicity3, dfotherfinal, by =c("DistrictCode", "Year","County"))
+
+combinedEthnFrame$dist_year <- paste(combinedEthnFrame$DistrictCode, combinedEthnFrame$Year, sep="_")
+combinedEthnFrame <- combinedEthnFrame[,-c(1,2)]
+combinedEthnFrame <- combinedEthnFrame[c(7,1,2,3,4,5,6)]
+```
+

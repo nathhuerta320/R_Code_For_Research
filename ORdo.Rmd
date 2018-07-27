@@ -1,0 +1,259 @@
+---
+title: "ORDo"
+author: "Nathalie Huerta"
+date: "7/18/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+ordo <- read.csv(file = "ORDo.csv", header = T)
+```
+
+```{r}
+# odds ratio for male : female
+#total number of students dropout
+domale <- sum(as.numeric(ordo$do_male))
+dofemale <- sum(as.numeric(ordo$do_female))
+
+#total number of students enrolled 
+enmale <- sum(as.numeric(ordo$enroll_male))
+enfem <- sum(as.numeric(ordo$enroll_female))
+
+#total number of non dropout students 
+totdopmal <- enmale - domale
+totdofeml <- enfem - dofemale
+
+
+domf <- matrix(c(domale,totdopmal,dofemale, totdofeml),nrow=2,byrow=TRUE)
+colnames(domf) <- c("Total dropout","Total Non- Dropout")
+rownames(domf) <- c("Male","female")
+print(domf)
+
+ 
+ormf <- oddsratio(domf)
+ormf
+
+#The odds are 1.43 times higher that male students will dropout compared to men. 
+
+#----------------------------------------------------------------------------------
+
+
+
+
+```
+
+```{r}
+#odds ratio by race/ethnicity 
+
+#total number of dropout  
+rado <- sum(as.numeric(ordo$do_asian))
+rbdo <- sum(as.numeric(ordo$do_black))
+rhdo <- sum(as.numeric(ordo$do_hisp))
+rwdo <- sum(as.numeric(ordo$do_other))
+
+#total number of dropout 
+raenr <- sum(as.numeric(ordo$enroll_asian))
+rbenr <- sum(as.numeric(ordo$enroll_black))
+rhenr <- sum(as.numeric(ordo$enroll_hisp))
+rwenr <- sum(as.numeric(ordo$enroll_white))
+
+#total number of non-dropout 
+
+totnonRA <- raenr - rado
+totnoRB <- rbenr - rbdo
+totnoRH <- rhenr - rhdo
+totnoRW <- rwenr - rwdo
+
+```
+
+```{r}
+#asian vs race
+#asian : black
+
+doab <- matrix(c(rado,totnonRA,rbdo, totnoRB),nrow=2,byrow=TRUE)
+colnames(doab) <- c("Total dropout","Total Non- Dropout")
+rownames(doab) <- c("Asian","Black")
+print(doab)
+
+ 
+dorab <- oddsratio(doab)
+dorab
+
+#The results of the odds ratio of 0.17 means that are Asian students are less likely to dropout when compared to black students. 
+
+#-------------------------------------------------------------------------------
+
+#asian : hispanic 
+
+doah <- matrix(c(rado,totnonRA,rhdo, totnoRH),nrow=2,byrow=TRUE)
+colnames(doah) <- c("Total dropout","Total Non- Dropout")
+rownames(doah) <- c("Asian","Hispanic")
+print(doah)
+
+ 
+dorah <- oddsratio(doah)
+dorah
+
+#The results of the odds ratio of 0.28 means that are Asian students are less likely to dropout when compared to Hispanic students. 
+
+#-------------------------------------------------------------------------------
+
+#asian : white 
+
+doaw <- matrix(c(rado,totnonRA,rwdo, totnoRW),nrow=2,byrow=TRUE)
+colnames(doaw) <- c("Total dropout","Total Non- Dropout")
+rownames(doaw) <- c("Asian","White")
+print(doaw)
+
+ 
+doraw <- oddsratio(doaw)
+doraw
+
+#The odds is 1.28 times higher that an Asian student will dropout when compared to a white student. 
+
+```
+ 
+```{r}
+#odds ratio for black students 
+
+#black : asian 
+
+doba <- matrix(c(rbdo,totnoRB,rado, totnonRA),nrow=2,byrow=TRUE)
+colnames(doba) <- c("Total dropout","Total Non- Dropout")
+rownames(doba) <- c("Black","Asian")
+print(doba)
+
+ 
+dorba <- oddsratio(doba)
+dorba
+
+#The odds is 6 times higher that an Asian student will dropout when compared to a white student. 
+
+#-------------------------------------------------------------------------------------------------
+
+#black : hispanic
+
+dobh <- matrix(c(rbdo,totnoRB,rhdo, totnoRH),nrow=2,byrow=TRUE)
+colnames(dobh) <- c("Total dropout","Total Non- Dropout")
+rownames(dobh) <- c("Black","Hispanic")
+print(dobh)
+
+ 
+dorbh <- oddsratio(dobh)
+dorbh
+
+#The odds is 1.72 times higher that a black student will dropout when compared to a hispanic student. 
+
+#--------------------------------------------------------------------------------------------------
+
+#black : white 
+
+dobw <- matrix(c(rbdo,totnoRB,rwdo, totnoRW),nrow=2,byrow=TRUE)
+colnames(dobw) <- c("Total dropout","Total Non- Dropout")
+rownames(dobw) <- c("Black","White")
+print(dobw)
+
+ 
+dorbw <- oddsratio(dobw)
+dorbw
+
+#The odds is 8 times higher that a black student will dropout when compared to a white student. 
+
+```
+
+```{r}
+#odds ratio for hispanics 
+
+#hispanics : asian
+doha <- matrix(c(rhdo,totnoRH,rado, totnonRA),nrow=2,byrow=TRUE)
+colnames(doha) <- c("Total dropout","Total Non- Dropout")
+rownames(doha) <- c("Hispanic","Asian")
+print(doha)
+
+ 
+dorha <- oddsratio(doha)
+dorha
+
+#The odds is 4 times higher that a hispanic student will dropout when compared to an Asian student. 
+
+#---------------------------------------------------------------------------------------------------
+
+#hispanics : black 
+dohb <- matrix(c(rhdo,totnoRH,rbdo, totnoRB),nrow=2,byrow=TRUE)
+colnames(dohb) <- c("Total dropout","Total Non- Dropout")
+rownames(dohb) <- c("Hispanic","Black")
+print(dohb)
+
+ 
+dorhb <- oddsratio(dohb)
+dorhb
+
+#The results of the odds ratio of 0.58 means that hispanic students are less likely to dropout when compared to black students. 
+
+#---------------------------------------------------------------------------------------------------
+
+#hispanic : white 
+
+dohw <- matrix(c(rhdo,totnoRH,rwdo, totnoRW),nrow=2,byrow=TRUE)
+colnames(dohw) <- c("Total dropout","Total Non- Dropout")
+rownames(dohw) <- c("Hispanic","White")
+print(dohw)
+
+ 
+dorhw <- oddsratio(dohw)
+dorhw
+
+#The odds is 5 times higher that a hispanic student will dropout when compared to a white student. 
+
+```
+
+```{r}
+#odds ratio for whites 
+
+#white : asian
+dowa <- matrix(c(rwdo,totnoRW,rado, totnonRA),nrow=2,byrow=TRUE)
+colnames(dowa) <- c("Total dropout","Total Non- Dropout")
+rownames(dowa) <- c("White","Asian")
+print(dowa)
+
+ 
+dorwa <- oddsratio(dowa)
+dorwa
+
+#The results of the odds ratio of 0.78 means that white students are less likely to dropout when compared to asian students. 
+
+#-----------------------------------------------------------------------------------------------
+
+#white : black 
+dowb <- matrix(c(rwdo,totnoRW,rbdo, totnoRB),nrow=2,byrow=TRUE)
+colnames(dowb) <- c("Total dropout","Total Non- Dropout")
+rownames(dowb) <- c("White","Black")
+print(dowb)
+
+ 
+dorwb <- oddsratio(dowb)
+dorwb
+
+#The results of the odds ratio of 0.13 means that white students are less likely to dropout when compared to black students. 
+
+#-----------------------------------------------------------------------------------------------
+
+#white : hispanic 
+
+dowh <- matrix(c(rwdo,totnoRW,rhdo, totnoRH),nrow=2,byrow=TRUE)
+colnames(dowh) <- c("Total dropout","Total Non- Dropout")
+rownames(dowh) <- c("White","Hispanic")
+print(dowh)
+
+ 
+dorbw <- oddsratio(dowh)
+dorbw
+
+#The results of the odds ratio of 0.22 means that white students are less likely to dropout when compared to hispanic students. 
+
+```
+
+
+

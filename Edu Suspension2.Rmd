@@ -1,0 +1,332 @@
+---
+title: "Edu Suspension2"
+author: "Skylyn Irby"
+date: "7/9/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(ggplot2)
+Suspension11 <- read.csv("suspension2011-12.csv", header = T)
+Suspension12 <- read.csv("suspension2012-13.csv", header = T)
+Suspension13 <- read.csv("suspension2013-14.csv", header = T)
+Suspension14 <- read.csv("suspension2014-15.csv", header = T)
+Suspension15 <- read.csv("suspension2015-16.csv", header = T)
+Suspension16 <- read.csv("suspension2016-17.csv", header = T)
+
+SuspensionCombined <- rbind(Suspension11, Suspension12, Suspension13, Suspension14, Suspension15, Suspension16)
+
+length(unique(SuspensionCombined$schoolname))
+
+length(unique(SuspensionCombined$districtcode))
+
+write.csv(SuspensionCombined, file = "/Users/skylynolyviairby/Desktop/Edu Data Suspension/SuspensionCombined.csv")
+
+AllData <- SuspensionCombined[-c(1:13),]
+#extract when aggregate level is c
+
+#Extracts the rows of GM for each county; 
+Ccounty_GMcount <- filter(AllData, AllData$reportingcategory =="GM" , AllData$aggregatelevel == "C" )
+Ccounty_GMcount
+
+Ccounty_GFcount <- filter(AllData, AllData$reportingcategory =="GF" , AllData$aggregatelevel =="C")
+Ccounty_GFcount
+
+ConlyGMcounty <- Ccounty_GMcount[,c(1,4,6,10,11,12)]
+#ConlyGMcounty
+
+#ConlyGFcounty <- Ccounty_GFcount[, c(1,4,6,10,11,12)]
+#ConlyGFcounty
+
+#CdatframeTA <- data.frame(Ccounty_TAcount[c(2:59), "countyname"], ConlyTAcounty)
+#CdatframeTA
+
+CdatframeGM <- data.frame(Ccounty_GMcount[, ], ConlyGMcounty)
+CdatframeGM
+
+CdatframeGF <- data.frame(Ccounty_GFcount[, ], ConlyGFcounty)
+CdatframeGF
+
+#clean data for males
+CdatframeMBar <- CdatframeGM[,c(1,2,4,7)]
+colnames(CdatframeMBar) <- c("DistrictCode", "Year","County", "Total")
+CdatframeMBar$Gender <- "Males"
+
+
+#clean data for females
+CdatframeFBar <- CdatframeGF[,c(1,2,4,7)]
+colnames(CdatframeFBar) <- c("DistrictCode","Year","County", "Total")
+CdatframeFBar$Gender <- "Females"
+
+#combined dataframes
+combinedFrameBar <- rbind(CdatframeMBar, CdatframeFBar)
+
+geninfo <- aggregate(.~Year+Gender, data=combinedFrameBar, sum)
+
+GenPlot <- ggplot(geninfo, aes(Year,Total)) + labs(title= "California Yearly Suspensions", subtitle = "By Gender") + geom_bar(aes(fill=Gender), stat="identity") + theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
+GenPlot
+
+
+```
+
+
+Ethnicities Bar Graph
+```{r}
+count_RFtot <- filter(AllData, AllData$reportingcategory == "RF" , AllData$aggregatelevel == "C") 
+
+count_RAtot <- filter(AllData, AllData$reportingcategory == "RA" , AllData$aggregatelevel == "C") 
+count_RHtot <- filter(AllData, AllData$reportingcategory == "RH" , AllData$aggregatelevel == "C") 
+count_RPtot <- filter(AllData, AllData$reportingcategory == "RP" , AllData$aggregatelevel == "C") 
+count_RBtot <- filter(AllData, AllData$reportingcategory == "RB" , AllData$aggregatelevel == "C") 
+count_RItot <- filter(AllData, AllData$reportingcategory == "RI" , AllData$aggregatelevel == "C") 
+count_RWtot <- filter(AllData, AllData$reportingcategory == "RW" , AllData$aggregatelevel == "C") 
+
+count_RTtot <- filter(AllData, AllData$reportingcategory == "RT" , AllData$aggregatelevel == "C") 
+
+count_RD11 <- filter(AllData, AllData$reportingcategory == "RD" , AllData$aggregatelevel == "C", AllData$ïacademicyear == "2011-12") 
+#how to extract rows to get rows 2 through 59 and creates new data with only these rows
+
+#Shows all the number of suspensions for each race in school districts
+
+#Filipino
+steprf <- count_RFtot[,c(1,4,6,7,10,11,12)]
+steprf
+
+#Asian
+stepra <- count_RAtot[,c(1,4,6,7,10,11,12)]
+stepra
+
+#Hispanic
+steprh <- count_RHtot[,c(1,4,6,7,10,11,12)]
+steprh
+
+#Pacific Islander
+steprp <- count_RPtot[,c(1,4,6,7,10,11,12)]
+steprp
+
+#Black
+steprb <- count_RBtot[,c(1,4,6,7,10,11,12)]
+steprb
+
+#Indian
+stepri <- count_RItot[,c(1,4,6,7,10,11,12)]
+stepri
+
+#White
+steprw <- count_RWtot[,c(1,4,6,7,10,11,12)]
+steprw
+
+#not reported
+steprd <- count_RDtot[,c(1,4,6,7,10,11,12)]
+steprd
+
+#Mixed
+steprt <- count_RTtot[,c(1,4,6,7,10,11,12)]
+steprt
+
+#we now need to figure out how to make a 59 by 2 new dataset that only contains the countycode and the total number of expulsions 
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+rf <- data.frame(count_RFtot[, "districtcode"], steprf)
+rf
+
+ra <- data.frame(count_RAtot[, "districtcode"], stepra)
+ra
+
+rh <- data.frame(count_RHtot[, "districtcode"], steprh)
+rh
+
+ri <- data.frame(count_RItot[, "districtcode"], stepri)
+ri
+
+rp <- data.frame(count_RPtot[, "districtcode"], steprp)
+rp
+
+rw <- data.frame(count_RWtot[, "districtcode"], steprw)
+rw
+
+rb <- data.frame(count_RBtot[, "districtcode"], steprb)
+rb
+
+rt <- data.frame(count_RTtot[, "districtcode"], steprt)
+rt
+
+rd <- data.frame(count_RDtot[, "districtcode"], steprd)
+rd
+ 
+dfnew2 <- ra[,c(3,2,4,8)]
+colnames(dfnew2)<- c("DistrictCode", "Year","County", "Total")
+dfnew2$Ethnicity <- "Asian"
+
+dfnew6 <- rb[,c(3,2,4,8)]
+colnames(dfnew6)<- c("DistrictCode", "Year","County", "Total")
+dfnew6$Ethnicity <- "Black"
+
+dfnew4 <- rh[,c(3,2,4,8)]
+colnames(dfnew4)<- c("DistrictCode", "Year","County", "Total")
+dfnew4$Ethnicity <- "Hispanic or Latino"
+
+dfnew8 <- rw[,c(3,2,4,8)]
+colnames(dfnew8) <- c("DistrictCode", "Year","County", "Total")
+dfnew8$Ethnicity <- "White"
+
+dfnew5 <- ri[,c(3,2,4,8)]
+colnames(dfnew5) <- c("DistrictCode", "Year","County", "Total")
+dfnew5$Ethnicity <- "Other"
+
+dfnew7 <- rp[,c(3,2,4,8)]
+colnames(dfnew7) <- c("DistrictCode", "Year","County", "Total")
+dfnew7$Ethnicity <- "Other"
+
+dfnew3 <- rf[,c(3,2,4,8)]
+colnames(dfnew3)<- c("DistrictCode", "Year","County", "Total")
+dfnew3$Ethnicity <- "Other"
+
+dfnew9 <- rt[,c(3,2,4,8)]
+colnames(dfnew9) <- c("DistrictCode", "Year","County", "Total")
+dfnew9$Ethnicity <- "Other"
+
+dfnew0 <- rd[,c(3,2,4,8)]
+colnames(dfnew0) <- c("DistrictCode", "Year","County", "Total")
+dfnew0$Ethnicity <- "Other"
+
+#binds the dataframes together 
+ethnAll <- rbind(dfnew2,dfnew6,dfnew4,dfnew8,dfnew5, dfnew3, dfnew7, dfnew0, dfnew9)
+ethnAll
+#plot bar graphs 
+library(ggplot2)
+
+#combining several elments 
+ethinfo <- aggregate(.~Year+Ethnicity, data=ethnAll, sum)
+
+ethPlot <- ggplot(ethinfo, aes(Year,Total)) +labs(title="Yearly Suspension",subtitle = "By Ethnicity") + geom_bar(aes(fill=Ethnicity), stat="identity")  + theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.45))
+
+ethPlot
+
+```
+
+
+Cumulative Enrollment
+```{r}
+CE11 <- sum(as.numeric(as.character(onlyTAcount[1:58,11])))
+CE12 <- sum(as.numeric(as.character(onlyTAcount[59:116,11])))
+CE13 <- sum(as.numeric(as.character(onlyTAcount[117:174,11])))
+CE14 <- sum(as.numeric(as.character(onlyTAcount[175:232,11])))
+CE15 <- sum(as.numeric(as.character(onlyTAcount[233:290,11])))
+CE16 <- sum(as.numeric(as.character(onlyTAcount[291:348,11])))
+```
+
+Total Suspension
+```{r}
+
+onlyTAcount <- (filter(AllData, AllData$reportingcategory =="TA", AllData$aggregatelevel =="C"))
+#onlyTAcount <- filter(SuspensionCombined, SuspensionCombined$reportingcategory =="TA" && SuspensionCombined$aggregatelevel == "D1" && SuspensionCombined$totalsuspensions)
+
+#ConlyTAcounty <- Ccounty_TAcount[c(2:59),c(10,11,12)]
+
+#Total_Suspension  <- filter(AllData, AllData$reportingcategory =="TA" , AllData$aggregatelevel =="D1")
+#Total_Suspension
+
+#ConlyTAcounty
+
+TA11 <- sum(as.numeric(as.character(onlyTAcount[1:58,12])))
+TA12 <- sum(as.numeric(as.character(onlyTAcount[59:116,12])))
+TA13 <- sum(as.numeric(as.character(onlyTAcount[117:174,12])))
+TA14 <- sum(as.numeric(as.character(onlyTAcount[175:232,12])))
+TA15 <- sum(as.numeric(as.character(onlyTAcount[233:290,12])))
+TA16 <- sum(as.numeric(as.character(onlyTAcount[291:348,12])))
+
+allyears <- c(TA11, TA12, TA13, TA14, TA15, TA16) 
+
+Years <- c(2011:2016)
+SuspTot <- data.frame(Years, allyears)
+names(SuspTot) <- c("Years", "Totals")
+
+
+totinfo <- aggregate(.~Years, data=SuspTot, sum)
+options(scipen = 999)
+
+TotPlot <- ggplot(totinfo, aes(Years,Totals)) + labs(title= "California Yearly Suspensions") + geom_bar(stat="identity") + theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
+TotPlot
+
+```
+
+
+
+```
+Suspension Rate
+```{r}
+
+SR11 <- sum(as.numeric(as.character(onlyTAcount[1:58,16])))
+SR12 <- sum(as.numeric(as.character(onlyTAcount[59:116,16])))
+SR13 <- sum(as.numeric(as.character(onlyTAcount[117:174,16])))
+SR14 <- sum(as.numeric(as.character(onlyTAcount[175:232,16])))
+SR15 <- sum(as.numeric(as.character(onlyTAcount[233:290,16])))
+SR16 <- sum(as.numeric(as.character(onlyTAcount[291:348,16])))
+
+```
+Violent Injury
+```{r}
+VI11 <- sum(as.numeric(as.character(onlyTAcount[1:58,17])))
+VI12 <- sum(as.numeric(as.character(onlyTAcount[59:116,17])))
+VI13 <- sum(as.numeric(as.character(onlyTAcount[117:174,17])))
+VI14 <- sum(as.numeric(as.character(onlyTAcount[175:232,17])))
+VI15 <- sum(as.numeric(as.character(onlyTAcount[233:290,17])))
+VI16 <- sum(as.numeric(as.character(onlyTAcount[291:348,17])))
+
+```
+
+Violent Non-Injury
+```{r}
+VN11 <- sum(as.numeric(as.character(onlyTAcount[1:58,18])))
+VN12 <- sum(as.numeric(as.character(onlyTAcount[59:116,18])))
+VN13 <- sum(as.numeric(as.character(onlyTAcount[117:174,18])))
+VN14 <- sum(as.numeric(as.character(onlyTAcount[175:232,18])))
+VN15 <- sum(as.numeric(as.character(onlyTAcount[233:290,18])))
+VN16 <- sum(as.numeric(as.character(onlyTAcount[291:348,18])))
+```
+Weapon Possession
+```{r}
+WP11 <- sum(as.numeric(as.character(onlyTAcount[1:58,19])))
+WP12 <- sum(as.numeric(as.character(onlyTAcount[59:116,19])))
+WP13 <- sum(as.numeric(as.character(onlyTAcount[117:174,19])))
+WP14 <- sum(as.numeric(as.character(onlyTAcount[175:232,19])))
+WP15 <- sum(as.numeric(as.character(onlyTAcount[233:290,19])))
+WP16 <- sum(as.numeric(as.character(onlyTAcount[291:348,19])))
+```
+
+Drug Related
+```{r}
+DR11 <- sum(as.numeric(as.character(onlyTAcount[1:58,20])))
+DR12 <- sum(as.numeric(as.character(onlyTAcount[59:116,20])))
+DR13 <- sum(as.numeric(as.character(onlyTAcount[117:174,20])))
+DR14 <- sum(as.numeric(as.character(onlyTAcount[175:232,20])))
+DR15 <- sum(as.numeric(as.character(onlyTAcount[233:290,20])))
+DR16 <- sum(as.numeric(as.character(onlyTAcount[291:348,20])))
+```
+
+Defiance Only
+```{r}
+DO11 <- sum(as.numeric(as.character(onlyTAcount[1:58,21])))
+DO12 <- sum(as.numeric(as.character(onlyTAcount[59:116,21])))
+DO13 <- sum(as.numeric(as.character(onlyTAcount[117:174,21])))
+DO14 <- sum(as.numeric(as.character(onlyTAcount[175:232,21])))
+DO15 <- sum(as.numeric(as.character(onlyTAcount[233:290,21])))
+DO16 <- sum(as.numeric(as.character(onlyTAcount[291:348,21])))
+```
+
+```{r}
+
+df <- data.frame(x = c(2011:2016), y = c(DR11, DR12, DR13, DR14, DR15, DR16), z = c(WP11, WP12, WP13, WP14, WP15, WP16))
+df
+
+#plots the number of drug suspensions 2011-2017 in a LINE GRAPH; suspension for drugs increased? why? easy access? change in laws?
+
+#Drug Suspensions
+ggplot(data=df, aes(x,y)) + geom_line(aes(x,y),color = "red") + labs(title = "Rate of Drug Related Suspensions") + labs(x = "Year", y= "Suspension for Drug Use")  + theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
+#Weapon Suspensions
+ggplot(data=df, aes(x,y)) + geom_line(aes(x,z),color = "blue") + labs(title = "Rate of Weapon Related Suspensions") + labs(x = "Year", y= "Suspension for Weapons")  + theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5))
+
+
+```

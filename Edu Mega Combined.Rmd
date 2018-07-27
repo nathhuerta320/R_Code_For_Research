@@ -1,0 +1,126 @@
+---
+title: "Edu Combined"
+author: "Skylyn Irby"
+date: "7/10/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library("dplyr")
+SuspensionCombined <- read.csv("SuspensionCombined.csv", header = T)
+
+#DropoutCombined <- read.csv("DropoutCombined.csv", header = T)
+
+#ExpulsionCombined <- read.csv("ExpulsionCombined.csv", header = T)
+
+```
+
+```{r}
+combinedGenderFrame <- merge(Cdatframenew, Cdatframe2, by = c("DistrictCode", "Year","County"))
+
+combinedGenderFrame$dist_year <- paste(combinedGenderFrame$DistrictCode, combinedGenderFrame$Year, sep="_")
+
+combinedGenderFrame <- combinedGenderFrame[,-c(1,2,5)]
+combinedGenderFrame <- combinedGenderFrame[c(4,1,2,3)]
+
+
+
+dfeth1 <- ra[,c(3,2,4,8)]
+colnames(dfeth1)<- c("DistrictCode", "Year","County", "AsianSuspensions")
+#dfnew2$Ethnicity <- "Asian"
+
+dfeth2 <- rb[,c(3,2,4,8)]
+colnames(dfeth2)<- c("DistrictCode", "Year","County", "BlackSuspensions")
+#dfnew6$Ethnicity <- "Black"
+
+dfeth3 <- rh[,c(3,2,4,8)]
+colnames(dfeth3)<- c("DistrictCode", "Year","County", "HispanicSuspensions")
+#dfnew4$Ethnicity <- "Hispanic or Latino"
+
+dfeth4 <- rw[,c(3,2,4,8)]
+colnames(dfeth4) <- c("DistrictCode", "Year","County", "WhiteSuspensoins")
+#dfnew8$Ethnicity <- "White"
+
+dfeth5 <- ri[,c(3,2,4,8)]
+colnames(dfeth5) <- c("DistrictCode", "Year","County", "OtherSuspensions")
+#dfnew5$Ethnicity <- "Other" Indian
+
+dfeth6 <- rp[,c(3,2,4,8)]
+colnames(dfeth6) <- c("DistrictCode", "Year","County", "OtherSuspensions")
+#dfnew7$Ethnicity <- "Other" pacific islander
+
+dfeth7 <- rf[,c(3,2,4,8)]
+colnames(dfeth7)<- c("DistrictCode", "Year","County", "OtherSuspensions")
+#dfnew3$Ethnicity <- "Other" filipino
+
+dfeth8 <- rt[,c(3,2,4,8)]
+colnames(dfeth8) <- c("DistrictCode", "Year","County", "OtherSuspensions")
+#dfnew9$Ethnicity <- "Other" 
+
+dfeth9 <- rd[,c(3,2,4,8)]
+colnames(dfeth9) <- c("DistrictCode", "Year","County", "OtherSuspensions")
+
+#-----------
+#ADDING THE Other Columns together!!!
+
+dfother1 <- merge(dfeth5, dfeth6, by = c("DistrictCode", "Year","County"))
+
+dfother1$OtherSuspensions.x <- as.numeric(as.character(dfother1$OtherSuspensions.x))
+dfother1$OtherSuspensions.y <- as.numeric(as.character(dfother1$OtherSuspensions.y))
+dfother1$OtherSuspensions.x[is.na(dfother1$OtherSuspensions.x)] <- 0
+dfother1$OtherSuspensions.y[is.na(dfother1$OtherSuspensions.y)] <- 0
+
+#sums the 2 columns
+dfother11 <- dfother1$OtherSuspensions.x + dfother1$OtherSuspensions.y
+#adds new column with add columns
+dfother1$dfother11 <- dfother1$OtherSuspensions.x + dfother1$OtherSuspensions.y
+#subtracts old 2 columns, keeps the added one
+dfother1 <- dfother1[,-c(4,5)]
+
+#---------------
+
+dfother2 <- merge(dfother1, dfeth7,by = c("DistrictCode", "Year","County"))
+
+dfother2$OtherSuspensions <- as.numeric(as.character(dfother2$OtherSuspensions))
+dfother2$OtherSuspensions[is.na(dfother2$OtherSuspensions)] <- 0
+dfother22 <- dfother2$dfother11 + dfother2$OtherSuspensions
+dfother2$dfother22 <- dfother2$dfother11 + dfother2$OtherSuspensions
+dfother2 <- dfother2[,-c(4,5)]
+
+
+dfother3 <- merge(dfother2, dfeth8,by = c("DistrictCode", "Year","County"))
+
+dfother3$OtherSuspensions <- as.numeric(as.character(dfother3$OtherSuspensions))
+dfother3$OtherSuspensions[is.na(dfother3$OtherSuspensions)] <- 0
+dfother33 <- dfother3$dfother22 + dfother3$OtherSuspensions
+dfother3$dfother33 <- dfother3$dfother22 + dfother3$OtherSuspensions
+dfother3 <- dfother3[,-c(4,5)]
+
+
+dfotherfinal <- merge(dfother3, dfeth9,by = c("DistrictCode", "Year","County"))
+
+dfotherfinal$OtherSuspensions <- as.numeric(as.character(dfotherfinal$OtherSuspensions))
+dfotherfinal$OtherSuspensions[is.na(dfotherfinal$OtherSuspensions)] <- 0
+OtherSuspensions <- dfotherfinal$dfother33 + dfotherfinal$OtherSuspensions
+dfotherfinal$OtherSuspensions <- dfotherfinal$dfother33 + dfotherfinal$OtherSuspensions
+dfotherfinal <- dfotherfinal[,-c(4)]
+
+
+ethnicity1 <- merge(dfeth1, dfeth2, by = c("DistrictCode", "Year","County"))
+ethnicity2 <- merge(ethnicity1, dfeth3, by = c("DistrictCode", "Year","County"))
+ethnicity3 <- merge(ethnicity2, dfeth4, by=c("DistrictCode", "Year","County"))
+combinedEthnFrame <- merge(ethnicity3, dfotherfinal, by =c("DistrictCode", "Year","County"))
+
+combinedEthnFrame$dist_year <- paste(combinedEthnFrame$DistrictCode, combinedEthnFrame$Year, sep="_")
+combinedEthnFrame <- combinedEthnFrame[,-c(1,2)]
+combinedEthnFrame <- combinedEthnFrame[c(7,1,2,3,4,5,6)]
+
+MegaSuspension<- merge( combinedGenderFrame, combinedEthnFrame, c("dist_year","County"))
+
+write.csv(MegaSuspension, file = "/Users/skylynolyviairby/Desktop/Edu Data Suspension/MegaSuspension.csv")
+
+getwd()
+
+```

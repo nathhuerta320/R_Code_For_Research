@@ -1,0 +1,263 @@
+---
+title: "newoddssus"
+author: "Nathalie Huerta"
+date: "7/19/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+orsus <- read.csv(file = "NewSuspension_demo.csv", header = T)
+entotsus <- read.csv(file = "en_demo.csv", header = T)
+orsus <- merge(orsus, entotsus, by = "dist_year")
+
+```
+
+```{r}
+library(fmsb)
+# odds ratio for male : female
+#total number of students suspened
+susmale <- sum(as.numeric(orsus$MaleSuspensions))
+susmalefe <- sum(as.numeric(orsus$FemaleSuspensions))
+
+#total number of students enrolled 
+enmale <- sum(as.numeric(orsus$enroll_male))
+enfem <- sum(as.numeric(orsus$enroll_female))
+
+#total number of non dropout students 
+totsusmal <- enmale - susmale
+totsusfeml <- enfem - susmalefe
+
+
+dosusmf <- matrix(c(susmale,totdopmal,susmalefe, totdofeml),nrow=2,byrow=TRUE)
+colnames(domf) <- c("Total dropout","Total Non- Dropout")
+rownames(domf) <- c("Male","female")
+print(domf)
+
+ 
+orsusmf <- oddsratio(dosusmf)
+orsusmf
+
+#The odds are 3 times higher that male students will dropout compared to men. 
+
+```
+
+```{r}
+#odds ratio by race/ethnicity 
+
+#total number of dropout  
+rasus <- sum(as.numeric(orsus$AsianSuspensions))
+rbsus <- sum(as.numeric(orsus$BlackSuspensions))
+rhsus <- sum(as.numeric(orsus$HispanicSuspensions))
+rwsus <- sum(as.numeric(orsus$WhiteSuspensoins))
+
+#total number of dropout 
+rasen <- sum(as.numeric(orsus$enroll_asian))
+rbsen <- sum(as.numeric(orsus$enroll_black))
+rhsen <- sum(as.numeric(orsus$enroll_hisp))
+rwsen <- sum(as.numeric(orsus$enroll_white))
+
+#total number of non-dropout 
+
+totnRA <- rasen - rasus
+totnRB <- rbsen - rbsus
+totnRH <- rhsen - rhsus
+totnRW <- rwsen - rwsus
+
+```
+
+```{r}
+#asian vs race
+#asian : black
+
+susab <- matrix(c(rasus,totnRA,rbsus, totnRB),nrow=2,byrow=TRUE)
+colnames(susab) <- c("Total dropout","Total Non- Dropout")
+rownames(susab) <- c("Asian","Black")
+print(susab)
+
+ 
+susab <- oddsratio(susab)
+susab
+
+#The results of the odds ratio of 0.07424992 means that are Asian students are less likely to dropout when compared to black students. 
+
+#-------------------------------------------------------------------------------
+
+#asian : hispanic 
+
+susah <- matrix(c(rasus,totnRA,rhsus, totnRH),nrow=2,byrow=TRUE)
+colnames(susah) <- c("Total dropout","Total Non- Dropout")
+rownames(susah) <- c("Asian","Hispanic")
+print(susah)
+
+ 
+susrah <- oddsratio(susah)
+susrah
+
+#The results of the odds ratio of 0.7523373 means that are Asian students are less likely to dropout when compared to Hispanic students. 
+
+#-------------------------------------------------------------------------------
+
+#asian : white 
+
+susaw <- matrix(c(rasus,totnonRA,rwsus, totnRW),nrow=2,byrow=TRUE)
+colnames(susaw) <- c("Total dropout","Total Non- Dropout")
+rownames(susaw) <- c("Asian","White")
+print(susaw)
+
+ 
+susraw <- oddsratio(susaw)
+susraw
+
+#The results of the odds ratio of 0.63 means that Asian students are less likely to be suspended when compared to white students. 
+
+```
+ 
+```{r}
+#odds ratio for black students 
+
+#black : asian 
+
+susba <- matrix(c(rbsus,totnRB,rasus, totnRA),nrow=2,byrow=TRUE)
+colnames(susba) <- c("Total Suspended","Total Non- Suspended")
+rownames(susba) <- c("Black","Asian")
+print(susba)
+
+ 
+susrba <- oddsratio(susba)
+susrba
+
+#The odds is 13 times higher that an Asian student will dropout when compared to a white student. 
+
+#-------------------------------------------------------------------------------------------------
+
+#black : hispanic
+
+susbh <- matrix(c(rbsus,totnRB,rhsus, totnRH),nrow=2,byrow=TRUE)
+colnames(susbh) <- c("Total Suspended","Total Non- Suspended")
+rownames(susbh) <- c("Black","Hispanic")
+print(susbh)
+
+ 
+susrbh <- oddsratio(susbh)
+susrbh
+
+#The odds is 10 times higher that a black student will get suspended compared to a hispanic student. 
+
+#--------------------------------------------------------------------------------------------------
+
+#black : white 
+
+susbw <- matrix(c(rbsus,totnRB,rwsus, totnRW),nrow=2,byrow=TRUE)
+colnames(susbw) <- c("Total Suspended","Total Non- Suspended")
+rownames(susbw) <- c("Black","White")
+print(susbw)
+
+ 
+susrbw <- oddsratio(susbw)
+susrbw
+
+#The odds is 6 times higher that a black student will get suspended compared to a to a white student. 
+
+```
+
+```{r}
+#odds ratio for hispanics 
+
+#hispanics : asian
+susha <- matrix(c(rhsus,totnRH,rasus, totnRA),nrow=2,byrow=TRUE)
+colnames(susha) <- c("Total Suspended","Total Non- Suspended")
+rownames(susha) <- c("Hispanic","Asian")
+print(susha)
+
+ 
+dorha <- oddsratio(susha)
+dorha
+
+#The odds is 1.329191 times higher that a hispanic student will dropout when compared to an Asian student. 
+
+#---------------------------------------------------------------------------------------------------
+
+#hispanics : black 
+sushb <- matrix(c(rhsus,totnRH,rbsus, totnRB),nrow=2,byrow=TRUE)
+colnames(sushb) <- c("Total Suspended","Total Non- Suspended")
+rownames(sushb) <- c("Hispanic","Black")
+print(sushb)
+
+ 
+susrhb <- oddsratio(sushb)
+susrhb
+
+#The results of the odds ratio of 0.09869233 means that hispanic students are less likely to dropout when compared to black students. 
+
+#---------------------------------------------------------------------------------------------------
+
+#hispanic : white 
+
+sushw <- matrix(c(rhsus,totnRH,rwsus, totnRW),nrow=2,byrow=TRUE)
+colnames(sushw) <- c("Total Suspended","Total Non- Suspended")
+rownames(sushw) <- c("Hispanic","White")
+print(sushw)
+
+ 
+susrhw <- oddsratio(sushw)
+susrhw
+
+#ask joanna about this odd ratio  
+
+```
+
+```{r}
+#odds ratio for whites 
+
+#white : asian
+suswa <- matrix(c(rwsus,totnoRW,rasus, totnRA),nrow=2,byrow=TRUE)
+colnames(suswa) <- c("Total Suspended","Total Non- Suspended")
+rownames(suswa) <- c("White","Asian")
+print(suswa)
+
+ 
+susrwa <- oddsratio(suswa)
+susrwa
+
+#The odds are 2 times higher that a white student will get suspended compared to a white student.  
+
+#-----------------------------------------------------------------------------------------------
+
+#white : black 
+suswb <- matrix(c(rwsus,totnRW,rbsus, totnRB),nrow=2,byrow=TRUE)
+colnames(suswb) <- c("Total Suspended","Total Non- Suspended")
+rownames(suswb) <- c("White","Black")
+print(suswb)
+
+ 
+susrwb <- oddsratio(suswb)
+susrwb
+
+#The results of the odds ratio of 0.14 means that white students are less likely to dropout when compared to black students. 
+
+#-----------------------------------------------------------------------------------------------
+
+#white : hispanic 
+
+suswh <- matrix(c(rwsus,totnRW,rhsus, totnRH),nrow=2,byrow=TRUE)
+colnames(suswh) <- c("Total Suspended","Total Non- Suspended")
+rownames(suswh) <- c("White","Hispanic")
+print(suswh)
+
+ 
+dorbw <- oddsratio(suswh)
+dorbw
+
+#The odds are 1.45 times higher that a white student will get suspended compared to a hispanic student.
+
+```
+
+
+
+
+
+
+
+

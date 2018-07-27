@@ -1,0 +1,266 @@
+---
+title: "Odds_Ratio_Combined_Expulsion"
+author: "Nathalie Huerta"
+date: "7/18/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#Odds Ratio for Gender
+
+```{r}
+#imports the data and merges calpads and csu/uc eligible 
+combinedexpulsion <- read.csv(file = "Expulsion_DEMO.csv", header = T) #imports the data 
+entotexp <- read.csv(file = "en_demo.csv", header = T)
+exencombo <- merge(combinedexpulsion,entotexp, by = c("dist_year") )
+
+
+```
+
+```{r}
+#odds ratio for gender
+library(fmsb)
+#males : females 
+#total number of males expelled and enrolled 
+mexpel1 <- sum(as.numeric(exencombo$Expulsion_Male))
+enrollm11 <- sum(as.numeric(exencombo$enroll_male))
+
+#total number of females expelled and enrolled 
+fexpel1 <- sum(as.numeric(exencombo$Expulsion_Female))
+enrollfem1 <- sum(as.numeric(exencombo$enroll_female))
+
+#total numer of students not expelled for males and females 
+totexmales1 <- enrollm11 - mexpel1
+totexfem1 <- enrollfem1 - fexpel1
+
+#computes the odds ratio for male : females 
+expulmalfem <- matrix(c(mexpel1,totexmales1,fexpel1,totexfem1),nrow=2,byrow=TRUE)
+colnames(expulmalfem) <- c("Total Expelled","Total Not Expelled")
+rownames(expulmalfem) <- c("Male","Female")
+print(expulmalfem)
+
+ 
+oddcalcmf <- oddsratio(expulmalfem)
+oddcalcmf
+
+#The odds are 3.876616 times higher that a male student will get expelled compared to a female student. 
+
+#-----------------------------------------------------------------------------------------------
+
+```
+
+#Odds Ratios for Ethnicity 
+```{r}
+#total number of expelled for each ethnicity and total of non-expelled students 
+
+#total number of expelled 
+
+raexp1 <- sum(as.numeric(exencombo$Expulsion_Asian)[!is.na(exencombo$Expulsion_Asian)])
+rbexp1 <- sum(as.numeric(exencombo$Expulsion_Black)[!is.na(exencombo$Expulsion_Black)])
+rhexp1 <- sum(as.numeric(exencombo$Expulsion_Hispanic)[!is.na(exencombo$Expulsion_Hispanic)])
+rwexp1 <- sum(as.numeric(exencombo$Expulsion_White)[!is.na(exencombo$Expulsion_White)])
+
+#total number of enrolled 
+raen1 <- sum(as.numeric(exencombo$enroll_asian))
+rben1 <- sum(as.numeric(exencombo$enroll_black))
+rhen1 <- sum(as.numeric(exencombo$enroll_hisp))
+rwen1 <- sum(as.numeric(exencombo$enroll_white))
+
+#total number of non-expelled 
+
+RAnon1 <- raen1 - raexp1
+RBnon1<- rben1 - rbexp1
+RHnon1 <- rhen1 - rhexp1
+RWnon1 <- rwen1 - rwexp1
+
+#---------------------------------------------------------------------------------------------------
+
+#odds ratio for ASIAN vs 3 different enthnicities 
+
+#asian : black
+expulasian1 <- matrix(c(raexp1, RAnon1, rbexp1, RBnon1),nrow = 2, byrow = TRUE)
+colnames(expulasian1) <- c("Total Expelled","Total Not Expelled")
+rownames(expulasian1) <- c("Asian","Black")
+print(expulasian1)
+
+ 
+oddcalab1 <- oddsratio(expulasian1)
+oddcalab1
+
+#0.1195129
+
+#asian : hip
+ahexp1 <- matrix(c(raexp1, RAnon1, rhexp1, RHnon1),nrow = 2, byrow = TRUE)
+colnames(ahexp1) <- c("Total Expelled","Total Not Expelled")
+rownames(ahexp1) <- c("Asian","Hispanic")
+print(ahexp1)
+
+oddcalah1 <- oddsratio(ahexp1)
+oddcalah1
+
+#0.2439862
+
+#0r 3
+#asian : white
+
+expellaw <- matrix(c(raexp1,RAnon1,rwexp1, RWnon1),nrow=2,byrow=TRUE)
+colnames(expellaw) <- c("Total dropout","Total Non- Dropout")
+rownames(expellaw) <- c("Asian","White")
+print(expellaw)
+
+ 
+susraw1 <- oddsratio(expellaw)
+susraw1
+
+#The results of the odds ratio of  0.349325 means that Asian students are less likely to be suspended when compared to white students.
+
+```
+
+```{r}
+
+#black : asian 
+expellblack <- matrix(c(rbexp1, RBnon1, raexp1, RAnon1),nrow = 2, byrow = TRUE)
+colnames(expellblack) <- c("Total Expelled","Total Not Expelled")
+rownames(expellblack) <- c("Black","Asian")
+print(expellblack)
+
+
+oddcalba1 <- oddsratio(expellblack)
+oddcalba1
+
+# 8.367301
+
+#-------------------------
+
+#black:hispanic 
+expellblack2 <- matrix(c(rbexp1, RBnon1, rhexp1, RHnon1),nrow = 2, byrow = TRUE)
+colnames(expellblack2) <- c("Total Expelled","Total Not Expelled")
+rownames(expellblack2) <- c("Black","Asian")
+print(expellblack2)
+
+
+oddcalba12 <- oddsratio(expellblack2)
+oddcalba12
+
+#2.041506
+
+#------------------------
+
+#black:white
+expellblack3 <- matrix(c(rbexp1, RBnon1, rwexp1, RWnon1),nrow = 2, byrow = TRUE)
+colnames(expellblack3) <- c("Total Expelled","Total Not Expelled")
+rownames(expellblack3) <- c("Black","Asian")
+print(expellblack3)
+
+
+oddcalba13 <- oddsratio(expellblack3)
+oddcalba13
+#2.922907
+
+#-------------------------
+
+```
+
+```{r}
+
+#hispanic : asian 
+expellhisp <- matrix(c(rhexp1, RHnon1, raexp1, RAnon1),nrow = 2, byrow = TRUE)
+colnames(expellhisp) <- c("Total Expelled","Total Not Expelled")
+rownames(expellhisp) <- c("Hispanic ","Asian")
+print(expellhisp)
+
+
+expellhisp1 <- oddsratio(expellhisp)
+expellhisp1
+
+#4.098592
+
+
+#--------------
+
+#hisp:black
+expellhisp2 <- matrix(c(rhexp1, RHnon1, rbexp1, RBnon1),nrow = 2, byrow = TRUE)
+colnames(expellhisp2) <- c("Total Expelled","Total Not Expelled")
+rownames(expellhisp2) <- c("Hispanic ","Black")
+print(expellhisp2)
+
+
+expellhisp12 <- oddsratio(expellhisp2)
+expellhisp12
+
+#0.4898344
+
+#-------------
+
+#hisp:white
+expellhisp3 <- matrix(c(rhexp1, RHnon1, rwexp1, RWnon1),nrow = 2, byrow = TRUE)
+colnames(expellhisp3) <- c("Total Expelled","Total Not Expelled")
+rownames(expellhisp3) <- c("Hispanic ","Black")
+print(expellhisp3)
+
+
+expellhisp13 <- oddsratio(expellhisp3)
+expellhisp13
+
+#1.431741
+
+```
+
+```{r}
+
+#white : asian 
+
+expellwhite <- matrix(c(rwexp1, RWnon1, raexp1, RAnon1),nrow = 2, byrow = TRUE)
+colnames(expellwhite) <- c("Total Expelled","Total Not Expelled")
+rownames(expellwhite) <- c("White ","Asian")
+print(expellwhite)
+
+
+expellwhite1 <- oddsratio(expellwhite)
+expellwhite1
+
+#2.862664
+
+#----------------------
+
+#white : black
+expellwhite2 <- matrix(c(rwexp1, RWnon1, rbexp1, RBnon1),nrow = 2, byrow = TRUE)
+colnames(expellwhite2) <- c("Total Expelled","Total Not Expelled")
+rownames(expellwhite2) <- c("White ","Black")
+print(expellwhite2)
+
+
+expellwhite12 <- oddsratio(expellwhite2)
+expellwhite12
+
+#0.3421251
+
+#-------------
+#w:H
+expellwhite3 <- matrix(c(rwexp1, RWnon1, rhexp1, RHnon1),nrow = 2, byrow = TRUE)
+colnames(expellwhite3) <- c("Total Expelled","Total Not Expelled")
+rownames(expellwhite3) <- c("White ","Hispanic")
+print(expellwhite3)
+
+
+expellwhite13 <- oddsratio(expellwhite3)
+expellwhite13
+
+#0.6984505
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,16 @@
+---
+title: "Attempt_to_remerge_expulsion"
+author: "Nathalie Huerta"
+date: "7/23/2018"
+output: html_document
+---
+
+```{r}
+library("dplyr")
+#imports expulsion data 
+
+Expulsiondata <- read.csv(file = "Combined_Expulsion.csv", header =  T)
+
+expomale <- filter(Expulsiondata, Expulsiondata$)
+```
+

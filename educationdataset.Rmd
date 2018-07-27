@@ -1,0 +1,83 @@
+---
+title: "Nw_Expulsion"
+author: "Nathalie Huerta"
+date: "7/9/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#2011-2012 data 
+#imports the data 
+#explusion 
+explusion <- read.csv(file = "expulsion2011-12.csv", header = T) 
+#this is the data for 2012-2013
+#imports the data 
+explusion12 <- read.csv(file= "expulsion2012-13.csv", header = T) 
+#this is the data for 2013-14
+explusion13 <- read.csv(file= "expulsion2013-14.csv", header = T)
+#this is the data for 2014-2015
+explusion14 <- read.csv(file= "expulsion2014-15.csv", header = T) 
+#this the data for 2015-2016
+explusion15 <- read.csv(file= "expulsion2015-16.csv", header = T)
+#this is the data for 2016-2017
+explusion16 <- read.csv(file= "expulsion2016-17.csv", header = T) 
+```
+
+
+
+```{r}
+#combines all 6 datasets together to make one big data set by using rbind but to use all column names must be the same 
+combineall2 <- rbind(explusion,explusion12,explusion13,explusion14,explusion15,explusion16)
+combineall2
+
+#takes out the first 13 rows of the dataset 
+newcombine2 <- combineall[-c(1:13),]
+newcombine2
+
+
+
+countGMtotal2 <- filter(newcombine, newcombine$reportingcategory == "GM" , newcombine$aggregatelevel == "C") 
+
+countGFtotal2 <- filter(newcombine, newcombine$reportingcategory == "GF" , newcombine$aggregatelevel == "C")
+
+#library(ggplot2)
+#theme_set(theme_classic())
+
+
+GM2 <- countGMtotal2[,c(1,6,10,11,12)]
+GM2
+
+GF2 <- countGFtotal2[,c(1,6,10,11,12)]
+GF2
+
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+datframgm2 <- data.frame(countGMtotal2[, "countyname"], GM2)
+datframgm2
+
+dataframgf2 <- data.frame(countGFtotal2[, "countyname"], GF2)
+dataframgf2
+
+#clean data for males 
+dfn2 <- datframgm2[,c(1,2,6)]
+colnames(dfn2)<- c("county", "Year", "Total")
+dfn2$Gender <- "Males"
+
+#clean data for females
+dfn3 <- dataframgf2[,c(1,2,6)]
+colnames(dfn3)<- c("county", "Year", "Total")
+dfnew3$Gender <- "Females"
+
+#binds the dataframes together 
+combined2 <- rbind(dfn2, dfn3)
+combined2
+
+#plot bar graphs 
+library(ggplot2)
+geninfo <- aggregate(.~Year+Gender, data=combined2, sum)
+
+GenPlot <- ggplot(geninfo, aes(Year,Total)) + geom_bar(aes(fill=Gender), stat="identity")
+GenPlot
+```
+

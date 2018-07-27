@@ -1,0 +1,530 @@
+---
+title: "Odds Ratio"
+author: "Nathalie Huerta"
+date: "7/12/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r}
+#got help from Jaron
+```
+
+#What is odds ratio?
+
+An odds ratio (OR) is a measure of association between exposure and an outcoms. It is a ratio of odds  describing an outcome occurring given a particular exposure as well as comparing the odds of the outcome occuring in the absence of a particular exposure. Odds Ratio is used in the following cases: 
+
+1) Control Studies, where relative risks cannot be estimated (most commonly used)
+2) Logistic Regression Analysis, ORs are computed during the analyses
+3) Cross-Sectional Study Designs with Modifications
+4) Cohort Study Designs with Modifications. 
+
+An OR is the "odds of the outcome in one group by the the odds of outcome in the other group (analogous to relative risk)" (cite), ranging from zero to infinity. Hence, given condition A and condition B the odds ratio (OR) can be expressed as: 
+
+$$OR = \frac{\frac{P(A)}{(1-P(A))}}{\frac{P(B)}{1-P(B)}}.    $$
+Although odds ratio seems simple, they play several important roles. They are always valid measures of associations, but before computing an OR one must learn how to interpret it. (add more stuff later) 
+
+#How to interpret odds ratio? 
+
+An odds ratio is interpreted similar to relative risks (RR) but one should not confuse an odds ratio with RR. Based on a ratio obtained from condition A and condition B, OR can be interpreted in three manners: 
+
+1) If the OR = 1, then exposure to condition A does not affect the odds of condition B.
+
+2) If the OR >1, then there is higher odds of condition B happening when exposed to condition A. 
+
+3) If the OR<1, then exposure is associated with lower odds of outcome. 
+
+This may seem as a simple task but one must consider the significance of the odds ratio. If a positive OR is obtained, then does this mean we have a significant OR? Having a positive OR does not mean you have obtained a statistically significant result. In order to oder to obtain a statistically significant result one must consider the confidence interval (CI) and p-value. The 95% CI is used to measure the precision of the effect estimate of the OR. Confidence intervals are used to determine if the result from the OR lies in between the upper and lower confidence level. One should note, if the CI include 1, the OR is not statiscally significant. If the p-value > 0.05, then there is no statistical significance between the groups whereas if the p-value < 0.05, then it will be statistically significant. 
+
+```{r}
+#first you need to install the package fmsb
+#install.packages("fmsb")
+
+#then, install the fmsb library so you can run the odd ratios function 
+library(fmsb)
+
+#this will calculate the odds ratio. then call the function 
+#oddsratio()
+#sample code obtained from Rdocumentation 
+#creates a 2 by 2 table like so this becomes the data to compute the OR
+res <- oddsratio(5, 10, 85, 80)
+#list the p.value, confidence interval, estimate?, method, and data.name
+ str(res)
+# prints out Odds ratio estimate and its significance probability 
+ print(res)
+#compute the odds ratio. not really sure what this part of the code dos 
+ oddsratio(12, 5, 6, 12)
+ oddsratio(12, 5, 6, 12, p.calc.by.independence=FALSE)
+ DH <- sample(c("Disease", "Health"), 100, replace=TRUE)
+ EN <- sample(c("Exposed", "Nonexposed"), 100, replace=TRUE)
+ x <- table(EN, DH)
+ oddsratio(x)
+
+
+```
+
+## Coding for actual dataset
+###Code for odds ratio for gender for Expulsion Data
+```{r}
+#odds ratios for expulsions 
+completemerge <- read.csv(file = "completeMerge.csv", header = T)
+a <- sum(as.numeric(completemerge$Expulsions_Males))
+a
+b <- sum(as.numeric(completemerge$Expulsions_Females))
+b
+c <- sum(as.numeric(completemerge$en_female))
+c
+d <- sum(as.numeric(completemerge$en_male))
+d
+
+tot <- c-b
+tot
+
+tot2 <- d-a
+tot2
+
+
+expulmf <- matrix(c(339,308748,1473,323129),nrow=2,byrow=TRUE)
+colnames(expulmf) <- c("Total Expelled","Total Not Expelled")
+rownames(expulmf) <- c("Female","Male")
+print(expulmf)
+
+#why is this not running 
+oddcalc <- oddsratio(expulmf)
+oddcalc
+
+#The resulting odds ratio of .24 means that females are less likely to get expelled than male. 
+```
+
+##Coding for Expulsion Race
+```{r}
+#odds ratio for race for expulsion
+#black students vs white students
+#sums the columns for the columns to find total expelled and total enrolled 
+RB <- sum(as.numeric(completemerge$Expulsion_Black))
+RW <- sum(as.numeric(completemerge$Expulsion_White))
+enrb <- sum(as.numeric(completemerge$en_black))
+enrw <- sum(as.numeric(completemerge$en_white))
+#subtracts the total enrolled by ethnicity to find the total of not expelled to find OR
+totexrb <- enrb - RB
+totexrw <- enrw - RW
+#comutes the odds ratio
+expbw <- matrix(c(RB,totexrb,RW,totexrw),nrow=2,byrow=TRUE)
+colnames(expbw) <- c("Total Expelled","Total Not Expelled")
+rownames(expbw) <- c("Black","White")
+print(expbw)
+
+oddcalc2 <- oddsratio(expbw)
+oddcalc2
+
+#The odds is 7 times higher that a black student will get expelled compared to a white student.
+
+#------------------------------------------------------------------------------------------------
+#Black : Asian
+RA <- sum(as.numeric(completemerge$Expulsion_Asian))
+enra <- sum(as.numeric(completemerge$en_asian))
+totexra <- enra - RA
+
+expba <- matrix(c(RB,totexrb,RA,totexra),nrow=2,byrow=TRUE)
+colnames(expba) <- c("Total Expelled","Total Not Expelled")
+rownames(expba) <- c("Black","Asian")
+print(expba)
+
+oddcalcba <- oddsratio(expba)
+oddcalcba
+
+#The odds is 3 times higher that a black student will get expelled compared to an asian student.
+
+#---------------------------------------------------------------------------------------------
+RO <- sum(as.numeric(completemerge$Expulsion_Other))
+enro <- sum(as.numeric(completemerge$en_other))
+totexro <- enro - RO
+
+expbo <- matrix(c(RB,totexrb,RO,totexro),nrow=2,byrow=TRUE)
+colnames(expbo) <- c("Total Expelled","Total Not Expelled")
+rownames(expbo) <- c("Black","Other")
+print(expbo)
+
+oddcalcbo <- oddsratio(expbo)
+oddcalcbo
+
+#The odds is 6 times higher that a black student will get expelled compared to an asian student.
+
+#---------------------------------------------------------------------------------------------
+
+#Black : Hispanic
+RH <- sum(as.numeric(completemerge$Expulsion_Hispanic))
+enrh <- sum(as.numeric(completemerge$en_hisp))
+totexrh <- enrh - RH
+expbh <- matrix(c(RB,totexrb,RH,totexrh),nrow=2,byrow=TRUE)
+colnames(expbh) <- c("Total Expelled","Total Not Expelled")
+rownames(expbh) <- c("Black","Hispanic")
+print(expbh)
+
+oddcalc4 <- oddsratio(expbh)
+oddcalc4
+
+#The odds are 5 times higher that a hispanic students will get expelled compared to a hispanic student.
+```
+
+```{r}
+#hispanic vs white for expulsion
+RH <- sum(as.numeric(completemerge$Expulsion_Hispanic))
+enrh <- sum(as.numeric(completemerge$en_hisp))
+totexrh <- enrh - RH
+
+exphw <- matrix(c(RH,totexrh,RW,totexrw),nrow=2,byrow=TRUE)
+colnames(exphw) <- c("Total Expelled","Total Not Expelled")
+rownames(exphw) <- c("Hispanic","White")
+print(exphw)
+
+oddcalc3 <- oddsratio(exphw)
+oddcalc3
+
+#The odds are 1.35 times higher that a hispanic student will get expelled compared to a white student. 
+#---------------------------------------------------------------------------------------------------
+#Hispanic : Asian 
+expha <- matrix(c(RH,totexrh,RA,totexra),nrow=2,byrow=TRUE)
+colnames(expha) <- c("Total Expelled","Total Not Expelled")
+rownames(expha) <- c("Hispanic","Asian")
+print(expha)
+
+oddcalcha <- oddsratio(expha)
+oddcalcha
+
+#The resulting odds ratio of .64 means that Hispanics are less likely to get expelled than Asian.
+#look up at results for OR when it is less than 1 
+
+#--------------------------------------------------------------------------------------------------
+#Hispanic : Black for expulsion 
+
+exphb <- matrix(c(RH,totexrh,RB,totexrb),nrow=2,byrow=TRUE)
+colnames(exphb) <- c("Total Expelled","Total Not Expelled")
+rownames(exphb) <- c("Hispanic","Black")
+print(exphb)
+
+oddcalchb <- oddsratio(exphb)
+oddcalchb
+
+#The resulting odds ratio of .19 means that Hispanics are less likely to get expelled than blacks.
+
+#--------------------------------------------------------------------------------------------------
+#Hispanic : Other for expulsion
+expho <- matrix(c(RH,totexrh,RO,totexro),nrow=2,byrow=TRUE)
+colnames(expho) <- c("Total Expelled","Total Not Expelled")
+rownames(expho) <- c("Hispanic","Other")
+print(expho)
+
+oddcalcho <- oddsratio(expho)
+oddcalcho
+
+#The odds are 1.18 times higher that a hispanic student will get expelled compared to other. 
+
+```
+
+```{r}
+#Asian : Black for Expulsion
+expab <- matrix(c(RA,totexra,RB,totexrb),nrow=2,byrow=TRUE)
+colnames(expab) <- c("Total Expelled","Total Not Expelled")
+rownames(expab) <- c("Asian","Black")
+print(expab)
+
+oddcalcab <- oddsratio(expab)
+oddcalcab
+
+#The resulting odds ratio of .30 means that Asian students are less likely to get expelled than black students.
+
+#----------------------------------------------------------------------------------------------------
+#Asian : Hispanic for Expulsion 
+expah <- matrix(c(RA,totexra,RH,totexrh),nrow=2,byrow=TRUE)
+colnames(expah) <- c("Total Expelled","Total Not Expelled")
+rownames(expah) <- c("Asian","Hispanic")
+print(expah)
+
+oddcalcah <- oddsratio(expah)
+oddcalcah
+
+#The odds are 1.56 times higher that a Asian student will get expelled compared to a Hispanic student. 
+#---------------------------------------------------------------------------------------------------
+#Asian : Other
+expao <- matrix(c(RA,totexra,RO,totexro),nrow=2,byrow=TRUE)
+colnames(expao) <- c("Total Expelled","Total Not Expelled")
+rownames(expao) <- c("Asian","Other")
+print(expao)
+
+oddcalcao <- oddsratio(expao)
+oddcalcao
+
+#The odds are 1.84 times higher that a Asian student will get expelled compared to a student who is other.
+
+#----------------------------------------------------------------------------------------------------
+#Asian : White
+expaw <- matrix(c(RA,totexra,RW,totexrw),nrow=2,byrow=TRUE)
+colnames(expaw) <- c("Total Expelled","Total Not Expelled")
+rownames(expaw) <- c("Asian","White")
+print(expaw)
+
+oddcalcaw <- oddsratio(expaw)
+oddcalcaw
+
+#The odds are 2 times higher that an Asian student will get expelled compared to a student who is white.
+
+```
+
+```{r}
+#odds ratio for White race for expulsion
+#White : Asian
+expwa <- matrix(c(RW,totexrw,RA,totexra),nrow=2,byrow=TRUE)
+colnames(expwa) <- c("Total Expelled","Total Not Expelled")
+rownames(expwa) <- c("White","Asian")
+print(expwa)
+
+oddcalcwa <- oddsratio(expwa)
+oddcalcwa
+
+#The resulting odds ratio of .47 means that White students are less likely to get expelled than asian students.
+
+#---------------------------------------------------------------------------------------------------
+#Whites : Black for expulsion 
+expwb <- matrix(c(RW,totexrw,RB,totexrb),nrow=2,byrow=TRUE)
+colnames(expwb) <- c("Total Expelled","Total Not Expelled")
+rownames(expwb) <- c("White","Black")
+print(expwb)
+
+oddcalcwb <- oddsratio(expwb)
+oddcalcwb
+
+#The resulting odds ratio of .14 means that White students are less likely to get expelled than Black students. 
+
+#----------------------------------------------------------------------------------------------------
+#Whites : Hispanic for expulsion 
+expwh <- matrix(c(RW,totexrw,RH,totexrh),nrow=2,byrow=TRUE)
+colnames(expwh) <- c("Total Expelled","Total Not Expelled")
+rownames(expwh) <- c("White","Hispanic")
+print(expwh)
+
+oddcalcwh <- oddsratio(expwh)
+oddcalcwh
+
+#The resulting odds ratio of .74 means that White students are less likely to get expelled than Hispanic students.
+
+#--------------------------------------------------------------------------------------------------
+#White : Other
+expwo <- matrix(c(RW,totexrw,RO,totexro),nrow=2,byrow=TRUE)
+colnames(expwo) <- c("Total Expelled","Total Not Expelled")
+rownames(expwo) <- c("White","Other")
+print(expwo)
+
+oddcalcwo <- oddsratio(expwo)
+oddcalcwo
+
+#The resulting odds ratio of .87 means that White students are less likely to get expelled than other students.
+
+```
+
+
+##Odds Ratios for Dropout Data for gender 
+```{r}
+#odds ratio for dropout 
+#females vs males
+dropfem <- sum(as.numeric(completemerge$do_female))
+dropmal <- sum(as.numeric(completemerge$do_male))
+
+droptotfem <- c - dropfem
+droptotmal <- d - dropmal
+
+dropfm <- matrix(c(dropfem, droptotfem, dropmal, droptotmal),nrow=2,byrow=TRUE)
+colnames(dropfm) <- c("Total Dropout","Total Who Did Not Dropout")
+rownames(dropfm) <- c("Female","Male")
+print(dropfm)
+
+oddcalcdrop <- oddsratio(dropfm)
+oddcalcdrop
+
+#The resulting odds ratio of .71 means that females were less likely to dropout than males. 
+```
+
+```{r}
+#odds ratio for race/ethnicity for dropout 
+#black : white for dropout
+doRB <- sum(as.numeric(completemerge$do_black))
+doRW <- sum(as.numeric(completemerge$do_white))
+enrb <- sum(as.numeric(completemerge$en_black))
+enrw <- sum(as.numeric(completemerge$en_white))
+
+dototexrb <- enrb - doRB
+dototexrw <- enrw - doRW
+#comutes the odds ratio
+doexpbw <- matrix(c(doRB,dototexrb,doRW,dototexrw),nrow=2,byrow=TRUE)
+colnames(doexpbw) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpbw) <- c("Black","White")
+print(doexpbw)
+
+oddrop <- oddsratio(doexpbw)
+oddrop
+
+#The odds is 4 times higher that a black student will dropout when compared to a white student. 
+
+#-------------------------------------------------------------------------------------------------
+
+#Black : Asian 
+doRA <- sum(as.numeric(completemerge$do_asian))
+dototra <- enra - doRA
+
+doexpba <- matrix(c(doRB,dototexrb,doRA,dototra),nrow=2,byrow=TRUE)
+colnames(doexpba) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpba) <- c("Black","Asian")
+print(doexpba)
+
+oddropba <- oddsratio(doexpba)
+oddropba
+
+#The odds is 11 times higher that a black student will dropout when compared to an asian student.
+
+#---------------------------------------------------------------------------------------------------
+
+#Black : Hispanic 
+doRH <- sum(as.numeric(completemerge$do_hisp))
+doenrh <- sum(as.numeric(completemerge$en_hisp))
+dototrh <- doenrh - doRH
+
+doexpbh <- matrix(c(doRB,dototexrb,doRH,dototrh),nrow=2,byrow=TRUE)
+colnames(doexpbh) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpbh) <- c("Black","Hispanic")
+print(doexpbh)
+
+oddropbh <- oddsratio(doexpbh)
+oddropbh
+
+#The odds is 1.84 times higher that a black student will dropout when compared to a hispanic student.
+
+```
+
+```{r}
+#odds ratio for race/ethnicity for dropout 
+#Asian : Black
+
+doexpab <- matrix(c(doRA,dototra,doRB,dototexrb),nrow=2,byrow=TRUE)
+colnames(doexpab) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpab) <- c("Asian","Black")
+print(doexpab)
+
+oddropab <- oddsratio(doexpab)
+oddropab
+
+#---------------------------------------------------------------------------------------------------
+
+#Asian : Hispanic
+
+doexpah <- matrix(c(doRA,dototra,doRH,dototexrh),nrow=2,byrow=TRUE)
+colnames(doexpah) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpah) <- c("Asian","Hispanic")
+print(doexpah)
+
+oddropah <- oddsratio(doexpah)
+oddropah
+
+#The resulting odds ratio of .16 means that Asians were less likely to dropout than Hispanic. 
+
+#---------------------------------------------------------------------------------------------------
+
+#Asian : White
+
+doexpaw <- matrix(c(doRA,dototra,doRW,dototexrw),nrow=2,byrow=TRUE)
+colnames(doexpaw) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpaw) <- c("Asian","White")
+print(doexpaw)
+
+oddropaw <- oddsratio(doexpaw)
+oddropaw
+
+#The resulting odds ratio of .37 means that Asians were less likely to dropout than Whites.
+
+```
+
+
+```{r}
+#hispanic: white 
+
+doexphw <- matrix(c(doRH,dototexrh,doRW,dototexrw),nrow=2,byrow=TRUE)
+colnames(doexphw) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexphw) <- c("Hispanic","White")
+print(doexphw)
+
+oddrophw <- oddsratio(doexphw)
+oddrophw
+
+#The odds are 2 times higher that a hispanic student will get expelled compared to a white student. 
+
+#------------------------------------------------------------------------------------------------
+
+#Hispanic: Black
+doexphb <- matrix(c(doRH,dototexrh,doRB,dototexrb),nrow=2,byrow=TRUE)
+colnames(doexphb) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexphb) <- c("Hispanic","Black")
+print(doexphb)
+
+dooddcalhb <- oddsratio(doexphb)
+dooddcalhb
+
+
+#the resulting odds ratio of .54 means that hispanic were less likely to dropout than black students.
+
+#------------------------------------------------------------------------------------------------
+
+#Hispanic : Asia 
+
+doexpha <- matrix(c(doRH,dototexrh,doRA,dototexra),nrow=2,byrow=TRUE)
+colnames(doexpha) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpha) <- c("Hispanic","Asia")
+print(doexpha)
+
+dooddcalha <- oddsratio(doexpha)
+dooddcalha
+
+#The odds are 6 times higher that a hispanic student will dropout compared to an asian student. 
+```
+
+```{r}
+#white : Asian 
+
+doexpwa <- matrix(c(doRW,dototexrw,doRA,dototexra),nrow=2,byrow=TRUE)
+colnames(doexpwa) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpwa) <- c("White","Asia")
+print(doexpwa)
+
+dooddcalwa <- oddsratio(doexpwa)
+dooddcalwa
+
+#The odds are 3 times higher that a white student will dropout compared to an asian student. 
+
+#------------------------------------------------------------------------------------------------
+
+#white : Black
+
+doexpwb <- matrix(c(doRW,dototexrw,doRB,dototexrb),nrow=2,byrow=TRUE)
+colnames(doexpwb) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpwb) <- c("White","Black")
+print(doexpwb)
+
+dooddcalwb <- oddsratio(doexpwb)
+dooddcalwb
+
+#The resulting odds ratio of .24 means that whites were less likely to dropout than blacks.
+
+#------------------------------------------------------------------------------------------------
+
+#white hispanic 
+
+doexpwh <- matrix(c(doRW,dototexrw,doRH,dototexrh),nrow=2,byrow=TRUE)
+colnames(doexpwh) <- c("Total Dropout","Total Non- Dropout")
+rownames(doexpwh) <- c("White","Hispanic")
+print(doexpwh)
+
+dooddcalwh <- oddsratio(doexpwh)
+dooddcalwh
+
+#The resulting odds ratio of .45 means that whites were less likely to dropout than hispanics.
+
+```
+

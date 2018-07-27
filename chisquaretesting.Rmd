@@ -1,0 +1,22 @@
+---
+title: "rebindexpulsion"
+author: "Nathalie Huerta"
+date: "7/23/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+retryexpulsion2011 <- read.csv(file = "expulsion2011-12.csv", header = TRUE)
+retryexpulsion2012 <- read.csv(file = "expulsion2012-13.csv", header = TRUE)
+retryexpulsion2013 <- read.csv(file = "expulsion2013-14.csv", header = TRUE)
+retryexpulsion2014 <- read.csv(file = "expulsion2014-15.csv", header = TRUE)
+retryexpulsion2015 <- read.csv(file = "expulsion2015-16.csv", header = TRUE)
+retryexpulsion2016 <- read.csv(file = "expulsion2016-17.csv", header = TRUE)
+```
+
+
+```{r}
+comboexpulsionagain <- rbind(retryexpulsion2011,retryexpulsion2012,retryexpulsion2013,retryexpulsion2014,retryexpulsion2015,retryexpulsion2016)
+```

@@ -1,0 +1,398 @@
+---
+title: "Dateducation"
+author: "Nathalie Huerta"
+date: "7/3/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+library(dplyr)
+#2011-2017 data 
+explusion <- read.csv(file = "expulsion2011-12.csv", header = T) #imports the data 
+#this is the data for 2012-2013
+explusion12 <- read.csv(file= "expulsion2012-13.csv", header = T) #imports the data 
+#this is the data for 2013-14
+explusion13 <- read.csv(file= "expulsion2013-14.csv", header = T) #imports the data 
+#this is the data for 2014-2015
+explusion14 <- read.csv(file= "expulsion2014-15.csv", header = T) #imports the data 
+#this is the data for 2016-2017
+expulsion15 <- read.csv(file= "expulsion2015-16.csv", header = T)
+explusion16 <- read.csv(file= "expulsion2016-17.csv", header = T) #imports the data 
+```
+
+```{r}
+#started redoing what i had done previously right here 
+
+#combines all 6 datasets together to make one big data set by using rbind but to use all column names must be the same 
+combineall <- rbind(explusion,explusion12,explusion13,explusion14,expulsion15,explusion16)
+#combineall
+
+#takes out the first 13 rows of the dataset 
+newcombine <- combineall[-c(1:13),]
+#newcombine
+
+#write.csv(newcombine,file = "/Users/nathaliehuerta/Desktop/Combined_Expulsions.csv")
+
+count_GM <- filter(newcombine, newcombine$reportingcategory == "GM" , newcombine$aggregatelevel == "D1") 
+
+count_GF <- filter(newcombine, newcombine$reportingcategory == "GF" , newcombine$aggregatelevel == "D1")
+
+#library(ggplot2)
+#theme_set(theme_classic())
+
+
+stepGM2 <- count_GM[,c(1,3,4,6,7,10,11,12)]
+stepGM2
+
+stepGF2 <- count_GF[,c(1,3,4,6,7,10,11,12)]
+stepGF2
+
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+datframegm2 <- data.frame(count_GMtotal2[, "districtcode"], stepGM2)
+datframegm2
+
+dataframegf2 <- data.frame(count_GFtotal2[, "districtcode"], stepGF2)
+dataframegf2
+
+#clean data for males 
+dfnew2 <- datframegm2[,c(1,4,2,6)]
+colnames(dfnew2)<- c( "Year", "Total")
+dfnew2$Gender <- "Males"
+
+#clean data for females
+dfnew3 <- dataframegf2[,c(1,4,2,6)]
+colnames(dfnew3)<- c( "Year", "Total")
+dfnew3$Gender <- "Females"
+
+#binds the dataframes together 
+combined2 <- rbind(dfnew2, dfnew3)
+combined2
+
+
+combinedGenderFrame <- merge(dfnew2, dfnew3, by = c("County","Year","Total"))
+
+#plot bar graphs 
+library(ggplot2)
+geninfo <- aggregate(.~Year+Gender, data=combined2, sum)
+
+GenPlot <- ggplot(geninfo, aes(Year,Total)) + labs(title = "Yearly Expulsions By Gender") + geom_bar(aes(fill=Gender), stat="identity") + 
+  theme(plot.title = element_text(hjust = 0.5))
+GenPlot
+```
+
+
+
+```{r}
+
+
+#start here tomorrow 07/09/18
+count_RFtot2 <- filter(newcombine, newcombine$reportingcategory == "RF" , newcombine$aggregatelevel == "D1") 
+count_RAtot2 <- filter(newcombine, newcombine$reportingcategory == "RA" , newcombine$aggregatelevel == "D1") 
+count_RHtot2 <- filter(newcombine, newcombine$reportingcategory == "RH" , newcombine$aggregatelevel == "D1") 
+count_RPtot2 <- filter(newcombine, newcombine$reportingcategory == "RP" , newcombine$aggregatelevel == "D1") 
+count_RBtot2 <- filter(newcombine, newcombine$reportingcategory == "RB" , newcombine$aggregatelevel == "D1") 
+count_RItot2 <- filter(newcombine, newcombine$reportingcategory == "RI" , newcombine$aggregatelevel == "D1") 
+count_RWtot2 <- filter(newcombine, newcombine$reportingcategory == "RW" , newcombine$aggregatelevel == "D1") 
+
+count_RTtot2 <- filter(newcombine, newcombine$reportingcategory == "RT" , newcombine$aggregatelevel == "D1") 
+
+count_RDtot2 <- filter(newcombine, newcombine$reportingcategory == "RD" , newcombine$aggregatelevel == "D1") 
+#how to extract rows to get rows 2 through 59 and creates new data with only these rows
+
+steprf <- count_RFtot2[,c(1,4,6,12)]
+
+
+stepra <- count_RAtot2[,c(1,4,6,12)]
+
+
+steprh <- count_RHtot2[,c(1,4,6,12)]
+
+
+steprp <- count_RPtot2[,c(1,4,6,12)]
+
+
+steprb <- count_RBtot2[,c(1,4,6,12)]
+
+
+stepri <- count_RItot2[,c(1,4,6,12)]
+
+
+steprw <- count_RWtot2[,c(1,4,6,12)]
+
+
+steprd <- count_RDtot2[,c(1,4,6,12)]
+
+
+steprt <- count_RTtot2[,c(1,4,6,12)]
+
+
+#we now need to figure out how to make a 59 by 2 new dataset that only contains the countycode and the total number of expulsions 
+#creates a dataframe with only countynames for only gendermales and total expulsions 
+rf <- data.frame(count_RFtot2[, "districtcode"], steprf)
+
+
+ra <- data.frame(count_RAtot2[, "districtcode"], stepra)
+
+
+rh <- data.frame(count_RHtot2[, "districtcode"], steprh)
+
+
+ri <- data.frame(count_RItot2[, "districtcode"], stepri)
+
+
+rp <- data.frame(count_RPtot2[, "districtcode"], steprp)
+
+
+rw <- data.frame(count_RWtot2[, "districtcode"], steprw)
+
+
+rb <- data.frame(count_RBtot2[, "districtcode"], steprb)
+
+
+rt <- data.frame(count_RTtot2[, "districtcode"], steprt)
+
+
+rd <- data.frame(count_RDtot2[, "districtcode"], steprd)
+
+ 
+dfnew2 <- ra[,c(2,3,5)]
+colnames(dfnew2)<- c("Year","districtcode", "totalexpulsions")
+dfnew2$Ethnicity <- "Asian"
+
+dfnew6 <- rb[,c(2,3,5)]
+colnames(dfnew6)<- c("Year","districtcode", "totalexpulsions")
+dfnew6$Ethnicity <- "African American"
+
+dfnew3 <- rf[,c(2,3,5)]
+colnames(dfnew3)<- c("Year","districtcode", "totalexpulsions")
+dfnew3$Ethnicity <- "Other"
+
+dfnew4 <- rh[,c(2,3,5)]
+colnames(dfnew4)<- c("Year","districtcode", "totalexpulsions")
+dfnew4$Ethnicity <- "Hispanic or Latino"
+
+dfnew5 <- ri[,c(2,3,5)]
+colnames(dfnew5) <- c("Year","districtcode", "totalexpulsions")
+dfnew5$Ethnicity <- "Other"
+
+dfnew7 <- rp[,c(2,3,5)]
+colnames(dfnew7) <- c("Year","districtcode", "totalexpulsions")
+dfnew7$Ethnicity <- "Other"
+
+dfnew8 <- rw[,c(2,3,5)]
+colnames(dfnew8) <- c("Year","districtcode", "totalexpulsions")
+dfnew8$Ethnicity <- "White"
+
+dfnew9 <- rt[,c(2,3,5)]
+colnames(dfnew9) <- c("Year","districtcode", "totalexpulsions")
+dfnew9$Ethnicity <- "Other"
+
+dfnew0 <- rd[,c(2,3,5)]
+colnames(dfnew0) <- c("Year","districtcode", "totalexpulsions")
+dfnew0$Ethnicity <- "Other"
+
+#binds the dataframes together 
+
+#trying to merge the other category also dropping the extra columns with NA values
+mergethcombo <- merge(dfnew9, dfnew0, by = "districtcode", "Year","totalexpulsions", all.x = TRUE, all.y = TRUE)
+mergethcombo
+
+dropothercol <- mergethcombo[,c(-5,-6,-7)]
+
+mergethcombo2 <- merge(dfnew5, dfnew7, by = "districtcode", "Year","totalexpulsions", all.x = TRUE, all.y = TRUE)
+mergethcombo2
+
+dropothercol2 <- mergethcombo2[,c(-5,-6,-7)]
+
+mallother <- merge(dropothercol, dropothercol2, by = "districtcode", "Year","totalexpulsions", all.x = TRUE, all.y = TRUE)
+mallother
+
+
+
+
+ethall <- rbind(dfnew2,dfnew6,dfnew3,dfnew4,dfnew5,dfnew7,dfnew8)
+ethall
+
+
+
+#plot bar graphs 
+library(ggplot2)
+
+#combining several elments 
+ethinfo <- aggregate(.~Year+Ethnicity, data=ethall, sum)
+
+ethPlot <- ggplot(ethinfo, aes(Year,Total)) +labs(title="Yearly Expulsion Rates By Ethnicity") + geom_bar(aes(fill=Ethnicity), stat="identity")  +
+  theme(plot.title = element_text(hjust = 0.5))
+ethPlot
+```
+
+
+Cumulative Enrollment
+```{r}
+
+TAcount <- (filter(newcombine, newcombine$reportingcategory =="TA", newcombine$aggregatelevel =="C"))
+
+#subset with certin columns  of the TA and Cs
+onlyTAcount <- TAcount[,]
+onlyTAcount
+
+#dataframe of all TA and counties
+onlyTAcountdf <- data.frame(onlyTAcount[, "countyname"], onlyTAcount)
+onlyTAcountdf
+
+CE11 <- sum(as.numeric(as.character(onlyTAcount[1:58,11])))
+CE12 <- sum(as.numeric(as.character(onlyTAcount[59:116,11])))
+CE12
+CE13 <- sum(as.numeric(as.character(onlyTAcount[117:174,11])))
+CE13
+CE14 <- sum(as.numeric(as.character(onlyTAcount[175:232,11])))
+CE14
+CE15 <- sum(as.numeric(as.character(onlyTAcount[233:290,11])))
+CE15
+CE16 <- sum(as.numeric(as.character(onlyTAcount[291:348,11])))
+CE16
+
+
+```
+Total Explusion
+```{r}
+
+TA11 <- sum(as.numeric(as.character(onlyTAcount[1:58,12])))
+TA11
+TA12 <- sum(as.numeric(as.character(onlyTAcount[59:116,12])))
+TA12
+TA13 <- sum(as.numeric(as.character(onlyTAcount[117:174,12])))
+TA13
+TA14 <- sum(as.numeric(as.character(onlyTAcount[175:232,12])))
+TA14
+TA15 <- sum(as.numeric(as.character(onlyTAcount[233:290,12])))
+TA15
+TA16 <- sum(as.numeric(as.character(onlyTAcount[291:348,12])))
+TA16
+
+```
+Expulsion Rate
+```{r}
+
+SR11 <- sum(as.numeric(as.character(onlyTAcount[1:58,16])))
+SR11
+SR12 <- sum(as.numeric(as.character(onlyTAcount[59:116,16])))
+SR12
+SR13 <- sum(as.numeric(as.character(onlyTAcount[117:174,16])))
+SR13
+SR14 <- sum(as.numeric(as.character(onlyTAcount[175:232,16])))
+SR14
+SR15 <- sum(as.numeric(as.character(onlyTAcount[233:290,16])))
+SR15
+SR16 <- sum(as.numeric(as.character(onlyTAcount[291:348,16])))
+SR16
+
+```
+Violent Injury
+```{r}
+VI11 <- sum(as.numeric(as.character(onlyTAcount[1:58,17])))
+VI11
+VI12 <- sum(as.numeric(as.character(onlyTAcount[59:116,17])))
+VI12
+VI13 <- sum(as.numeric(as.character(onlyTAcount[117:174,17])))
+VI13
+VI14 <- sum(as.numeric(as.character(onlyTAcount[175:232,17])))
+VI14
+VI15 <- sum(as.numeric(as.character(onlyTAcount[233:290,17])))
+VI15
+VI16 <- sum(as.numeric(as.character(onlyTAcount[291:348,17])))
+VI16
+
+```
+
+Violent Non-Injury
+```{r}
+VN11 <- sum(as.numeric(as.character(onlyTAcount[1:58,18])))
+VN11
+VN12 <- sum(as.numeric(as.character(onlyTAcount[59:116,18])))
+VN12
+VN13 <- sum(as.numeric(as.character(onlyTAcount[117:174,18])))
+VN13
+VN14 <- sum(as.numeric(as.character(onlyTAcount[175:232,18])))
+VN14
+VN15 <- sum(as.numeric(as.character(onlyTAcount[233:290,18])))
+VN15
+VN16 <- sum(as.numeric(as.character(onlyTAcount[291:348,18])))
+VN16
+```
+Weapon Possession
+```{r}
+WP11 <- sum(as.numeric(as.character(onlyTAcount[1:58,19])))
+WP11
+WP12 <- sum(as.numeric(as.character(onlyTAcount[59:116,19])))
+WP12
+WP13 <- sum(as.numeric(as.character(onlyTAcount[117:174,19])))
+WP13
+WP14 <- sum(as.numeric(as.character(onlyTAcount[175:232,19])))
+WP14
+WP15 <- sum(as.numeric(as.character(onlyTAcount[233:290,19])))
+WP15
+WP16 <- sum(as.numeric(as.character(onlyTAcount[291:348,19])))
+WP16
+```
+
+Drug Related
+```{r}
+DR11 <- sum(as.numeric(as.character(onlyTAcount[1:58,20])))
+DR12 <- sum(as.numeric(as.character(onlyTAcount[59:116,20])))
+DR13 <- sum(as.numeric(as.character(onlyTAcount[117:174,20])))
+DR14 <- sum(as.numeric(as.character(onlyTAcount[175:232,20])))
+DR15 <- sum(as.numeric(as.character(onlyTAcount[233:290,20])))
+DR16 <- sum(as.numeric(as.character(onlyTAcount[291:348,20])))
+```
+
+Defiance Only
+```{r}
+DO11 <- sum(as.numeric(as.character(onlyTAcount[1:58,21])))
+DO11
+DO12 <- sum(as.numeric(as.character(onlyTAcount[59:116,21])))
+DO12
+DO13 <- sum(as.numeric(as.character(onlyTAcount[117:174,21])))
+DO13
+DO14 <- sum(as.numeric(as.character(onlyTAcount[175:232,21])))
+DO14
+DO15 <- sum(as.numeric(as.character(onlyTAcount[233:290,21])))
+DO15
+DO16 <- sum(as.numeric(as.character(onlyTAcount[291:348,21])))
+DO16
+```
+
+```{r}
+#making new df
+#clean data for males 
+dfnew22 <- datframegm2[,c(4,2,5,9)]
+colnames(dfnew22)<- c("districtcode","Year", "countyname", "totalexpulsions")
+dfnew22$Gender <- "Males"
+
+#clean data for females
+dfnew32 <- dataframegf2[,c(4,2,5,9)]
+colnames(dfnew32)<- c("districtcode","Year", "countyname", "totalexpulsions")
+dfnew32$Gender <- "Females"
+
+#binds the dataframes together 
+combined2 <- rbind(dfnew2, dfnew3)
+combined2
+
+#merges the datasets for gender male and gender females into one data set by columns 
+mergecombo <- merge(dfnew22, dfnew32, by = "districtcode", "Year", "countyname","totalexpulsions", all.x = TRUE, all.y = TRUE)
+mergecombo
+
+#drops columns 6,7,8, & 9 b/c when merging the datasets it created columns with NA values 
+dropcolnew <- mergecombo[,c(-6,-7,-8,-9)]
+dropcolnew
+
+```
+
+```{r}
+
+
+```
+
